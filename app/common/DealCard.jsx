@@ -18,7 +18,7 @@ export const DealCard = ({ deal }) => {
     return (
         <div className="group bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col md:flex-row items-center gap-6 border border-gray-100">
             <div className="relative w-full md:w-1/2 h-64 md:h-50">
-                <div className="absolute -top-3 -left-3 bg-[#254226] text-white text-xs font-bold px-3 py-1 rounded-full z-10">
+                <div className="absolute top-1 left-7 bg-[#254226] text-white text-xs font-bold px-3 py-1 rounded-full z-10">
                     {deal.discount}
                 </div>
                 <div className="absolute right-7 top-6  flex items-center flex-col justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity z-20">
@@ -55,13 +55,15 @@ export const DealCard = ({ deal }) => {
                     <span className="text-sm font-medium text-gray-700">{deal.rating}</span>
                 </div>
                 <p className="text-sm text-gray-600 mt-3 line-clamp-2">{deal.description}</p>
-                <div className="flex items-center gap-2 mt-4 justify-center md:justify-start">
+                <div className="flex items-center gap-2 mt-2 justify-center md:justify-start">
                     <span className="text-2xl font-bold text-rose-600">Rs.{deal.price}/-</span>
                     <span className="text-sm text-gray-500 font-medium line-through">Rs.{deal.originalPrice}/-</span>
                 </div>
-                <button className='font-semibold pt-2 flex items-center'>Shop Now
-                    <IoIosArrowRoundForward size={24} />
-                </button>
+                <div className='flex justify-center md:justify-start '>
+                    <button className='font-semibold pt-2 flex items-center'>Shop Now
+                        <IoIosArrowRoundForward size={24} />
+                    </button>
+                </div>
             </div>
         </div>
     );

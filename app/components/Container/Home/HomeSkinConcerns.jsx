@@ -18,7 +18,7 @@ const concerns = [
 
 const HomeSkinConcerns = () => {
     return (
-        <div className="py-12 bg-[#FFF4E5]">
+        <div className="py-4 md:py-12 bg-[#FFF4E5]">
             <h3 className="text-center text-red-500 font-semibold text-[26px] md:text-[32px] mb-8">
                 Shop by Skin Concerns
             </h3>

@@ -5,7 +5,7 @@ import Footer from "./components/Common/Footer/Footer";
 import ProtectedRoute from "../app/protectedRoute/ProtectedRoute";
 
 export const metadata = {
-  title: "My Next 16 App",
+  title: "Jwala Beauty - Your One-Stop Shop for All Things Beauty",
   description: "Project setup with Redux, Framer Motion, and Tailwind v4",
 };
 

@@ -33,8 +33,8 @@ const deals = [
 
 const HomeDealsDay = () => {
     return (
-        <section className="py-16 px-4 sm:px-6 lg:px-20 bg-amber-50">
-            <div className="text-center mb-12">
+        <section className="py-4 md:py-12 px-4 sm:px-6 lg:px-20 ">
+            <div className="text-center mb-4 md:mb-12">
                 <h2 className="text-4xl font-semibold">
                     <span className="text-rose-600">Deals</span> of the Day
                 </h2>

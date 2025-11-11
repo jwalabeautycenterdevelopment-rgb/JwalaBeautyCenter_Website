@@ -22,7 +22,7 @@ const HomeShopCategories = () => {
     const repeatedCategories = [...categories, ...categories];
 
     return (
-        <div className="relative overflow-hidden py-6">
+        <div className="relative overflow-hidden py-4 md:py-6">
             <div className="flex justify-center items-center mb-8">
                 <motion.h3
                     initial={{ opacity: 0, y: -15 }}
