@@ -3,6 +3,8 @@ import HomeSkinConcerns from "./components/Container/Home/HomeSkinConcerns";
 import MainLayout from "./common/MainLayout";
 import HomeShopCategories from "./components/Container/Home/HomeShopCategories";
 import SpecialDealsWithImages from "./components/Container/Home/SpecialDealsWithImages";
+import OurProducts from "./components/Container/Home/OurProducts";
+import HomeDealsDay from "./components/Container/Home/HomeDealsDay";
 
 export default function Page() {
   return (
@@ -10,6 +12,8 @@ export default function Page() {
       <HomeSkinConcerns />
       <HomeShopCategories />
       <SpecialDealsWithImages />
+      <OurProducts />
+      <HomeDealsDay />
     </MainLayout>
   );
 }
