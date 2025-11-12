@@ -28,20 +28,21 @@ const categories = [
 const OurProducts = () => {
     const [active, setActive] = useState('all');
     return (
-        <section className="py-4 md:py-12 px-4 sm:px-6 lg:px-20">
-            <div >
-                <div >
-                    <p className="text-sm font-medium text-black">Our Products </p>
+        <section className="py-4 md:py-12  px-4 sm:px-6 lg:px-20">
+            <div className="max-w-7xl mx-auto">
+                <div className="mb-6">
+                    <p className="text-sm font-medium text-black">Our Products</p>
                     <h2 className="text-2xl md:text-4xl font-semibold md:mt-2">
                         <span className="text-gray-900">Our </span>
                         <span className="text-rose-600">Best Sellers Products</span>
                     </h2>
                 </div>
-                <div className="overflow-x-auto py-4  scrollbar-hide">
+                <div className="overflow-x-auto py-0 md:py-4 scrollbar-hide">
                     <div className="flex gap-3 min-w-max">
                         {categories?.map((cat) => {
                             const isActive = active === cat.id;
-                            const baseClass = 'px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer';
+                            const baseClass =
+                                "px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer";
                             return (
                                 <button
                                     key={cat.id}
@@ -49,24 +50,24 @@ const OurProducts = () => {
                                     className={clsx(
                                         baseClass,
                                         isActive
-                                            ? cat.color || 'bg-rose-600 text-white'
-                                            : 'bg-white text-gray-700 hover:bg-gray-100'
+                                            ? cat.color || "bg-rose-600 text-white"
+                                            : "bg-white text-gray-700 hover:bg-gray-100"
                                     )}
                                 >
                                     {cat.label}
                                 </button>
                             );
                         })}
-
                     </div>
                 </div>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto my-2">
-                {products?.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 my-8">
+                    {products?.map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                    ))}
+                </div>
             </div>
         </section>
+
     );
 };
 

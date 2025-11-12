@@ -51,10 +51,12 @@ const Header = () => {
     return (
         <header className="bg-white shadow-sm py-1 px-4 md:px-6 sticky top-0 left-0 w-full z-50">
             <nav className="flex justify-between items-center">
-                <Link href="/">
-                    <Image src={Logo} alt="Company Logo" width={1000} height={1000} className="w-32 h-auto" />
-                </Link>
-                <p className="text_primary font-medium hidden md:flex">Welcome to Jwala Online store</p>
+                <div className="flex xl:gap-8 items-center">
+                    <Link href="/">
+                        <Image src={Logo} alt="Company Logo" width={1000} height={1000} className="w-32 h-auto" />
+                    </Link>
+                    <p className="text_primary font-medium hidden xl:flex">Welcome to Jwala Online store</p>
+                </div>
                 <div className="hidden lg:flex items-center space-x-12">
                     {navLinks?.map((path) => {
                         const label =

@@ -14,23 +14,26 @@ const concerns = [
     { title: "Acne Mask", img: facialImg },
     { title: "Hydrating Glow", img: facialImg },
     { title: "Tan Removal", img: facialImg },
+    { title: "Acne Mask", img: facialImg },
+
 ];
 
 const HomeSkinConcerns = () => {
     return (
-        <div className="py-4 md:py-12 bg-[#FFF4E5]">
+        <div className="py-4 md:py-12 bg-[#FFF4E5] px-4 sm:px-6 lg:px-20">
             <h3 className="text-center text-red-500 font-semibold text-[26px] md:text-[32px] mb-8">
                 Shop by Skin Concerns
             </h3>
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-7xl mx-auto">
                 <Swiper
                     modules={[Navigation]}
-                    spaceBetween={20}
+                    spaceBetween={30}
                     slidesPerView={1.5}
                     navigation
                     breakpoints={{
                         640: { slidesPerView: 2 },
-                        1024: { slidesPerView: 4 },
+                        768: { slidesPerView: 4 },
+                        1400: { slidesPerView: 5 },
                     }}
                     className="px-6"
                 >
