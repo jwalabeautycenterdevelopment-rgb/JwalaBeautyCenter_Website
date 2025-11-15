@@ -42,7 +42,7 @@ const HomeDealsDay = () => {
 
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {deals?.map((deal) => (
-                    <DealCard key={deal.id} deal={deal} />
+                    <DealCard key={deal?.id} deal={deal} />
                 ))}
             </div>
         </section>

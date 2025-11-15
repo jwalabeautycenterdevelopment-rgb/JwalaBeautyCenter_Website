@@ -1,6 +1,5 @@
 "use client";
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { toast } from 'react-toastify';
 import { useState } from 'react';
 import Image from 'next/image';
 import { BsCart2 } from 'react-icons/bs';
@@ -9,17 +8,15 @@ export const DealCard = ({ deal }) => {
     const [wishlisted, setWishlisted] = useState(false);
 
     const handleAddToCart = () => {
-        toast.success(`${deal.title} added to cart!`, {
-            position: 'top-right',
-            autoClose: 2000,
-        });
+        console.log("jii");
+
     };
 
     return (
         <div className="group bg-white rounded-3xl py-6 shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col md:flex-row items-center gap-6 border border-gray-100">
             <div className="relative w-full md:w-1/2 h-64 md:h-50">
                 <div className="absolute top-2 md:top-1  left-15 md:left-10 bg-[#254226] text-white text-xs font-bold px-3 py-1 rounded-full z-10">
-                    {deal.discount}
+                    {deal?.discount}
                 </div>
                 <div className="absolute right-15 md:right-7 top-6  flex items-center flex-col justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity z-20">
                     <button
@@ -40,24 +37,25 @@ export const DealCard = ({ deal }) => {
                     </button>
                 </div>
                 <Image
-                    src={deal.image}
-                    alt={deal.title}
+                    src={deal?.image}
+                    alt={deal?.title}
                     fill
                     className="object-contain drop-shadow-md"
                 />
             </div>
             <div className="flex-1 text-center md:text-left">
-                <p className="text-xs text-gray-500 font-medium">{deal.category}</p>
-                <h3 className="text-xl font-bold mt-1">{deal.title}</h3>
-
-                <div className="flex items-center gap-1 mt-2 justify-center md:justify-start">
-                    <span className="text-yellow-400 text-sm">★★★★★</span>
-                    <span className="text-sm font-medium text-gray-700">{deal.rating}</span>
+                <div className='flex justify-center md:justify-between items-center'>
+                    <p className="text-xs text-gray-500 font-medium">{deal?.category}</p>
+                    <div className="flex items-center gap-1 pe-5">
+                        <span className="text-yellow-400 text-sm">★</span>
+                        <span className="text-sm font-medium text-gray-700">{deal?.rating}</span>
+                    </div>
                 </div>
-                <p className="text-sm text-gray-600 mt-3 line-clamp-2">{deal.description}</p>
+                <h3 className="text-xl font-bold mt-1">{deal?.title}</h3>
+                <p className="text-sm text-gray-600 mt-3 line-clamp-2">{deal?.description}</p>
                 <div className="flex items-center gap-2 mt-2 justify-center md:justify-start">
-                    <span className="text-2xl font-bold text-rose-600">Rs.{deal.price}/-</span>
-                    <span className="text-sm text-gray-500 font-medium line-through">Rs.{deal.originalPrice}/-</span>
+                    <span className="text-2xl font-bold text-rose-600">Rs.{deal?.price}/-</span>
+                    <span className="text-sm text-gray-500 font-medium line-through">Rs.{deal?.originalPrice}/-</span>
                 </div>
                 <div className='flex justify-center md:justify-start '>
                     <button className='font-semibold pt-2 flex items-center'>Shop Now

@@ -1,8 +1,6 @@
 import "./globals.css";
 import ReduxProvider from "./provider/ReduxProvider";
-import Header from "./components/Common/Header/Header";
-import Footer from "./components/Common/Footer/Footer";
-import ProtectedRoute from "../app/protectedRoute/ProtectedRoute";
+import AppWrapper from "./middleware/AppWrapper";
 
 export const metadata = {
   title: "Jwala Beauty - Your One-Stop Shop for All Things Beauty",
@@ -11,14 +9,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning>
+    <html lang="en">
+      <body>
         <ReduxProvider>
-          <Header />
-          {/* <ProtectedRoute> */}
-            <main>{children}</main>
-          {/* </ProtectedRoute> */}
-          <Footer />
+          <AppWrapper>{children}</AppWrapper>
         </ReduxProvider>
       </body>
     </html>

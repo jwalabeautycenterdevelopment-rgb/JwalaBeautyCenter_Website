@@ -6,18 +6,30 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { IoCartOutline, IoHeartOutline } from "react-icons/io5";
 import Logo from "@/app/assets/navbar_icon.svg";
+import { IoIosSearch } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchMe, logout } from "@/app/store/slice/authSlice";
+import { successAlert } from "@/app/utils/alertService";
+import CustomImage from "@/app/common/Image";
+import { FaUserCircle } from "react-icons/fa";
 
 const Header = () => {
     const router = useRouter();
+    const { accessToken, userData } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const closeMenu = () => setIsMenuOpen(false);
 
-    const userData = null;
+    useEffect(() => {
+        if (accessToken) {
+            dispatch(fetchMe())
+        }
+    }, [dispatch, accessToken])
+
     const totalQuantity = 10;
     const favorite = 3;
-    const IMG_URL = "/uploads/";
     const navLinks = ["/", "/category", "/brands", "/offers",];
     const mobileLinks = ["/", "/category", "/brands", "/offers", "/cart", "/favorite"];
 
@@ -27,7 +39,9 @@ const Header = () => {
     };
 
     const handleLogout = () => {
-        console.log("Logout clicked");
+        dispatch(logout())
+        successAlert("Logout Successfully")
+        router.push("/login")
     };
 
     const menuVariants = {
@@ -77,7 +91,10 @@ const Header = () => {
                         );
                     })}
 
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-5">
+                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="relative">
+                            <IoIosSearch className="w-6 h-6" />
+                        </motion.div>
                         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="relative">
                             <Link href="/favorite">
                                 <IoHeartOutline className="w-6 h-6 text-gray-700 hover:text-pink-500 transition-colors duration-200" />
@@ -119,8 +136,8 @@ const Header = () => {
                                 onMouseLeave={() => setShowDropdown(false)}
                             >
                                 {userData?.profileImage ? (
-                                    <Image
-                                        src={IMG_URL + userData.profileImage}
+                                    <CustomImage
+                                        src={userData?.profileImage}
                                         alt="Profile"
                                         width={32}
                                         height={32}
@@ -156,10 +173,10 @@ const Header = () => {
                             </div>
                         ) : (
                             <Link
-                                href="/signup"
+                                href="/register"
                                 className="px-5 py-1.5 border rounded-full text-sm font-medium text-gray-700  transition-colors duration-200"
                             >
-                                Sign Up
+                                Register
                             </Link>
                         )}
                     </div>
@@ -226,17 +243,17 @@ const Header = () => {
                                             }}
                                         />
                                         <span className="font-medium text-gray-700">
-                                            {userData.firstName}
+                                            {userData?.firstName}
                                         </span>
                                     </div>
                                 ) : (
                                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                         <Link
-                                            href="/signup"
+                                            href="/register"
                                             onClick={closeMenu}
                                             className="px-6 py-2 border rounded-full text-black  hover:text-white transition-colors duration-200 text-center mb-6 block"
                                         >
-                                            Sign Up
+                                            Register
                                         </Link>
                                     </motion.div>
                                 )}

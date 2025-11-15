@@ -40,21 +40,21 @@ const OurProducts = () => {
                 <div className="overflow-x-auto py-0 md:py-4 scrollbar-hide">
                     <div className="flex gap-3 min-w-max">
                         {categories?.map((cat) => {
-                            const isActive = active === cat.id;
+                            const isActive = active === cat?.id;
                             const baseClass =
-                                "px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer";
+                                "px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer border"; // added border
                             return (
                                 <button
-                                    key={cat.id}
-                                    onClick={() => setActive(cat.id)}
+                                    key={cat?.id}
+                                    onClick={() => setActive(cat?.id)}
                                     className={clsx(
                                         baseClass,
                                         isActive
-                                            ? cat.color || "bg-rose-600 text-white"
-                                            : "bg-white text-gray-700 hover:bg-gray-100"
+                                            ? cat.color || "bg-rose-600 text-white border-rose-600"
+                                            : "bg-white text-gray-700 border-gray-300 hover:border-red-500 hover:text-red-600"
                                     )}
                                 >
-                                    {cat.label}
+                                    {cat?.label}
                                 </button>
                             );
                         })}
@@ -62,7 +62,7 @@ const OurProducts = () => {
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 my-8">
                     {products?.map((product) => (
-                        <ProductCard key={product.id} product={product} />
+                        <ProductCard key={product?.id} product={product} />
                     ))}
                 </div>
             </div>

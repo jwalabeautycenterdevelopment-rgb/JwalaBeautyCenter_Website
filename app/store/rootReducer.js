@@ -1,6 +1,8 @@
 import { combineReducers } from "redux";
-import productReducer from "./slice/product";
+import registerReducer from "./slice/register";
+import authReducer from "./slice/authSlice";
 const reducer = combineReducers({
-  product: productReducer,
+  register: registerReducer,
+  auth: authReducer,
 });
 export default reducer;

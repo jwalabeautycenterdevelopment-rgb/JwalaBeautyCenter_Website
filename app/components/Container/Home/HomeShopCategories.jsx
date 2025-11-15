@@ -50,17 +50,17 @@ const HomeShopCategories = () => {
                         >
                             <div className="relative w-[150px] aspect-square mb-3">
                                 <Image
-                                    src={category.image}
-                                    alt={category.name}
+                                    src={category?.image}
+                                    alt={category?.name}
                                     fill
                                     className="object-contain"
                                 />
                             </div>
                             <h4 className="text-gray-700 text-[15px] font-medium mb-1">
-                                {category.name}
+                                {category?.name}
                             </h4>
                             <p className="text-gray-500 font-medium text-xs md:text-sm">
-                                ({category.count} Products)
+                                ({category?.count} Products)
                             </p>
                         </div>
                     ))}
