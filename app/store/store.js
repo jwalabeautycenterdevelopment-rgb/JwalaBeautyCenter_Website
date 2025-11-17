@@ -22,4 +22,7 @@ export const store = configureStore({
     }),
 });
 
-export const persistor = persistStore(store);
+export let persistor;
+if (typeof window !== "undefined") {
+  persistor = persistStore(store);
+}
