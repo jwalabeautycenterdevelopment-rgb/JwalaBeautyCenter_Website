@@ -14,7 +14,7 @@ const Footer = () => {
         <footer className="bg-[#ffff] px-4 md:px-6 text-gray-800 border-t border-gray-200">
             <div className="mx-auto py-3 md:pt-8 pb-4">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
-                    <div className="md:col-span-4 space-y-4">
+                    <div className="col-span-1 md:col-span-2 lg:col-span-4 space-y-4">
                         <Image
                             src={Logo}
                             alt="JBC Logo"
@@ -22,7 +22,7 @@ const Footer = () => {
                             width={1000} height={1000}
                         />
                     </div>
-                    <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
+                    <div className="col-span-1 md:col-span-10 lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
                         <div>
                             <h3 className="font-semibold mb-3 text-lg">Links</h3>
                             <ul className="space-y-2 text-sm">
@@ -73,7 +73,6 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
-
                 <div className="border-t border-gray-300 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-600 px-4 md:px-6">
                     <p className="text-center md:text-left font-semibold text-black">
                         © 2025. JWALA BEAUTY CENTER. All Right Reserved. Developed By{" "}

@@ -12,6 +12,7 @@ import { fetchMe, logout } from "@/app/store/slice/authSlice";
 import { successAlert } from "@/app/utils/alertService";
 import CustomImage from "@/app/common/Image";
 import { FaUserCircle } from "react-icons/fa";
+import { openPopup } from "@/app/store/slice/popupSlice";
 
 const Header = () => {
     const router = useRouter();
@@ -172,12 +173,11 @@ const Header = () => {
                                 </AnimatePresence>
                             </div>
                         ) : (
-                            <Link
-                                href="/register"
-                                className="px-5 py-1.5 border rounded-full text-sm font-medium text-gray-700  transition-colors duration-200"
+                            <button onClick={() => dispatch(openPopup("signup"))}
+                                className="px-5 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-700  transition-colors duration-200 hover:text-red-500 cursor-pointer"
                             >
                                 Register
-                            </Link>
+                            </button>
                         )}
                     </div>
                 </div>

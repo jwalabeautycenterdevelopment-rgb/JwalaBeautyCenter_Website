@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { forgotPassword, clearAuthError, clearAuthMessage } from "@/app/store/slice/authSlice";
 import { errorAlert, successAlert } from "@/app/utils/alertService";
+import { openPopup } from "@/app/store/slice/popupSlice";
 
 const ForgotPassword = () => {
     const router = useRouter();
@@ -22,7 +23,7 @@ const ForgotPassword = () => {
             successAlert(forgotPasswordSuccess);
             dispatch(clearAuthMessage());
             setFormData({ email: "" });
-            router.push("/verifyotp");
+            dispatch(openPopup("verifyotp"))
         }
         if (forgotPasswordError) {
             errorAlert(forgotPasswordError);
@@ -41,8 +42,9 @@ const ForgotPassword = () => {
     };
 
     return (
-        <div className="relative min-h-screen flex justify-center items-center ">
-            <div className="relative w-full max-w-[700px] bg-[#A1A1A1] rounded-3xl shadow-xl p-6 md:p-12 overflow-hidden">
+        <div className="flex justify-center items-center ">
+            <div className="relative 
+    rounded-3xl p-8 md:p-12 overflow-hidden">
                 <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 relative z-10">
                     Forgot Password
                 </h2>
@@ -54,30 +56,28 @@ const ForgotPassword = () => {
                         type="email"
                         name="email"
                         placeholder="Email Address"
-                        value={formData.email}
+                        value={formData?.email}
                         onChange={handleChange}
                     />
                     <div className="flex justify-center">
                         <button
                             type="submit"
-                            disabled={!isFormValid || forgotLoading}
+                            disabled={forgotLoading}
                             className={`tracking-widest px-10 py-2 bg-red-600/20 backdrop-blur-md 
-                            text-black rounded-full hover:bg-[#FBBBBC]/30 transition-all duration-300
+                            text-black rounded-full hover:bg-[#FBBBBC]/30 transition-all duration-300 cursor-pointer
                             text-sm md:text-lg
-                            ${!isFormValid || forgotLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+                            ${forgotLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                         >
                             {forgotLoading ? "Sending..." : "Send Email"}
                         </button>
                     </div>
-                    <p className="text-center text-black text-sm">
+                    <div className="text-center text-black text-sm">
                         Remembered your password?
-                        <span
-                            onClick={() => router.push("/login")}
-                            className="text-black font-semibold ml-1 cursor-pointer underline"
-                        >
-                            Login
-                        </span>
-                    </p>
+                        <button
+                            type="button"
+                            onClick={() => dispatch(openPopup("login"))}
+                            className="text-black font-semibold ml-1 cursor-pointer">Login</button>
+                    </div>
                 </form>
             </div>
         </div>

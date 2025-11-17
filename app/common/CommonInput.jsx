@@ -17,7 +17,7 @@ const InputField = ({
     return (
         <div className="relative">
             {showLabel && name && (
-                <label className="block mb-1 text-gray-700 capitalize">
+                <label className="block md:mb-1 text-gray-700 capitalize">
                     {name.replace(/([A-Z])/g, " $1")}
                 </label>
             )}

@@ -5,6 +5,7 @@ import { errorAlert, successAlert } from "@/app/utils/alertService";
 import { useRouter } from "next/navigation";
 import { clearError, clearMessage, resendOtp } from "@/app/store/slice/register";
 import { verifyUser } from "@/app/store/slice/authSlice";
+import { closePopup } from "@/app/store/slice/popupSlice";
 
 export default function Register() {
     const length = 6;
@@ -26,6 +27,7 @@ export default function Register() {
             successAlert(otpSuccess);
             setOtp("");
             router.push("/");
+            dispatch(closePopup())
             dispatch(clearMessage());
         }
         if (otpError) {
@@ -83,10 +85,10 @@ export default function Register() {
 
     const inputClass =
         "w-12 h-12 md:w-14 md:h-14 text-center text-xl bg-white rounded-lg border border-gray-400 focus:outline-none";
-
     return (
-        <div className="min-h-screen flex justify-center items-center px-4">
-            <div className="w-full max-w-[700px] bg-[#A1A1A1] rounded-3xl shadow-lg p-6 md:p-12">
+        <div className="flex justify-center items-center px-4">
+            <div className="relative 
+    rounded-3xl  p-8 md:p-12 overflow-hidden">
                 <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900">Verify OTP</h2>
                 <p className="text-center text-black mb-5 text-sm md:text-base">Enter the OTP sent to your email</p>
                 <form className="space-y-5">

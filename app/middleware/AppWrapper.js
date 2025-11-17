@@ -7,6 +7,7 @@ import Footer from "../components/Common/Footer/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { setupTokenRefresh } from "../utils/setupTokenRefresh";
+import PopupManager from "../common/PopupManager";
 
 export default function AppWrapper({ children }) {
   const pathname = usePathname();
@@ -24,6 +25,7 @@ export default function AppWrapper({ children }) {
   return (
     <>
       {!hideLayout && <Header />}
+      <PopupManager />
       <main>{children}</main>
       {!hideLayout && <Footer />}
       <ToastContainer
