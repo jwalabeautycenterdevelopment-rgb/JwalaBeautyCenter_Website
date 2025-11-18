@@ -7,6 +7,7 @@ import Login from "../components/Container/Login/Login";
 import { AnimatePresence, motion } from "framer-motion";
 import ForgotPassword from "../components/Container/ForgotPassword/ForgotPassword";
 import VerifyOtp from "../components/Container/VerifyOtp/VerifyOtp";
+import NewPassword from "../components/Container/NewPassword/NewPassword";
 
 const formAnimation = {
     initial: { opacity: 0, x: 60, rotateY: 10, scale: 0.95 },
@@ -34,6 +35,7 @@ export default function PopupManager() {
                             {activePopup === "login" && <Login />}
                             {activePopup === "forgotpassword" && <ForgotPassword />}
                             {activePopup === "verifyotp" && <VerifyOtp />}
+                            {activePopup === "newpassowrd" && <NewPassword />}
                         </motion.div>
 
                     </AnimatePresence>

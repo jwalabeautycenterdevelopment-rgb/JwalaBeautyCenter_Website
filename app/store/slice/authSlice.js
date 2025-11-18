@@ -46,11 +46,13 @@ export const loginUser = createAsyncThunk(
 export const forgotPassword = createAsyncThunk(
   "auth/forgotPassword",
   async (payload, thunkAPI) => {
+    const token = thunkAPI.getState()?.auth?.accessToken;
     try {
       const response = await FetchApi({
         endpoint: `/user/forgot-password`,
         method: "POST",
         body: payload,
+        token,
       });
       if (response?.data?.success === false) {
         return thunkAPI.rejectWithValue(response?.data?.errors);
@@ -67,7 +69,7 @@ export const resetPassword = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await FetchApi({
-        endpoint: `/user/reset-password`,
+        endpoint: `/user/reset-password?token=${payload?.token}`,
         method: "POST",
         body: payload,
       });
@@ -82,8 +84,8 @@ export const resetPassword = createAsyncThunk(
 );
 
 export const fetchMe = createAsyncThunk("auth/fetchMe", async (_, thunkAPI) => {
-  const token = thunkAPI.getState()?.auth?.accessToken;
   try {
+    const token = thunkAPI.getState()?.auth?.accessToken;
     const response = await FetchApi({
       endpoint: "/user/me",
       method: "GET",
@@ -133,8 +135,9 @@ const authSlice = createSlice({
     forgotLoading: false,
     forgotPasswordSuccess: null,
     forgotPasswordError: null,
-    resetLoading: false,
-    resetError: null,
+    resetPasswordLoading: false,
+    resetPasswordError: null,
+    resetPasswordSucess: null,
   },
   reducers: {
     clearAuthError(state) {
@@ -142,11 +145,13 @@ const authSlice = createSlice({
       state.loginError = null;
       state.forgotPasswordError = null;
       state.resetError = null;
+      state.resetPasswordError = null;
     },
     clearAuthMessage(state) {
       state.otpSuccess = null;
       state.loginSuccess = null;
       state.forgotPasswordSuccess = null;
+      state.resetPasswordSucess = null;
     },
     logout(state) {
       state.accessToken = null;
@@ -210,15 +215,16 @@ const authSlice = createSlice({
       })
 
       .addCase(resetPassword.pending, (state) => {
-        state.resetLoading = true;
+        state.resetPasswordLoading = true;
         state.resetError = null;
       })
       .addCase(resetPassword.fulfilled, (state, action) => {
-        state.resetLoading = false;
+        state.resetPasswordLoading = false;
+        state.resetPasswordSucess = action?.payload?.message;
       })
       .addCase(resetPassword.rejected, (state, action) => {
-        state.forgotLoading = false;
-        state.resetError = action.payload || "Registration failed";
+        state.resetPasswordLoading = false;
+        state.resetPasswordError = action.payload || "Registration failed";
       })
 
       .addCase(fetchMe.pending, (state) => {

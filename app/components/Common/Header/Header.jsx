@@ -223,7 +223,7 @@ const Header = () => {
                             </div>
                         ) : (
                             <button onClick={() => dispatch(openPopup("signup"))}
-                                className="px-5 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-700  transition-colors duration-200 hover:text-red-500 cursor-pointer"
+                                className="px-5 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-700  transition-colors duration-200 hover:text-red-500 cursor-pointer hover:border-red-500"
                             >
                                 Register
                             </button>
@@ -297,16 +297,17 @@ const Header = () => {
                                     </div>
                                 ) : (
                                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                        <Link
-                                            href="/register"
-                                            onClick={closeMenu}
-                                            className="px-6 py-2 border rounded-full text-black  hover:text-white transition-colors duration-200 text-center mb-6 block"
+                                        <button
+                                            onClick={() => {
+                                                toggleMenu();
+                                                dispatch(openPopup("signup"));
+                                            }}
+                                            className="px-5 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-700 transition-colors duration-200 hover:text-red-500 cursor-pointer hover:border-red-500"
                                         >
                                             Register
-                                        </Link>
+                                        </button>
                                     </motion.div>
                                 )}
-
                                 <motion.div
                                     className="flex flex-col space-y-6"
                                     variants={{
@@ -356,9 +357,10 @@ const Header = () => {
                             </div>
                         </motion.div>
                     </>
-                )}
-            </AnimatePresence>
-        </header>
+                )
+                }
+            </AnimatePresence >
+        </header >
     );
 };
 

@@ -24,7 +24,7 @@ export default function AppWrapper({ children }) {
       {!hideLayout && <Header />}
       <PopupManager />
       <main>{children}</main>
-      {hideLayout && <Footer />}
+      {!hideLayout && <Footer />}
       <ToastContainer
         position="top-right"
         autoClose={3000}

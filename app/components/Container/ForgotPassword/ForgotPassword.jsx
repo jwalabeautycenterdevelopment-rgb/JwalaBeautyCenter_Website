@@ -1,14 +1,12 @@
 'use client';
 import { useState, useEffect } from "react";
 import InputField from "@/app/common/CommonInput";
-import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { forgotPassword, clearAuthError, clearAuthMessage } from "@/app/store/slice/authSlice";
 import { errorAlert, successAlert } from "@/app/utils/alertService";
-import { openPopup } from "@/app/store/slice/popupSlice";
+import { closePopup, openPopup } from "@/app/store/slice/popupSlice";
 
 const ForgotPassword = () => {
-    const router = useRouter();
     const dispatch = useDispatch();
     const { forgotLoading, forgotPasswordError, forgotPasswordSuccess } = useSelector((state) => state.auth);
 
@@ -23,13 +21,13 @@ const ForgotPassword = () => {
             successAlert(forgotPasswordSuccess);
             dispatch(clearAuthMessage());
             setFormData({ email: "" });
-            dispatch(openPopup("verifyotp"))
+            dispatch(closePopup())
         }
         if (forgotPasswordError) {
             errorAlert(forgotPasswordError);
             dispatch(clearAuthError());
         }
-    }, [forgotPasswordSuccess, forgotPasswordError, dispatch, router]);
+    }, [forgotPasswordSuccess, forgotPasswordError, dispatch]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });

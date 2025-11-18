@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import Image from 'next/image';
-import { BsDashLg } from 'react-icons/bs';
 import clsx from 'clsx';
 
 import Bg1 from '@/app/assets/banner.jpg';
@@ -47,17 +46,6 @@ export default function HomeBanner() {
                                 className="object-cover"
                                 priority={idx === 0}
                             />
-                            <div className="absolute left-5 md:left-30 top-1/2 -translate-y-1/2 flex flex-col gap-1 md:gap-4">
-                                <p className="text_primary text-lg sm:text-4xl">
-                                    Complete Cosmetic Solutions
-                                </p>
-                                <h1 className="text-bl text-2xl sm:text-7xl font-normal max-w-xl">
-                                    Face Moisturers to Blushes
-                                </h1>
-                                <button className="px-8 md:px-15 py-2 bg-red-600/20 backdrop-blur-md text-black rounded-full hover:bg-[#FBBBBC]/30 transition-all duration-300 w-max text-sm md:text-lg">
-                                    View
-                                </button>
-                            </div>
                         </div>
                     </SwiperSlide>
                 ))}
