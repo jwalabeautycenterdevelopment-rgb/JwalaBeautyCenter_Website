@@ -13,10 +13,7 @@ export default function AppWrapper({ children }) {
   const pathname = usePathname();
   const accessToken = useSelector((state) => state.auth.accessToken);
 
-  const hideLayout =
-    pathname.startsWith("/login") ||
-    pathname.startsWith("/register") ||
-    pathname.startsWith("/404");
+  const hideLayout = pathname === "/_not-found";
 
   useEffect(() => {
     if (accessToken) setupTokenRefresh();
@@ -27,7 +24,7 @@ export default function AppWrapper({ children }) {
       {!hideLayout && <Header />}
       <PopupManager />
       <main>{children}</main>
-      {!hideLayout && <Footer />}
+      {hideLayout && <Footer />}
       <ToastContainer
         position="top-right"
         autoClose={3000}

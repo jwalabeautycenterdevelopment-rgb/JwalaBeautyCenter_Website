@@ -22,6 +22,8 @@ const Header = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const closeMenu = () => setIsMenuOpen(false);
+    const [showSearch, setShowSearch] = useState(false);
+
 
     useEffect(() => {
         if (accessToken) {
@@ -29,21 +31,20 @@ const Header = () => {
         }
     }, [dispatch, accessToken])
 
+    useEffect(() => {
+        const handler = (e) => {
+            if (!e.target.closest(".search-container")) {
+                setShowSearch(false);
+            }
+        };
+        document.addEventListener("click", handler);
+        return () => document.removeEventListener("click", handler);
+    }, []);
+
     const totalQuantity = 10;
     const favorite = 3;
     const navLinks = ["/", "/category", "/brands", "/offers",];
     const mobileLinks = ["/", "/category", "/brands", "/offers", "/cart", "/favorite"];
-
-    const handleProfile = () => {
-        router.push("/profile");
-        setShowDropdown(false);
-    };
-
-    const handleLogout = () => {
-        dispatch(logout())
-        successAlert("Logout Successfully")
-        router.push("/login")
-    };
 
     const menuVariants = {
         closed: {
@@ -62,6 +63,17 @@ const Header = () => {
     };
 
     const overlayVariants = { closed: { opacity: 0 }, open: { opacity: 1 } };
+
+    const handleProfile = () => {
+        router.push("/profile");
+        setShowDropdown(false);
+    };
+
+    const handleLogout = () => {
+        dispatch(logout())
+        successAlert("Logout Successfully")
+        window.location.reload()
+    };
 
     return (
         <header className="bg-white shadow-sm py-1 px-4 md:px-6 sticky top-0 left-0 w-full z-50">
@@ -94,7 +106,44 @@ const Header = () => {
 
                     <div className="flex items-center gap-5">
                         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="relative">
-                            <IoIosSearch className="w-6 h-6" />
+                            <div className="relative search-container">
+                                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                    <IoIosSearch
+                                        className="w-6 h-6 cursor-pointer"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setShowSearch(!showSearch);
+                                        }}
+                                    />
+                                </motion.div>
+                                <AnimatePresence>
+                                    {showSearch && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="
+                                            absolute right-0 mt-3 
+                                            w-[320px] md:w-[450px]
+                                            backdrop-blur-xl bg-white/20
+                                            border border-white/10 shadow-2xl
+                                            rounded-3xl p-4 z-50
+                                        "
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <IoIosSearch className="w-6 h-6 text-gray-700" />
+                                                <input
+                                                    type="text"
+                                                    placeholder="Search for products..."
+                                                    className="bg-transparent w-full outline-none text-gray-800 placeholder-gray-500"
+                                                    autoFocus
+                                                />
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
                         </motion.div>
                         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="relative">
                             <Link href="/favorite">

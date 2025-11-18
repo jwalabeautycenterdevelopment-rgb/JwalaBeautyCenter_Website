@@ -18,7 +18,7 @@ export const DealCard = ({ deal }) => {
                 <div className="absolute top-2 md:top-1  left-15 md:left-10 bg-[#254226] text-white text-xs font-bold px-3 py-1 rounded-full z-10">
                     {deal?.discount}
                 </div>
-                <div className="absolute right-15 md:right-7 top-6  flex items-center flex-col justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                <div className="absolute right-15 md:right-9 top-5  flex items-center flex-col justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity z-20">
                     <button
                         onClick={handleAddToCart}
                         className="bg-white text-black p-2.5 rounded-full flex items-center gap-1 shadow hover:bg-gray-200 transition"
