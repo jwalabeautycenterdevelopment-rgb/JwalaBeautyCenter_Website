@@ -13,7 +13,8 @@ export default function AppWrapper({ children }) {
   const pathname = usePathname();
   const accessToken = useSelector((state) => state.auth.accessToken);
 
-  const hideLayout = pathname === "/_not-found";
+  const hiddenPaths = ["/404"];
+  const hideLayout = pathname ? hiddenPaths.includes(pathname) : false;
 
   useEffect(() => {
     if (accessToken) setupTokenRefresh();
