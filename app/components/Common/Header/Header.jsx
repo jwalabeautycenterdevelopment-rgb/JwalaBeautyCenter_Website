@@ -222,11 +222,21 @@ const Header = () => {
                                 </AnimatePresence>
                             </div>
                         ) : (
-                            <button onClick={() => dispatch(openPopup("signup"))}
-                                className="px-5 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-700  transition-colors duration-200 hover:text-red-500 cursor-pointer hover:border-red-500"
-                            >
-                                Register
-                            </button>
+                            <div className="flex items-center">
+                                <button
+                                    onClick={() => dispatch(openPopup("login"))}
+                                    className=" py-1.5  rounded-full text-sm font-medium text-gray-700 transition-colors duration-200 hover:text-green-500 cursor-pointer hover:border-green-500"
+                                >
+                                    Login /
+                                </button>
+
+                                <button
+                                    onClick={() => dispatch(openPopup("signup"))}
+                                    className=" py-1.5  rounded-full text-sm font-medium text-gray-700 transition-colors duration-200 hover:text-red-500 cursor-pointer hover:border-red-500"
+                                >
+                                    Register
+                                </button>
+                            </div>
                         )}
                     </div>
                 </div>
@@ -297,15 +307,27 @@ const Header = () => {
                                     </div>
                                 ) : (
                                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                        <button
-                                            onClick={() => {
-                                                toggleMenu();
-                                                dispatch(openPopup("signup"));
-                                            }}
-                                            className="px-5 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-700 transition-colors duration-200 hover:text-red-500 cursor-pointer hover:border-red-500"
-                                        >
-                                            Register
-                                        </button>
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                onClick={() => {
+                                                    closeMenu();
+                                                    dispatch(openPopup("login"));
+                                                }}
+                                                className="py-1.5 rounded-full text-sm font-medium text-gray-700 hover:text-green-500 hover:border-green-500 transition"
+                                            >
+                                                Login /
+                                            </button>
+
+                                            <button
+                                                onClick={() => {
+                                                    closeMenu();
+                                                    dispatch(openPopup("signup"));
+                                                }}
+                                                className="py-1.5 rounded-full text-sm font-medium text-gray-700 hover:text-red-500 hover:border-red-500 transition"
+                                            >
+                                                Register
+                                            </button>
+                                        </div>
                                     </motion.div>
                                 )}
                                 <motion.div

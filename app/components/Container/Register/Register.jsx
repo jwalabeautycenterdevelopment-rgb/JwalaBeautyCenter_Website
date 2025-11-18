@@ -61,10 +61,11 @@ const Register = () => {
                 alt="right"
                 width={250}
                 height={200}
+                loading="eager"
                 className="absolute bottom-0 right-0 translate-x-10 translate-y-5 opacity-50 pointer-events-none hidden md:block"
             />
             <div className="flex justify-center mb-2 relative z-10">
-                <Image src={Logo} alt="logo" width={120} height={120} />
+                <Image src={Logo} alt="logo" width={120} height={120} loading="eager" />
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 relative z-10">
                 Get Started Now

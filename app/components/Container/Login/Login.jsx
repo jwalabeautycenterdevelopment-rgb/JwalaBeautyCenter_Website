@@ -42,10 +42,11 @@ const Login = () => {
                 className="absolute top-0 right-0 rotate-5    -translate-y-12 opacity-50 hidden md:block"
             />
             <Image src={RightImg} alt="right" width={250} height={250}
+                loading="eager"
                 className="absolute bottom-0 left-0 rotate-100  -translate-x-10 opacity-50 hidden md:block"
             />
             <div className="flex justify-center mb-3 relative z-10">
-                <Image src={Logo} alt="logo" width={120} height={120} />
+                <Image src={Logo} alt="logo" width={120} height={120}   loading="eager" />
             </div>
             <h2 className="text-3xl font-bold text-center relative z-10">Welcome Back</h2>
             <p className="text-center text-black mb-3 relative z-10">
