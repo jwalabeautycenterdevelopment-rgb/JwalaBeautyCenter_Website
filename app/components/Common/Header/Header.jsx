@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { IoCartOutline, IoHeartOutline } from "react-icons/io5";
+import { IoCartOutline, IoHeartOutline, IoChevronDown } from "react-icons/io5";
 import Logo from "@/app/assets/navbar_icon.svg";
 import { IoIosSearch } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,7 @@ import { successAlert } from "@/app/utils/alertService";
 import CustomImage from "@/app/common/Image";
 import { FaUserCircle } from "react-icons/fa";
 import { openPopup } from "@/app/store/slice/popupSlice";
+import { categories } from "@/app/utils/mockData";
 
 const Header = () => {
     const router = useRouter();
@@ -20,10 +21,11 @@ const Header = () => {
     const dispatch = useDispatch();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+    const [activeSubmenu, setActiveSubmenu] = useState(null);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const closeMenu = () => setIsMenuOpen(false);
     const [showSearch, setShowSearch] = useState(false);
-
 
     useEffect(() => {
         if (accessToken) {
@@ -43,8 +45,14 @@ const Header = () => {
 
     const totalQuantity = 10;
     const favorite = 3;
-    const navLinks = ["/", "/category", "/brands", "/offers",];
+    const navLinks = [
+        { path: "/category", label: "Categories", hasDropdown: true },
+        { path: "/brands", label: "Brands" },
+        { path: "/offers", label: "Offers" },
+    ];
+
     const mobileLinks = ["/", "/category", "/brands", "/offers", "/cart", "/favorite"];
+
 
     const menuVariants = {
         closed: {
@@ -64,6 +72,12 @@ const Header = () => {
 
     const overlayVariants = { closed: { opacity: 0 }, open: { opacity: 1 } };
 
+    const dropdownVariants = {
+        hidden: { opacity: 0, y: 10, scale: 0.95 },
+        visible: { opacity: 1, y: 0, scale: 1 },
+        exit: { opacity: 0, y: 10, scale: 0.95 }
+    };
+
     const handleProfile = () => {
         router.push("/profile");
         setShowDropdown(false);
@@ -76,7 +90,7 @@ const Header = () => {
     };
 
     return (
-        <header className="bg-white shadow-sm py-1 px-4 md:px-6 sticky top-0 left-0 w-full z-50">
+        <header className="bg-white shadow-sm px-4 md:px-6 sticky top-0 left-0 w-full z-50">
             <nav className="flex justify-between items-center">
                 <div className="flex xl:gap-8 items-center">
                     <Link href="/">
@@ -84,23 +98,133 @@ const Header = () => {
                     </Link>
                     <p className="text_primary font-medium hidden xl:flex">Welcome to Jwala Online store</p>
                 </div>
-                <div className="hidden lg:flex items-center space-x-12">
-                    {navLinks?.map((path) => {
-                        const label =
-                            path === "/"
-                                ? "Home"
-                                : path
-                                    .replace("/", "")
-                                    .replace("-", " ")
-                                    .replace(/\b\w/g, (l) => l.toUpperCase());
+                <div className="hidden lg:flex items-center space-x-10 text-md">
+                    {navLinks?.map((item) => {
+                        const isCategory = item.hasDropdown;
                         return (
-                            <Link
-                                key={path}
-                                href={path}
-                                className={`text-gray-700 hover:text-green-400 transition font-medium`}
+                            <div
+                                key={item.path}
+                                onMouseEnter={() => isCategory && setShowCategoryDropdown(true)}
+                                onMouseLeave={() => isCategory && setShowCategoryDropdown(false)}
                             >
-                                {label}
-                            </Link>
+                                {isCategory ? (
+                                    <button
+                                        className={`text-gray-700 hover:text-green-400 transition font-medium flex items-center gap-1 py-2`}
+                                    >
+                                        {item.label}
+                                        <IoChevronDown className={`w-4 h-4 transition-transform ${showCategoryDropdown ? 'rotate-180' : ''}`} />
+                                    </button>
+                                ) : (
+                                    <Link
+                                        href={item.path}
+                                        className={`text-gray-700 hover:text-green-400 transition font-medium py-2`}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                )}
+                                {isCategory && (
+                                    <AnimatePresence>
+                                        {showCategoryDropdown && (
+                                            <motion.div
+                                                variants={dropdownVariants}
+                                                initial="hidden"
+                                                animate="visible"
+                                                exit="exit"
+                                                transition={{ duration: 0.2 }}
+                                                className="absolute top-full left-0  w-full h-[500px] overflow-y-scroll bg-white rounded-lg shadow-xl border border-gray-200 z-50 "
+                                                onMouseEnter={() => setShowCategoryDropdown(true)}
+                                                onMouseLeave={() => setShowCategoryDropdown(false)}
+                                            >
+                                                <div className="p-6 grid grid-cols-3 gap-8">
+                                                    <div className="space-y-4">
+                                                        <h3 className="font-semibold text-gray-900 text-lg border-b pb-2">
+                                                            CATEGORIES
+                                                        </h3>
+                                                        {Object.keys(categories).map((category) => (
+                                                            <div
+                                                                key={category}
+                                                                className="relative group"
+                                                                onMouseEnter={() => setActiveSubmenu(category)}
+                                                            >
+                                                                <button className="w-full text-left text-gray-700 hover:text-green-500 font-medium transition-colors py-2 flex justify-between items-center">
+                                                                    {category}
+                                                                    <IoChevronDown className="w-3 h-3 transform group-hover:rotate-180 transition-transform" />
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+
+                                                    <div className="space-y-6">
+                                                        <h3 className="font-semibold text-gray-900 text-lg border-b pb-2">
+                                                            {activeSubmenu || "Browse"}
+                                                        </h3>
+                                                        {activeSubmenu && categories[activeSubmenu]?.subcategories && (
+                                                            <div className="space-y-4">
+                                                                {Object.entries(categories[activeSubmenu]?.subcategories)?.map(([subcat, items]) => (
+                                                                    <div key={subcat} className="space-y-2">
+                                                                        <h4 className="font-medium text-gray-800 text-sm">
+                                                                            {subcat}
+                                                                        </h4>
+                                                                        <div className="space-y-1">
+                                                                            {items?.map((item) => (
+                                                                                <Link
+                                                                                    key={item}
+                                                                                    href={`/category/${item.toLowerCase().replace(/\s+/g, '-')}`}
+                                                                                    className="block text-sm text-gray-600 hover:text-green-500 transition-colors"
+                                                                                >
+                                                                                    {item}
+                                                                                </Link>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="space-y-6">
+                                                        <h3 className="font-semibold text-gray-900 text-lg border-b pb-2">
+                                                            Featured
+                                                        </h3>
+                                                        {activeSubmenu && categories[activeSubmenu]?.collections && (
+                                                            <div className="space-y-4">
+                                                                <h4 className="font-medium text-gray-800 text-sm">
+                                                                    Collections
+                                                                </h4>
+                                                                <div className="space-y-2">
+                                                                    {categories[activeSubmenu].collections.map((collection) => (
+                                                                        <Link
+                                                                            key={collection}
+                                                                            href={`/collection/${collection.toLowerCase().replace(/\s+/g, '-')}`}
+                                                                            className="block text-sm text-green-600 hover:text-green-700 font-medium transition-colors"
+                                                                        >
+                                                                            {collection}
+                                                                        </Link>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                        <div className="bg-gray-50 rounded-lg p-4">
+                                                            <h4 className="font-medium text-gray-800 text-sm mb-2">
+                                                                Special Offers
+                                                            </h4>
+                                                            <p className="text-xs text-gray-600 mb-3">
+                                                                Up to 50% off on selected items
+                                                            </p>
+                                                            <Link
+                                                                href="/offers"
+                                                                className="text-xs text-green-600 hover:text-green-700 font-medium"
+                                                            >
+                                                                View All Offers →
+                                                            </Link>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                )}
+                            </div>
                         );
                     })}
 
@@ -225,14 +349,14 @@ const Header = () => {
                             <div className="flex items-center">
                                 <button
                                     onClick={() => dispatch(openPopup("login"))}
-                                    className=" py-1.5  rounded-full text-sm font-medium text-gray-700 transition-colors duration-200 hover:text-green-500 cursor-pointer hover:border-green-500"
+                                    className=" py-1.5  rounded-full text-md font-medium text-gray-700 transition-colors duration-200 hover:text-green-500 cursor-pointer hover:border-green-500"
                                 >
                                     Login /
                                 </button>
 
                                 <button
                                     onClick={() => dispatch(openPopup("signup"))}
-                                    className=" py-1.5  rounded-full text-sm font-medium text-gray-700 transition-colors duration-200 hover:text-red-500 cursor-pointer hover:border-red-500"
+                                    className=" py-1.5  rounded-full text-md font-medium text-gray-700 transition-colors duration-200 hover:text-red-500 cursor-pointer hover:border-red-500"
                                 >
                                     Register
                                 </button>

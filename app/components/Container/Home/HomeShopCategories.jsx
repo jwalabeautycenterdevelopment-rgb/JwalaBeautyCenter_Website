@@ -1,25 +1,21 @@
 "use client";
-import React from "react";
-import Image from "next/image";
+import React, { useEffect } from "react";
 import { motion, } from "framer-motion";
-
-import CategoryImg2 from "@/app/assets/category_img2.svg";
-import CategoryImg3 from "@/app/assets/category_img3.svg";
-import CategoryImg4 from "@/app/assets/category_img4.svg";
-import CategoryImg5 from "@/app/assets/category_img5.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { getParentCategory } from "@/app/store/slice/parentCategorySlice";
+import CustomImage from "@/app/common/Image";
 
 const HomeShopCategories = () => {
-    const categories = [
-        { name: "Toners", count: 23, image: CategoryImg2 },
-        { name: "Serums", count: 23, image: CategoryImg3 },
-        { name: "Moisturizer", count: 28, image: CategoryImg4 },
-        { name: "Acne treatment", count: 28, image: CategoryImg5 },
-        { name: "Sun screen", count: 28, image: CategoryImg2 },
-        { name: "Face wash", count: 18, image: CategoryImg3 },
-        { name: "Essence", count: 12, image: CategoryImg4 },
-    ];
+    const dispatch = useDispatch()
+    const { getAllCategories, hasFetched } = useSelector((state) => state.parentcategory);
 
-    const repeatedCategories = [...categories, ...categories];
+    useEffect(() => {
+        if (!hasFetched) {
+            dispatch(getParentCategory());
+        }
+    }, [dispatch, hasFetched]);
+
+    const repeatedCategories = [...getAllCategories, ...getAllCategories];
 
     return (
         <div className="relative overflow-hidden py-4 md:py-6 ">
@@ -49,11 +45,12 @@ const HomeShopCategories = () => {
                             className="rounded-lg text-center flex flex-col items-center p-4 min-w-[180px] md:min-w-[200px]"
                         >
                             <div className="relative w-[150px] aspect-square mb-3">
-                                <Image
+                                <CustomImage
                                     src={category?.image}
                                     alt={category?.name}
                                     fill
                                     className="object-contain"
+                                    priority={index === 0}
                                 />
                             </div>
                             <h4 className="text-gray-700 text-[15px] font-medium mb-1">

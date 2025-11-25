@@ -32,7 +32,7 @@ const HomeSkinConcerns = () => {
                     navigation
                     breakpoints={{
                         640: { slidesPerView: 2 },
-                        768: { slidesPerView: 4 },
+                        1200: { slidesPerView: 4 },
                         1400: { slidesPerView: 5 },
                     }}
                     className="px-6"

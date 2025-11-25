@@ -60,8 +60,8 @@ const Footer = () => {
                                     <a href="tel:+918925066671" className="text_primary hover:underline">+91 89250 66671</a>
                                 </li>
                                 <li>
-                                    <span className="font-medium">Email Id:</span>{" "}
-                                    <a href="mailto:parrysbeauty2023@gmail.com" className="text_primary hover:underline">
+                                    <span className="font-medium">Email</span>{" "}
+                                    <a href="mailto:parrysbeauty2023@gmail.com" className="text_primary  lg:text-xs xl:text-sm hover:underline">
                                         parrysbeauty2023@gmail.com
                                     </a>
                                 </li>
