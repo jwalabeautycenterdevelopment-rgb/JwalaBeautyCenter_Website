@@ -16,6 +16,22 @@ export const searchProducts = createAsyncThunk(
   }
 );
 
+export const getCategoryProducts = createAsyncThunk(
+  "products/subCategoryProducts",
+  async (slug, thunkAPI) => {
+    try {
+      const response = await FetchApi({
+        endpoint: `/user/products/subcategory/${slug}`,
+        method: "GET",
+      });
+
+      return response;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err?.message);
+    }
+  }
+);
+
 export const getUserProducts = createAsyncThunk(
   "products/getUserProducts",
   async (_, thunkAPI) => {
@@ -119,6 +135,10 @@ const productsSlice = createSlice({
     loadingUserProducts: false,
     errorUserProducts: null,
 
+    categoryProducts: [],
+    userCategoryProducts: false,
+    userCategoryProductsError: null,
+
     singleProduct: null,
     loadingSingle: false,
     errorSingle: null,
@@ -139,6 +159,7 @@ const productsSlice = createSlice({
       state.errorSingle = null;
       state.errorBestSellers = null;
       state.errorReviewAction = null;
+      state.userCategoryProductsError = null;
     },
     clearReviewSuccess(state) {
       state.successReviewAction = false;
@@ -161,6 +182,21 @@ const productsSlice = createSlice({
       .addCase(searchProducts.rejected, (state, action) => {
         state.loadingSearch = false;
         state.errorSearch = action.payload || "Failed to search products";
+      });
+
+    builder
+      .addCase(getCategoryProducts.pending, (state) => {
+        state.userCategoryProducts = true;
+        state.userCategoryProductsError = null;
+      })
+      .addCase(getCategoryProducts.fulfilled, (state, action) => {
+        state.userCategoryProducts = false;
+        state.categoryProducts = action.payload?.data?.products || [];
+      })
+      .addCase(getCategoryProducts.rejected, (state, action) => {
+        state.userCategoryProducts = false;
+        state.userCategoryProductsError =
+          action.payload || "Failed to fetch user products";
       });
 
     builder

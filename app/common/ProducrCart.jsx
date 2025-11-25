@@ -8,8 +8,6 @@ export const ProductCard = ({ product }) => {
     const [wishlisted, setWishlisted] = useState(false);
 
     const handleAddToCart = () => {
-        console.log("jii");
-
     };
 
     return (

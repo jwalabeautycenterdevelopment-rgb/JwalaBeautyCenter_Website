@@ -13,25 +13,36 @@ import { successAlert } from "@/app/utils/alertService";
 import CustomImage from "@/app/common/Image";
 import { FaUserCircle } from "react-icons/fa";
 import { openPopup } from "@/app/store/slice/popupSlice";
-import { categories } from "@/app/utils/mockData";
+import { getUserSubCategory } from "@/app/store/slice/subCategorySlice";
+import CategoryDropdown from "@/app/common/CategoryDropdown";
 
 const Header = () => {
     const router = useRouter();
-    const { accessToken, userData } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
+
+    const { accessToken, userData } = useSelector((state) => state.auth);
+    const { subCategories, hasFetched } = useSelector((state) => state.subCategory);
+
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
-    const [activeSubmenu, setActiveSubmenu] = useState(null);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const closeMenu = () => setIsMenuOpen(false);
     const [showSearch, setShowSearch] = useState(false);
+    const [showMobileCategory, setShowMobileCategory] = useState(false);
+
 
     useEffect(() => {
         if (accessToken) {
             dispatch(fetchMe())
         }
     }, [dispatch, accessToken])
+
+    useEffect(() => {
+        if (!hasFetched) {
+            dispatch(getUserSubCategory())
+        }
+    }, [dispatch])
 
     useEffect(() => {
         const handler = (e) => {
@@ -43,6 +54,8 @@ const Header = () => {
         return () => document.removeEventListener("click", handler);
     }, []);
 
+    const closeCategoryDropdown = () => setShowCategoryDropdown(false);
+
     const totalQuantity = 10;
     const favorite = 3;
     const navLinks = [
@@ -51,7 +64,7 @@ const Header = () => {
         { path: "/offers", label: "Offers" },
     ];
 
-    const mobileLinks = ["/", "/category", "/brands", "/offers", "/cart", "/favorite"];
+    const mobileLinks = ["/", "/brands", "/offers", "/cart", "/favorite"];
 
 
     const menuVariants = {
@@ -90,7 +103,7 @@ const Header = () => {
     };
 
     return (
-        <header className="bg-white shadow-sm px-4 md:px-6 sticky top-0 left-0 w-full z-50">
+        <header className="bg-white shadow-sm px-4 md:px-6 sticky top-0 left-0 w-full z-50 ">
             <nav className="flex justify-between items-center">
                 <div className="flex xl:gap-8 items-center">
                     <Link href="/">
@@ -131,95 +144,11 @@ const Header = () => {
                                                 animate="visible"
                                                 exit="exit"
                                                 transition={{ duration: 0.2 }}
-                                                className="absolute top-full left-0  w-full h-[500px] overflow-y-scroll bg-white rounded-lg shadow-xl border border-gray-200 z-50 "
+                                                className="absolute top-full left-0 w-full bg-white shadow-xl border border-gray-200 z-50"
                                                 onMouseEnter={() => setShowCategoryDropdown(true)}
                                                 onMouseLeave={() => setShowCategoryDropdown(false)}
                                             >
-                                                <div className="p-6 grid grid-cols-3 gap-8">
-                                                    <div className="space-y-4">
-                                                        <h3 className="font-semibold text-gray-900 text-lg border-b pb-2">
-                                                            CATEGORIES
-                                                        </h3>
-                                                        {Object.keys(categories).map((category) => (
-                                                            <div
-                                                                key={category}
-                                                                className="relative group"
-                                                                onMouseEnter={() => setActiveSubmenu(category)}
-                                                            >
-                                                                <button className="w-full text-left text-gray-700 hover:text-green-500 font-medium transition-colors py-2 flex justify-between items-center">
-                                                                    {category}
-                                                                    <IoChevronDown className="w-3 h-3 transform group-hover:rotate-180 transition-transform" />
-                                                                </button>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-
-                                                    <div className="space-y-6">
-                                                        <h3 className="font-semibold text-gray-900 text-lg border-b pb-2">
-                                                            {activeSubmenu || "Browse"}
-                                                        </h3>
-                                                        {activeSubmenu && categories[activeSubmenu]?.subcategories && (
-                                                            <div className="space-y-4">
-                                                                {Object.entries(categories[activeSubmenu]?.subcategories)?.map(([subcat, items]) => (
-                                                                    <div key={subcat} className="space-y-2">
-                                                                        <h4 className="font-medium text-gray-800 text-sm">
-                                                                            {subcat}
-                                                                        </h4>
-                                                                        <div className="space-y-1">
-                                                                            {items?.map((item) => (
-                                                                                <Link
-                                                                                    key={item}
-                                                                                    href={`/category/${item.toLowerCase().replace(/\s+/g, '-')}`}
-                                                                                    className="block text-sm text-gray-600 hover:text-green-500 transition-colors"
-                                                                                >
-                                                                                    {item}
-                                                                                </Link>
-                                                                            ))}
-                                                                        </div>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        )}
-                                                    </div>
-
-                                                    <div className="space-y-6">
-                                                        <h3 className="font-semibold text-gray-900 text-lg border-b pb-2">
-                                                            Featured
-                                                        </h3>
-                                                        {activeSubmenu && categories[activeSubmenu]?.collections && (
-                                                            <div className="space-y-4">
-                                                                <h4 className="font-medium text-gray-800 text-sm">
-                                                                    Collections
-                                                                </h4>
-                                                                <div className="space-y-2">
-                                                                    {categories[activeSubmenu].collections.map((collection) => (
-                                                                        <Link
-                                                                            key={collection}
-                                                                            href={`/collection/${collection.toLowerCase().replace(/\s+/g, '-')}`}
-                                                                            className="block text-sm text-green-600 hover:text-green-700 font-medium transition-colors"
-                                                                        >
-                                                                            {collection}
-                                                                        </Link>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                        <div className="bg-gray-50 rounded-lg p-4">
-                                                            <h4 className="font-medium text-gray-800 text-sm mb-2">
-                                                                Special Offers
-                                                            </h4>
-                                                            <p className="text-xs text-gray-600 mb-3">
-                                                                Up to 50% off on selected items
-                                                            </p>
-                                                            <Link
-                                                                href="/offers"
-                                                                className="text-xs text-green-600 hover:text-green-700 font-medium"
-                                                            >
-                                                                View All Offers →
-                                                            </Link>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <CategoryDropdown closeDropdown={closeCategoryDropdown} subCategories={subCategories} />
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
@@ -471,6 +400,41 @@ const Header = () => {
                                         },
                                     }}
                                 >
+                                    <div className="border-b border-gray-200 pb-2">
+                                        <button
+                                            onClick={() => setShowMobileCategory(!showMobileCategory)}
+                                            className="w-full flex justify-between items-center text-md font-medium text-gray-700 py-2"
+                                        >
+                                            Categories
+                                            <IoChevronDown
+                                                className={`transition-transform ${showMobileCategory ? "rotate-180" : ""}`}
+                                            />
+                                        </button>
+
+                                        <AnimatePresence>
+                                            {showMobileCategory && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, height: 0 }}
+                                                    animate={{ opacity: 1, height: "auto" }}
+                                                    exit={{ opacity: 0, height: 0 }}
+                                                    transition={{ duration: 0.25 }}
+                                                    className="pl-4 mt-2 space-y-3"
+                                                >
+                                                    {subCategories?.map((cat) => (
+                                                        <Link
+                                                            key={cat._id}
+                                                            href={`/category/${cat.slug}`}
+                                                            onClick={closeMenu}
+                                                            className="text-gray-600 text-sm block hover:text-green-600"
+                                                        >
+                                                            {cat.name}
+                                                        </Link>
+                                                    ))}
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+
                                     {mobileLinks?.map((path) => {
                                         const label =
                                             path === "/"

@@ -53,7 +53,7 @@ const subCategorySlice = createSlice({
       })
       .addCase(getUserSubCategory.fulfilled, (state, action) => {
         state.loadingAll = false;
-        state.subCategories = action?.payload?.data || [];
+        state.subCategories = action?.payload?.data?.subCategories || [];
         state.hasFetched = true;
       })
       .addCase(getUserSubCategory.rejected, (state, action) => {

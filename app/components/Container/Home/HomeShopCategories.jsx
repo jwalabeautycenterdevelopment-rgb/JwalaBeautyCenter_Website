@@ -2,20 +2,20 @@
 import React, { useEffect } from "react";
 import { motion, } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import { getParentCategory } from "@/app/store/slice/parentCategorySlice";
 import CustomImage from "@/app/common/Image";
+import { getUserSubCategory } from "@/app/store/slice/subCategorySlice";
 
 const HomeShopCategories = () => {
     const dispatch = useDispatch()
-    const { getAllCategories, hasFetched } = useSelector((state) => state.parentcategory);
+    const { subCategories, hasFetched } = useSelector((state) => state.subCategory);
 
     useEffect(() => {
         if (!hasFetched) {
-            dispatch(getParentCategory());
+            dispatch(getUserSubCategory());
         }
     }, [dispatch, hasFetched]);
 
-    const repeatedCategories = [...getAllCategories, ...getAllCategories];
+    const repeatedCategories = [...subCategories, ...subCategories];
 
     return (
         <div className="relative overflow-hidden py-4 md:py-6 ">
@@ -54,10 +54,10 @@ const HomeShopCategories = () => {
                                 />
                             </div>
                             <h4 className="text-gray-700 text-[15px] font-medium mb-1">
-                                {category?.name}
+                                {category?.name.length > 10 ? category?.name.substring(0, 16) + "…" : category?.name}
                             </h4>
                             <p className="text-gray-500 font-medium text-xs md:text-sm">
-                                ({category?.count} Products)
+                                ({category?.productCount} Products)
                             </p>
                         </div>
                     ))}

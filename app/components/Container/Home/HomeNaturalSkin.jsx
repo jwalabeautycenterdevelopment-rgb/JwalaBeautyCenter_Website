@@ -8,7 +8,8 @@ import CustomImage from "@/app/common/Image";
 const HomeNaturalSkin = () => {
     const dispatch = useDispatch()
     const { allBanners, hasFetched } = useSelector((state) => state.adBanner);
-    const firstBanner = allBanners[1]
+    const firstBanner = allBanners[0]
+    
 
     useEffect(() => {
         if (!hasFetched) {

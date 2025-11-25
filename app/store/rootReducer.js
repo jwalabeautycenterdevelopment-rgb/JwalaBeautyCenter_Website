@@ -7,6 +7,7 @@ import parentcategoryReducer from "./slice/parentCategorySlice";
 import adBannerReducer from "./slice/adBanner";
 import offerReducer from "./slice/offerSlice";
 import productReducer from "./slice/productsSlice";
+import subCategoryReducer from "./slice/subCategorySlice";
 const reducer = combineReducers({
   register: registerReducer,
   auth: authReducer,
@@ -16,5 +17,6 @@ const reducer = combineReducers({
   adBanner: adBannerReducer,
   offers: offerReducer,
   products: productReducer,
+  subCategory: subCategoryReducer,
 });
 export default reducer;
