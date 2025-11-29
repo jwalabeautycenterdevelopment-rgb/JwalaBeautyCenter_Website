@@ -94,7 +94,7 @@ const ProductSection = ({ slug }) => {
                                         )}
                                     </div>
                                 </div>
-                                <div className="px-2">
+                                <div className="px-2 mt-3">
                                     <h3 className="font-normal text-gray-800 line-clamp-2  h-10 text-sm leading-tight">
                                         {product?.name.length > 40 ? product?.name.substring(0, 52) + "…" : product?.name}
                                     </h3>
@@ -114,7 +114,6 @@ const ProductSection = ({ slug }) => {
                                             </span>
                                         )}
                                     </div>
-
                                     <div>
                                         {product?.stock > 0 ? (
                                             <span className="text-xs text-green-600 font-medium">
