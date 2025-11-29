@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { IoCartOutline, IoHeartOutline } from "react-icons/io5";
+import { IoCartOutline, IoHeartOutline, IoChevronDown } from "react-icons/io5";
 import Logo from "@/app/assets/navbar_icon.svg";
 import { IoIosSearch } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,16 +13,23 @@ import { successAlert } from "@/app/utils/alertService";
 import CustomImage from "@/app/common/Image";
 import { FaUserCircle } from "react-icons/fa";
 import { openPopup } from "@/app/store/slice/popupSlice";
+import { getUserSubCategory } from "@/app/store/slice/subCategorySlice";
+import CategoryDropdown from "@/app/common/CategoryDropdown";
 
 const Header = () => {
     const router = useRouter();
-    const { accessToken, userData } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
+
+    const { accessToken, userData } = useSelector((state) => state.auth);
+    const { subCategories, hasFetched } = useSelector((state) => state.subCategory);
+
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const closeMenu = () => setIsMenuOpen(false);
     const [showSearch, setShowSearch] = useState(false);
+    const [showMobileCategory, setShowMobileCategory] = useState(false);
 
 
     useEffect(() => {
@@ -30,6 +37,12 @@ const Header = () => {
             dispatch(fetchMe())
         }
     }, [dispatch, accessToken])
+
+    useEffect(() => {
+        if (!hasFetched) {
+            dispatch(getUserSubCategory())
+        }
+    }, [dispatch])
 
     useEffect(() => {
         const handler = (e) => {
@@ -41,10 +54,18 @@ const Header = () => {
         return () => document.removeEventListener("click", handler);
     }, []);
 
+    const closeCategoryDropdown = () => setShowCategoryDropdown(false);
+
     const totalQuantity = 10;
     const favorite = 3;
-    const navLinks = ["/", "/category", "/brands", "/offers",];
-    const mobileLinks = ["/", "/category", "/brands", "/offers", "/cart", "/favorite"];
+    const navLinks = [
+        { path: "/category", label: "Categories", hasDropdown: true },
+        { path: "/brands", label: "Brands" },
+        { path: "/offers", label: "Offers" },
+    ];
+
+    const mobileLinks = ["/", "/brands", "/offers", "/cart", "/favorite"];
+
 
     const menuVariants = {
         closed: {
@@ -64,6 +85,12 @@ const Header = () => {
 
     const overlayVariants = { closed: { opacity: 0 }, open: { opacity: 1 } };
 
+    const dropdownVariants = {
+        hidden: { opacity: 0, y: 10, scale: 0.95 },
+        visible: { opacity: 1, y: 0, scale: 1 },
+        exit: { opacity: 0, y: 10, scale: 0.95 }
+    };
+
     const handleProfile = () => {
         router.push("/profile");
         setShowDropdown(false);
@@ -76,7 +103,7 @@ const Header = () => {
     };
 
     return (
-        <header className="bg-white shadow-sm py-1 px-4 md:px-6 sticky top-0 left-0 w-full z-50">
+        <header className="bg-white shadow-sm px-4 md:px-6 sticky top-0 left-0 w-full z-50 ">
             <nav className="flex justify-between items-center">
                 <div className="flex xl:gap-8 items-center">
                     <Link href="/">
@@ -84,23 +111,49 @@ const Header = () => {
                     </Link>
                     <p className="text_primary font-medium hidden xl:flex">Welcome to Jwala Online store</p>
                 </div>
-                <div className="hidden lg:flex items-center space-x-12">
-                    {navLinks?.map((path) => {
-                        const label =
-                            path === "/"
-                                ? "Home"
-                                : path
-                                    .replace("/", "")
-                                    .replace("-", " ")
-                                    .replace(/\b\w/g, (l) => l.toUpperCase());
+                <div className="hidden lg:flex items-center space-x-10 text-md">
+                    {navLinks?.map((item) => {
+                        const isCategory = item.hasDropdown;
                         return (
-                            <Link
-                                key={path}
-                                href={path}
-                                className={`text-gray-700 hover:text-green-400 transition font-medium`}
+                            <div
+                                key={item.path}
+                                onMouseEnter={() => isCategory && setShowCategoryDropdown(true)}
+                                onMouseLeave={() => isCategory && setShowCategoryDropdown(false)}
                             >
-                                {label}
-                            </Link>
+                                {isCategory ? (
+                                    <button
+                                        className={`text-gray-700 hover:text-green-400 transition font-medium flex items-center gap-1 py-2`}
+                                    >
+                                        {item.label}
+                                        <IoChevronDown className={`w-4 h-4 transition-transform ${showCategoryDropdown ? 'rotate-180' : ''}`} />
+                                    </button>
+                                ) : (
+                                    <Link
+                                        href={item.path}
+                                        className={`text-gray-700 hover:text-green-400 transition font-medium py-2`}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                )}
+                                {isCategory && (
+                                    <AnimatePresence>
+                                        {showCategoryDropdown && (
+                                            <motion.div
+                                                variants={dropdownVariants}
+                                                initial="hidden"
+                                                animate="visible"
+                                                exit="exit"
+                                                transition={{ duration: 0.2 }}
+                                                className="absolute top-full left-0 w-full bg-white shadow-xl border border-gray-200 z-50"
+                                                onMouseEnter={() => setShowCategoryDropdown(true)}
+                                                onMouseLeave={() => setShowCategoryDropdown(false)}
+                                            >
+                                                <CategoryDropdown closeDropdown={closeCategoryDropdown} subCategories={subCategories} />
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                )}
+                            </div>
                         );
                     })}
 
@@ -225,14 +278,14 @@ const Header = () => {
                             <div className="flex items-center">
                                 <button
                                     onClick={() => dispatch(openPopup("login"))}
-                                    className=" py-1.5  rounded-full text-sm font-medium text-gray-700 transition-colors duration-200 hover:text-green-500 cursor-pointer hover:border-green-500"
+                                    className=" py-1.5  rounded-full text-md font-medium text-gray-700 transition-colors duration-200 hover:text-green-500 cursor-pointer hover:border-green-500"
                                 >
                                     Login /
                                 </button>
 
                                 <button
                                     onClick={() => dispatch(openPopup("signup"))}
-                                    className=" py-1.5  rounded-full text-sm font-medium text-gray-700 transition-colors duration-200 hover:text-red-500 cursor-pointer hover:border-red-500"
+                                    className=" py-1.5  rounded-full text-md font-medium text-gray-700 transition-colors duration-200 hover:text-red-500 cursor-pointer hover:border-red-500"
                                 >
                                     Register
                                 </button>
@@ -347,6 +400,41 @@ const Header = () => {
                                         },
                                     }}
                                 >
+                                    <div className="border-b border-gray-200 pb-2">
+                                        <button
+                                            onClick={() => setShowMobileCategory(!showMobileCategory)}
+                                            className="w-full flex justify-between items-center text-md font-medium text-gray-700 py-2"
+                                        >
+                                            Categories
+                                            <IoChevronDown
+                                                className={`transition-transform ${showMobileCategory ? "rotate-180" : ""}`}
+                                            />
+                                        </button>
+
+                                        <AnimatePresence>
+                                            {showMobileCategory && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, height: 0 }}
+                                                    animate={{ opacity: 1, height: "auto" }}
+                                                    exit={{ opacity: 0, height: 0 }}
+                                                    transition={{ duration: 0.25 }}
+                                                    className="pl-4 mt-2 space-y-3"
+                                                >
+                                                    {subCategories?.map((cat) => (
+                                                        <Link
+                                                            key={cat._id}
+                                                            href={`/category/${cat.slug}`}
+                                                            onClick={closeMenu}
+                                                            className="text-gray-600 text-sm block hover:text-green-600"
+                                                        >
+                                                            {cat.name}
+                                                        </Link>
+                                                    ))}
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+
                                     {mobileLinks?.map((path) => {
                                         const label =
                                             path === "/"

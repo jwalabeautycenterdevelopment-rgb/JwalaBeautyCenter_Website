@@ -21,7 +21,6 @@ const products = [
 
 const NewArrivals = () => {
     const handleAddToCart = (product) => {
-        console.log("Add to cart:", product);
     };
 
     return (

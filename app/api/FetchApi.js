@@ -1,6 +1,5 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const FETCH_TIMEOUT = 25000;
-
 export const FetchApi = async ({
   endpoint,
   method = "GET",

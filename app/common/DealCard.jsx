@@ -8,7 +8,6 @@ export const DealCard = ({ deal }) => {
     const [wishlisted, setWishlisted] = useState(false);
 
     const handleAddToCart = () => {
-        console.log("jii");
 
     };
 

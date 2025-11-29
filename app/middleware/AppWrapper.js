@@ -15,6 +15,7 @@ export default function AppWrapper({ children }) {
 
   const hiddenPaths = ["/404"];
   const hideLayout = pathname ? hiddenPaths.includes(pathname) : false;
+  
 
   useEffect(() => {
     if (accessToken) setupTokenRefresh();
