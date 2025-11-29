@@ -1,30 +1,45 @@
-"use client"
-import { NoProductFound } from "@/app/common/Animation"
-import CustomImage from "@/app/common/Image"
-import MainLayout from "@/app/common/MainLayout"
-import { ProductSkeleton } from "@/app/common/Skeleton"
-import { getCategoryProducts } from "@/app/store/slice/productsSlice"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
-import { FaBox, FaStar } from "react-icons/fa"
-import { useDispatch, useSelector } from "react-redux"
+"use client";
+import { NoProductFound } from "@/app/common/Animation";
+import CustomImage from "@/app/common/Image";
+import MainLayout from "@/app/common/MainLayout";
+import { ProductSkeleton } from "@/app/common/Skeleton";
+import { getCategoryProducts } from "@/app/store/slice/productsSlice";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { FaBox, FaStar } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 
 const formatPrice = (amount) => `₹${Number(amount || 0).toFixed(0)}`;
 
+const getProductPrices = (product) => {
+    if (product?.isVariant && product?.variants?.length > 0) {
+        return {
+            price: product.variants[0].price || 0,
+            offerPrice: product.variants[0].offerPrice || null,
+        };
+    }
+
+    return {
+        price: product.price || 0,
+        offerPrice: product.offerPrice || null,
+    };
+};
+
+const calculateDiscount = (original, offer) => {
+    if (!original || !offer || offer >= original) return 0;
+    return Math.round(((original - offer) / original) * 100);
+};
+
 const ProductSection = ({ slug }) => {
-    const dispatch = useDispatch()
-    const router = useRouter()
-    const { categoryProducts = [], userCategoryProducts } = useSelector((state) => state.products)
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const { categoryProducts = [], userCategoryProducts } = useSelector(
+        (state) => state.products
+    );
 
     useEffect(() => {
-        if (slug) dispatch(getCategoryProducts(slug))
-    }, [slug, dispatch])
-
-    const calculateDiscount = (original, offer) => {
-        if (!original || !offer || offer >= original) return 0;
-        return Math.round(((original - offer) / original) * 100);
-    };
-
+        if (slug) dispatch(getCategoryProducts(slug));
+    }, [slug, dispatch]);
 
     const renderRating = (rating) => {
         return (
@@ -32,11 +47,12 @@ const ProductSection = ({ slug }) => {
                 <span>{rating}</span>
                 <FaStar size={10} />
             </div>
-        )
-    }
+        );
+    };
+
     const handleNavigate = (item) => {
-        router.push(`/product/${item?.slug}`)
-    }
+        router.push(`/product/${item?.slug}`);
+    };
 
     return (
         <MainLayout className="px-4 sm:px-6 lg:px-18 py-10 capitalize">
@@ -51,10 +67,14 @@ const ProductSection = ({ slug }) => {
                             product?.productImages?.[0] ||
                             product?.variants?.[0]?.variantImages?.[0] ||
                             null;
+
                         const showImage = img && img !== "string";
-                        const discountPercent = calculateDiscount(product?.price, product?.offerPrice);
+                        const { price, offerPrice } = getProductPrices(product);
+                        const discountPercent = calculateDiscount(
+                            price,
+                            offerPrice
+                        );
                         const hasDiscount = discountPercent > 0;
-                        console.log(hasDiscount);
 
                         return (
                             <div
@@ -66,7 +86,10 @@ const ProductSection = ({ slug }) => {
                                         {discountPercent}% OFF
                                     </div>
                                 )}
-                                <div className="relative h-60 bg-gray-50 overflow-hidden group cursor-pointer" onClick={() => handleNavigate(product)}>
+                                <div
+                                    className="relative h-60 bg-gray-50 overflow-hidden group cursor-pointer"
+                                    onClick={() => handleNavigate(product)}
+                                >
                                     {showImage ? (
                                         <CustomImage
                                             src={img}
@@ -85,39 +108,46 @@ const ProductSection = ({ slug }) => {
                                                 Best Seller
                                             </span>
                                         )}
+
                                         {product?.isNewArrival && (
                                             <span className="inline-block px-3 py-1 text-white text-xs font-semibold
-            bg-linear-to-r from-orange-400 to-red-500
-            skew-x-[-7deg] shadow-md rounded-sm select-none">
-                                                <span className="inline-block ">New</span>
+                                                bg-linear-to-r from-orange-400 to-red-500
+                                                skew-x-[-7deg] shadow-md rounded-sm select-none"
+                                            >
+                                                <span className="inline-block">
+                                                    New
+                                                </span>
                                             </span>
                                         )}
                                     </div>
                                 </div>
                                 <div className="px-2 mt-3">
-                                    <h3 className="font-normal text-gray-800 line-clamp-2  h-10 text-sm leading-tight">
-                                        {product?.name.length > 40 ? product?.name.substring(0, 52) + "…" : product?.name}
+                                    <h3 className="font-normal text-gray-800 line-clamp-2 h-10 text-sm leading-tight">
+                                        {product?.name.length > 40
+                                            ? product?.name.substring(0, 52) +
+                                            "…"
+                                            : product?.name}
                                     </h3>
                                     <div className="flex items-center gap-2">
                                         {hasDiscount ? (
                                             <>
                                                 <span className="text-lg font-bold text-gray-900">
-                                                    {formatPrice(product?.offerPrice)}
+                                                    {formatPrice(offerPrice)}
                                                 </span>
                                                 <span className="text-sm text-gray-500 line-through">
-                                                    {formatPrice(product?.price)}
+                                                    {formatPrice(price)}
                                                 </span>
                                             </>
                                         ) : (
                                             <span className="text-lg font-bold text-gray-900">
-                                                {formatPrice(product?.price)}
+                                                {formatPrice(price)}
                                             </span>
                                         )}
                                     </div>
                                     <div>
-                                        {product?.stock > 0 ? (
+                                        {product?.stock || product?.variants[0].stock > 0 ? (
                                             <span className="text-xs text-green-600 font-medium">
-                                                In Stock ({product.stock} left)
+                                                In Stock ({product.stock || product?.variants[0].stock} left)
                                             </span>
                                         ) : (
                                             <span className="text-xs text-red-600 font-medium">
@@ -127,8 +157,12 @@ const ProductSection = ({ slug }) => {
                                     </div>
                                     <div className="flex justify-between items-center mt-1">
                                         <div className="flex items-center gap-2">
-                                            {renderRating(product?.rating || 4.3)}
-                                            <span className="text-xs text-gray-500">({product?.reviewCount || 1145})</span>
+                                            {renderRating(
+                                                product?.rating || 4.3
+                                            )}
+                                            <span className="text-xs text-gray-500">
+                                                ({product?.reviewCount || 1145})
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -137,8 +171,8 @@ const ProductSection = ({ slug }) => {
                     })
                 )}
             </div>
-        </MainLayout >
-    )
-}
+        </MainLayout>
+    );
+};
 
-export default ProductSection
+export default ProductSection;
