@@ -49,7 +49,7 @@ const NewArrivals = () => {
                     </div>
                     <div className="lg:col-span-8">
                         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-5">
-                            {products.map((product) => (
+                            {products?.map((product) => (
                                 <ProductCard
                                     key={product.id}
                                     product={product}

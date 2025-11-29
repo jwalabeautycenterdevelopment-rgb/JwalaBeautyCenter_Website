@@ -49,7 +49,7 @@ const HomeShopCategories = () => {
                                     src={category?.image}
                                     alt={category?.name}
                                     fill
-                                    className="object-contain"
+                                    className="object-contain rounded-full"
                                     priority={index === 0}
                                 />
                             </div>

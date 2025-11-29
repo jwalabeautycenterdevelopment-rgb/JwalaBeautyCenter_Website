@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { useSelectedLayoutSegments } from "next/navigation";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import Header from "../components/Common/Header/Header";
@@ -10,12 +10,10 @@ import { setupTokenRefresh } from "../utils/setupTokenRefresh";
 import PopupManager from "../common/PopupManager";
 
 export default function AppWrapper({ children }) {
-  const pathname = usePathname();
   const accessToken = useSelector((state) => state.auth.accessToken);
+  const segments = useSelectedLayoutSegments();
 
-  const hiddenPaths = ["/404"];
-  const hideLayout = pathname ? hiddenPaths.includes(pathname) : false;
-  
+  const isNotFound = segments.includes("not-found");
 
   useEffect(() => {
     if (accessToken) setupTokenRefresh();
@@ -23,10 +21,10 @@ export default function AppWrapper({ children }) {
 
   return (
     <>
-      {!hideLayout && <Header />}
+      {!isNotFound && <Header />}
       <PopupManager />
       <main>{children}</main>
-      {!hideLayout && <Footer />}
+      {!isNotFound && <Footer />}
       <ToastContainer
         position="top-right"
         autoClose={3000}

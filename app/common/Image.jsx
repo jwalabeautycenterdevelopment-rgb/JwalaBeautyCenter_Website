@@ -20,7 +20,7 @@ export default function CustomImage({
             setImgSrc(src.startsWith("http") ? src : `${IMG_URL}${src}`);
         } else {
             setImgSrc(
-                "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2558760599.jpg"
+                ""
             );
         }
     }, [src]);

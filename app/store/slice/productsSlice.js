@@ -49,10 +49,10 @@ export const getUserProducts = createAsyncThunk(
 
 export const getSingleProduct = createAsyncThunk(
   "products/getSingleProduct",
-  async (productId, thunkAPI) => {
+  async (slug, thunkAPI) => {
     try {
       const response = await FetchApi({
-        endpoint: `/user/products/singleProduct/${productId}`,
+        endpoint: `/user/products/singleProduct/${slug}`,
         method: "GET",
       });
       return response;
@@ -221,7 +221,7 @@ const productsSlice = createSlice({
       })
       .addCase(getSingleProduct.fulfilled, (state, action) => {
         state.loadingSingle = false;
-        state.singleProduct = action.payload?.data || null;
+        state.singleProduct = action.payload?.data?.product || null;
       })
       .addCase(getSingleProduct.rejected, (state, action) => {
         state.loadingSingle = false;
