@@ -8,6 +8,8 @@ import adBannerReducer from "./slice/adBanner";
 import offerReducer from "./slice/offerSlice";
 import productReducer from "./slice/productsSlice";
 import subCategoryReducer from "./slice/subCategorySlice";
+import dealsReducer from "./slice/dealsSlice";
+import cartReducer from "./slice/cartSlice";
 const reducer = combineReducers({
   register: registerReducer,
   auth: authReducer,
@@ -18,5 +20,7 @@ const reducer = combineReducers({
   offers: offerReducer,
   products: productReducer,
   subCategory: subCategoryReducer,
+  deals: dealsReducer,
+  cart: cartReducer,
 });
 export default reducer;

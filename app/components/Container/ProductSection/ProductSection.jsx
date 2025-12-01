@@ -4,31 +4,12 @@ import CustomImage from "@/app/common/Image";
 import MainLayout from "@/app/common/MainLayout";
 import { ProductSkeleton } from "@/app/common/Skeleton";
 import { getCategoryProducts } from "@/app/store/slice/productsSlice";
+import { calculateDiscount, formatPrice, getProductCardPrice, } from "@/app/utils/priceCalculate";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { FaBox, FaStar } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 
-const formatPrice = (amount) => `₹${Number(amount || 0).toFixed(0)}`;
-
-const getProductPrices = (product) => {
-    if (product?.isVariant && product?.variants?.length > 0) {
-        return {
-            price: product.variants[0].price || 0,
-            offerPrice: product.variants[0].offerPrice || null,
-        };
-    }
-
-    return {
-        price: product.price || 0,
-        offerPrice: product.offerPrice || null,
-    };
-};
-
-const calculateDiscount = (original, offer) => {
-    if (!original || !offer || offer >= original) return 0;
-    return Math.round(((original - offer) / original) * 100);
-};
 
 const ProductSection = ({ slug }) => {
     const dispatch = useDispatch();
@@ -69,13 +50,13 @@ const ProductSection = ({ slug }) => {
                             null;
 
                         const showImage = img && img !== "string";
-                        const { price, offerPrice } = getProductPrices(product);
+                        const { price, offerPrice } = getProductCardPrice(product);
                         const discountPercent = calculateDiscount(
                             price,
                             offerPrice
                         );
-                        const hasDiscount = discountPercent > 0;
 
+                        const hasDiscount = discountPercent >= 0;
                         return (
                             <div
                                 key={product?._id}

@@ -15,14 +15,16 @@ import { FaUserCircle } from "react-icons/fa";
 import { openPopup } from "@/app/store/slice/popupSlice";
 import { getUserSubCategory } from "@/app/store/slice/subCategorySlice";
 import CategoryDropdown from "@/app/common/CategoryDropdown";
+import { fetchCart, fetchGuestCart } from "@/app/store/slice/cartSlice";
+import useGuestId from "@/app/utils/useGuestId";
 
 const Header = () => {
     const router = useRouter();
     const dispatch = useDispatch();
-
+    const guestId = useGuestId();
     const { accessToken, userData } = useSelector((state) => state.auth);
     const { subCategories, hasFetched } = useSelector((state) => state.subCategory);
-
+    const { totalQuantity } = useSelector((state) => state.cart);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
@@ -31,18 +33,22 @@ const Header = () => {
     const [showSearch, setShowSearch] = useState(false);
     const [showMobileCategory, setShowMobileCategory] = useState(false);
 
-
     useEffect(() => {
         if (accessToken) {
-            dispatch(fetchMe())
+            dispatch(fetchMe());
+            dispatch(fetchCart());
+        } else {
+            dispatch(fetchGuestCart({ guestId }));
         }
-    }, [dispatch, accessToken])
+    }, [accessToken, guestId]);
+
 
     useEffect(() => {
         if (!hasFetched) {
-            dispatch(getUserSubCategory())
+            dispatch(getUserSubCategory());
         }
-    }, [dispatch])
+    }, [hasFetched]);
+
 
     useEffect(() => {
         const handler = (e) => {
@@ -56,7 +62,6 @@ const Header = () => {
 
     const closeCategoryDropdown = () => setShowCategoryDropdown(false);
 
-    const totalQuantity = 10;
     const favorite = 3;
     const navLinks = [
         { path: "/category", label: "Categories", hasDropdown: true },

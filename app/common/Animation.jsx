@@ -1,6 +1,9 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBox, FaSearch, FaExclamationTriangle, FaSync } from "react-icons/fa";
+import { Sparkles, ShoppingCart } from "lucide-react";
+import Link from "next/link";
+
 
 export const NoProductFound = () => {
     const icons = [
@@ -216,3 +219,160 @@ export const NoProductFound = () => {
         </div>
     );
 };
+
+
+
+export const EmptyCart = () => {
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2,
+                delayChildren: 0.3
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: "spring",
+                stiffness: 100,
+                damping: 15
+            }
+        }
+    };
+
+    const sparkleVariants = {
+        initial: { opacity: 0, scale: 0 },
+        animate: {
+            opacity: [0, 1, 0],
+            scale: [0, 1, 0],
+            transition: {
+                duration: 2,
+                repeat: Infinity,
+                repeatDelay: 1
+            }
+        }
+    };
+
+    return (
+        <motion.div
+            className="min-h-screen  flex items-center justify-center bg-linear-to-r from-[#fff5e6] to-[#fff5e6] px-5 md:px-0"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            <div className="max-w-md w-full">
+                <motion.div className="relative">
+                    <motion.div
+                        className="absolute -top-20 -left-20 w-40 h-40 bg-linear-to-r from-rose-100 to-pink-100 rounded-full blur-3xl opacity-60"
+                        animate={{
+                            x: [0, 20, 0],
+                            y: [0, 15, 0],
+                        }}
+                        transition={{
+                            duration: 8,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    />
+
+                    <motion.div
+                        className="absolute -bottom-20 -right-20 w-40 h-40 bg-linear-to-r from-blue-100 to-cyan-100 rounded-full blur-3xl opacity-60"
+                        animate={{
+                            x: [0, -15, 0],
+                            y: [0, 20, 0],
+                        }}
+                        transition={{
+                            duration: 6,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    />
+
+                    <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-200 shadow-2xl">
+                        <motion.div
+                            className="absolute -top-2 -right-2"
+                            variants={sparkleVariants}
+                            animate="animate"
+                        >
+                            <Sparkles className="w-6 h-6 text-rose-400" />
+                        </motion.div>
+
+                        <motion.div
+                            className="absolute -bottom-2 -left-2"
+                            variants={sparkleVariants}
+                            animate="animate"
+                            transition={{ delay: 1 }}
+                        >
+                            <Sparkles className="w-6 h-6 text-blue-400" />
+                        </motion.div>
+                        <motion.div
+                            className="flex justify-center mb-6"
+                            variants={itemVariants}
+                        >
+                        </motion.div>
+                        <div className="min-h-[300px] flex flex-col items-center justify-center">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.3 }}
+                                className="flex flex-col items-center gap-4"
+                            >
+                                <ShoppingCart className="w-20 h-20 text-gray-300" />
+                                <h3 className="text-lg font-medium text-gray-700">
+                                    No items in cart
+                                </h3>
+                                <p className="text-gray-500 text-sm">
+                                    Browse products to add items
+                                </p>
+                                <Link href={"/"} className=" cursor-pointer text-blue-600 hover:text-blue-700 font-medium">
+                                    View Products →
+                                </Link>
+                            </motion.div>
+                        </div>
+
+                        <div className="absolute -top-6 left-6">
+                            <motion.div
+                                className="w-12 h-12 bg-white rounded-lg shadow-lg flex items-center justify-center"
+                                animate={{
+                                    y: [0, -20, 0],
+                                }}
+                                transition={{
+                                    duration: 3,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                }}
+                            >
+                                <span className="text-2xl">👕</span>
+                            </motion.div>
+                        </div>
+
+                        <div className="absolute -bottom-6 right-6">
+                            <motion.div
+                                className="w-12 h-12 bg-white rounded-lg shadow-lg flex items-center justify-center"
+                                animate={{
+                                    y: [0, 20, 0],
+                                }}
+                                transition={{
+                                    duration: 3,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                    delay: 1.5
+                                }}
+                            >
+                                <span className="text-2xl">👟</span>
+                            </motion.div>
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+        </motion.div>
+    );
+};
+

@@ -6,12 +6,16 @@ import { useDispatch, useSelector } from "react-redux"
 import { FaStar } from "react-icons/fa"
 import CustomImage from "@/app/common/Image"
 import ProductPopup from "@/app/common/ProductPopup"
-
-const formatPrice = (amount) => `₹${Number(amount || 0).toFixed(0)}`
+import { formatPrice } from "@/app/utils/priceCalculate"
+import { addGuestCartItem, addOrUpdateCartItem } from "@/app/store/slice/cartSlice"
+import useGuestId from "@/app/utils/useGuestId"
 
 const ProductDetails = ({ slug }) => {
     const dispatch = useDispatch()
+    const guestId = useGuestId();
     const { singleProduct = {} } = useSelector((state) => state.products)
+    const { accessToken } = useSelector((state) => state.auth);
+
     const [selectedVariant, setSelectedVariant] = useState(0)
     const [selectedImage, setSelectedImage] = useState(0)
     const [isPopupOpen, setIsPopupOpen] = useState(false)
@@ -59,19 +63,41 @@ const ProductDetails = ({ slug }) => {
         setPopupProduct(null)
     }
 
+    const handleAddCart = () => {
+        if (!singleProduct) return;
+        const itemToAdd = {
+            productId: singleProduct._id,
+            quantity: 1,
+
+            ...(currentVariant && {
+                variant: {
+                    sku: currentVariant.sku,
+                }
+            }),
+        };
+        if (accessToken) {
+            dispatch(addOrUpdateCartItem(itemToAdd));
+        } else if (guestId) {
+            dispatch(addGuestCartItem({ guestId, item: itemToAdd }));
+        } else {
+            console.warn("Guest ID not available yet!");
+        }
+    };
+
+
     return (
         <MainLayout className="px-4 sm:px-6 lg:px-18 py-10">
             <div className="max-w-7xl mx-auto">
-                <div className="text-sm text-gray-500 mb-6">
+                <div className="text-sm text-gray-500 mb-6  line-clamp-2">
                     {singleProduct?.category?.name} / {singleProduct?.brand?.name} /{" "}
                     <span className="text-gray-900">{displayName}</span>
                 </div>
-
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div className="space-y-4">
                         <div className="bg-gray-100 rounded-lg h-96 flex items-center justify-center">
-                            {productImages.length > 0 ? (
+                            {productImages?.length > 0 ? (
                                 <button
+                                    className="cursor-pointer"
                                     onClick={() =>
                                         openPopup({
                                             name: displayName,
@@ -98,13 +124,13 @@ const ProductDetails = ({ slug }) => {
                                 </div>
                             )}
                         </div>
-                        {productImages.length > 1 && (
+                        {productImages?.length > 1 && (
                             <div className="flex gap-2 overflow-x-auto">
-                                {productImages.map((image, index) => (
+                                {productImages?.map((image, index) => (
                                     <button
                                         key={index}
                                         onClick={() => setSelectedImage(index)}
-                                        className={`w-20 h-20 border-2 rounded-lg overflow-hidden ${selectedImage === index ? "border-blue-500" : "border-gray-200"
+                                        className={`w-20 h-20 border-2  rounded-lg overflow-hidden ${selectedImage === index ? "border-blue-500" : "border-gray-200"
                                             }`}
                                     >
                                         <CustomImage
@@ -120,7 +146,19 @@ const ProductDetails = ({ slug }) => {
                         )}
                     </div>
                     <div className="space-y-2">
-                        <h1 className="text-2xl font-bold text-gray-900">{displayName}</h1>
+                        <h1 className="text-2xl font-bold text-gray-900  line-clamp-4">{displayName}</h1>
+                        <div className="flex gap-2">
+                            {singleProduct?.isNewArrival && (
+                                <span className="inline-block px-3 py-1 text-white text-xs font-semibold bg-linear-to-r from-orange-400 to-red-500 skew-x-[-7deg] shadow-md rounded-sm">
+                                    <span className="inline-block skew-x-[7deg]">New Arrival</span>
+                                </span>
+                            )}
+                            {singleProduct?.isBestSeller && (
+                                <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded text-xs font-semibold">
+                                    Best Seller
+                                </span>
+                            )}
+                        </div>
                         <div className="flex items-center gap-2">
                             <div className="flex items-center gap-1 bg-green-700 rounded-full px-3 py-1 text-white">
                                 <span className="text-sm font-semibold">{singleProduct?.rating || "0.0"}</span>
@@ -130,13 +168,13 @@ const ProductDetails = ({ slug }) => {
                                 ({singleProduct?.reviewCount || 0} ratings)
                             </span>
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-2 flex items-center  gap-2">
                             <div className="text-3xl font-bold text-gray-900">{formatPrice(displayPriceValue)}</div>
                             {hasDiscount && (
                                 <div className="flex items-center gap-2">
                                     <span className="text-lg text-gray-500 line-through">{formatPrice(originalPrice)}</span>
-                                    <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-sm font-semibold">
-                                        {discountPercent}% OFF
+                                    <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-sm font-medium">
+                                        Save  {discountPercent}% Off
                                     </span>
                                 </div>
                             )}
@@ -145,7 +183,7 @@ const ProductDetails = ({ slug }) => {
                             <div className="space-y-4 border-t border-gray-300">
                                 <h3 className="font-semibold text-gray-900">Select Variant:</h3>
                                 <div className="flex flex-wrap gap-3">
-                                    {singleProduct.variants.map((variant, index) => (
+                                    {singleProduct?.variants?.map((variant, index) => (
                                         <button
                                             key={variant._id}
                                             onClick={() => handleVariantSelect(index)}
@@ -154,7 +192,7 @@ const ProductDetails = ({ slug }) => {
                                                 : "border-gray-300 hover:border-gray-400"
                                                 }`}
                                         >
-                                            {variant?.name.length > 40 ? variant?.name.substring(0, 10) + ".." : variant?.name}
+                                            {variant?.name.length > 20 ? variant?.name.substring(0, 13) + ".." : variant?.name}
                                             <div className="text-xs text-gray-600">
                                                 {variant.stock > 0 ? `${variant.stock} in stock` : "Out of stock"}
                                             </div>
@@ -172,47 +210,39 @@ const ProductDetails = ({ slug }) => {
                         </div>
                         <div className="flex gap-4">
                             <button
+                                onClick={handleAddCart}
                                 disabled={currentStock === 0}
-                                className={`flex-1 font-semibold py-3 px-6 rounded-lg transition-colors ${currentStock > 0 ? "bg-yellow-400 hover:bg-yellow-500 text-gray-900" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                className={`flex-1 font-semibold py-3 px-6 rounded-lg transition-colors ${currentStock > 0 ? "bg-yellow-400 hover:bg-yellow-500 text-gray-900 cursor-pointer" : "bg-gray-300 text-gray-500 cursor-not-allowed"
                                     }`}
                             >
                                 {currentStock > 0 ? "Add to Cart" : "Out of Stock"}
                             </button>
                             <button
                                 disabled={currentStock === 0}
-                                className={`flex-1 font-semibold py-3 px-6 rounded-lg transition-colors ${currentStock > 0 ? "bg-orange-500 hover:bg-orange-600 text-white" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                className={`flex-1 font-semibold py-3 px-6 rounded-lg transition-colors ${currentStock > 0 ? "bg-orange-500 hover:bg-orange-600 text-white cursor-pointer" : "bg-gray-300 text-gray-500 cursor-not-allowed"
                                     }`}
                             >
                                 Buy Now
                             </button>
                         </div>
-                        <div className="flex gap-2">
-                            {singleProduct?.isNewArrival && (
-                                <span className="inline-block px-3 py-1 text-white text-xs font-semibold bg-linear-to-r from-orange-400 to-red-500 skew-x-[-7deg] shadow-md rounded-sm">
-                                    <span className="inline-block skew-x-[7deg]">New Arrival</span>
-                                </span>
-                            )}
-                            {singleProduct?.isBestSeller && (
-                                <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded text-xs font-semibold">
-                                    Best Seller
-                                </span>
-                            )}
-                        </div>
+
                     </div>
                 </div>
                 <div className="mt-12">
                     <h2 className="text-xl font-bold text-gray-900 mb-4">Product Description</h2>
                     <div className="bg-gray-50 p-6 rounded-lg">
-                        <p className="text-gray-700 text-sm font-normal whitespace-pre-line">
+                        <p className="text-gray-700 text-md font-normal whitespace-pre-line">
                             {singleProduct?.description || "No description available."}
                         </p>
                     </div>
                 </div>
             </div>
-            {isPopupOpen && popupProduct && (
-                <ProductPopup isOpen={isPopupOpen} onClose={closePopup} product={popupProduct} />
-            )}
-        </MainLayout>
+            {
+                isPopupOpen && popupProduct && (
+                    <ProductPopup isOpen={isPopupOpen} onClose={closePopup} product={popupProduct} />
+                )
+            }
+        </MainLayout >
     )
 }
 
