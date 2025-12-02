@@ -156,6 +156,7 @@ const authSlice = createSlice({
     logout(state) {
       state.accessToken = null;
       state.refreshToken = null;
+      state.userData = null;
       localStorage.clear();
       clearTokenRefresh();
     },

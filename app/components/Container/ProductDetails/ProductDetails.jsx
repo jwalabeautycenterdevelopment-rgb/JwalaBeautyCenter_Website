@@ -9,13 +9,18 @@ import ProductPopup from "@/app/common/ProductPopup"
 import { formatPrice } from "@/app/utils/priceCalculate"
 import { addGuestCartItem, addOrUpdateCartItem } from "@/app/store/slice/cartSlice"
 import useGuestId from "@/app/utils/useGuestId"
+import { Heart } from "lucide-react"
+import { addFavorite, addGuestFavorite, clearFavoriteMessage } from "@/app/store/slice/favoriteSlice"
+import { errorAlert } from "@/app/utils/alertService"
+import { clearMessage } from "@/app/store/slice/register"
 
 const ProductDetails = ({ slug }) => {
     const dispatch = useDispatch()
     const guestId = useGuestId();
     const { singleProduct = {} } = useSelector((state) => state.products)
     const { accessToken } = useSelector((state) => state.auth);
-
+    const { addFavoriteError, addFavoriteMsg } = useSelector((state) => state.myfavourite)
+    const { message, error } = useSelector((state) => state.cart)
     const [selectedVariant, setSelectedVariant] = useState(0)
     const [selectedImage, setSelectedImage] = useState(0)
     const [isPopupOpen, setIsPopupOpen] = useState(false)
@@ -29,6 +34,23 @@ const ProductDetails = ({ slug }) => {
         if (singleProduct?.variants?.length > 0) setSelectedVariant(0)
         setSelectedImage(0)
     }, [singleProduct])
+
+    useEffect(() => {
+        if (addFavoriteMsg) {
+            dispatch(clearFavoriteMessage());
+        }
+        if (addFavoriteError) {
+            errorAlert(addFavoriteError);
+            dispatch(clearFavoriteMessage());
+        }
+        if (message) {
+            dispatch(clearMessage())
+        }
+        if (error) {
+            dispatch(errorAlert(error))
+            dispatch(clearMessage())
+        }
+    }, [addFavoriteMsg, addFavoriteError, dispatch]);
 
     const currentVariant = singleProduct?.variants?.[selectedVariant]
 
@@ -68,7 +90,6 @@ const ProductDetails = ({ slug }) => {
         const itemToAdd = {
             productId: singleProduct._id,
             quantity: 1,
-
             ...(currentVariant && {
                 variant: {
                     sku: currentVariant.sku,
@@ -79,6 +100,22 @@ const ProductDetails = ({ slug }) => {
             dispatch(addOrUpdateCartItem(itemToAdd));
         } else if (guestId) {
             dispatch(addGuestCartItem({ guestId, item: itemToAdd }));
+        } else {
+            console.warn("Guest ID not available yet!");
+        }
+    };
+
+
+    const handleAddFavourtie = () => {
+        if (!singleProduct) return;
+        const payload = {
+            productId: singleProduct._id,
+            ...(currentVariant && { sku: currentVariant.sku })
+        };
+        if (accessToken) {
+            dispatch(addFavorite(payload));
+        } else if (guestId) {
+            dispatch(addGuestFavorite({ guestId, ...payload }));
         } else {
             console.warn("Guest ID not available yet!");
         }
@@ -208,21 +245,24 @@ const ProductDetails = ({ slug }) => {
                                 <span className="text-red-600 font-medium">Out of Stock</span>
                             )}
                         </div>
-                        <div className="flex gap-4">
+                        <div className="flex my-5 gap-4">
                             <button
                                 onClick={handleAddCart}
                                 disabled={currentStock === 0}
-                                className={`flex-1 font-semibold py-3 px-6 rounded-lg transition-colors ${currentStock > 0 ? "bg-yellow-400 hover:bg-yellow-500 text-gray-900 cursor-pointer" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                className={`flex-1 font-semibold cursor-pointer py-3 px-6 rounded-lg transition-colors ${currentStock > 0 ? "bg-yellow-400 hover:bg-yellow-500 text-gray-900 cursor-pointer" : "bg-gray-300 text-gray-500 cursor-not-allowed"
                                     }`}
                             >
                                 {currentStock > 0 ? "Add to Cart" : "Out of Stock"}
                             </button>
                             <button
-                                disabled={currentStock === 0}
-                                className={`flex-1 font-semibold py-3 px-6 rounded-lg transition-colors ${currentStock > 0 ? "bg-orange-500 hover:bg-orange-600 text-white cursor-pointer" : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                    }`}
+                                onClick={handleAddFavourtie}
+                                className="flex-1 flex items-center cursor-pointer justify-center gap-2 py-3 px-6
+               rounded-xl border border-gray-300 bg-white
+               text-gray-800 font-semibold transition-all
+               hover:bg-gray-50"
                             >
-                                Buy Now
+                                <Heart size={18} strokeWidth={2} className="text-gray-700" />
+                                Wishlist
                             </button>
                         </div>
 

@@ -10,6 +10,8 @@ import productReducer from "./slice/productsSlice";
 import subCategoryReducer from "./slice/subCategorySlice";
 import dealsReducer from "./slice/dealsSlice";
 import cartReducer from "./slice/cartSlice";
+import favouriteReducer from "./slice/favoriteSlice";
+
 const reducer = combineReducers({
   register: registerReducer,
   auth: authReducer,
@@ -22,5 +24,6 @@ const reducer = combineReducers({
   subCategory: subCategoryReducer,
   deals: dealsReducer,
   cart: cartReducer,
+  myfavourite: favouriteReducer,
 });
 export default reducer;

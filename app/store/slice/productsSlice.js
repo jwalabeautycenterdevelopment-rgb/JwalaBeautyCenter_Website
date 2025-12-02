@@ -136,6 +136,7 @@ const productsSlice = createSlice({
     errorUserProducts: null,
 
     categoryProducts: [],
+    userCategoryLoading: false,
     userCategoryProducts: false,
     userCategoryProductsError: null,
 
@@ -186,15 +187,15 @@ const productsSlice = createSlice({
 
     builder
       .addCase(getCategoryProducts.pending, (state) => {
-        state.userCategoryProducts = true;
+        state.userCategoryLoading = true;
         state.userCategoryProductsError = null;
       })
       .addCase(getCategoryProducts.fulfilled, (state, action) => {
-        state.userCategoryProducts = false;
+        state.userCategoryLoading = false;
         state.categoryProducts = action.payload?.data?.products || [];
       })
       .addCase(getCategoryProducts.rejected, (state, action) => {
-        state.userCategoryProducts = false;
+        state.userCategoryLoading = false;
         state.userCategoryProductsError =
           action.payload || "Failed to fetch user products";
       });
@@ -235,7 +236,7 @@ const productsSlice = createSlice({
       })
       .addCase(getBestSellers.fulfilled, (state, action) => {
         state.loadingBestSellers = false;
-        state.bestSellers = action.payload?.data?.bestSellers || [];
+        state.bestSellers = action.payload?.data?.products || [];
       })
       .addCase(getBestSellers.rejected, (state, action) => {
         state.loadingBestSellers = false;

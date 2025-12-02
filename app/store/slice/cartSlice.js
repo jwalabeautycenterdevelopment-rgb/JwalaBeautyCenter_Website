@@ -12,14 +12,12 @@ export const fetchCart = createAsyncThunk(
         token,
       });
       if (response?.data?.success === false)
-        return thunkAPI.rejectWithValue(response?.data?.errors);
+        return thunkAPI.rejectWithValue(
+          response?.data?.message || "Something went wrong"
+        );
       return response?.data;
     } catch (err) {
-      let errorMessage = err?.message;
-      try {
-        errorMessage = JSON.parse(err.message)?.message || err.message;
-      } catch {}
-      return thunkAPI.rejectWithValue(errorMessage);
+      return thunkAPI.rejectWithValue(err.message);
     }
   }
 );
@@ -32,15 +30,9 @@ export const fetchGuestCart = createAsyncThunk(
         endpoint: `/guest/cart/?guestId=${guestId}`,
         method: "GET",
       });
-      if (response?.data?.success === false)
-        return thunkAPI.rejectWithValue(response?.data?.errors);
       return response?.data;
     } catch (err) {
-      let errorMessage = err?.message;
-      try {
-        errorMessage = JSON.parse(err.message)?.message || err.message;
-      } catch {}
-      return thunkAPI.rejectWithValue(errorMessage);
+      return thunkAPI.rejectWithValue(err.message);
     }
   }
 );
@@ -57,16 +49,11 @@ export const addGuestCartItem = createAsyncThunk(
           ...item,
         },
       });
-      if (response?.data?.success === false)
-        return thunkAPI.rejectWithValue(response?.data?.errors);
       await thunkAPI.dispatch(fetchGuestCart({ guestId }));
       return response?.data;
     } catch (err) {
-      let errorMessage = err?.message;
-      try {
-        errorMessage = JSON.parse(err.message)?.message || err.message;
-      } catch {}
-      return thunkAPI.rejectWithValue(errorMessage);
+      console.log(err);
+      return thunkAPI.rejectWithValue(err.message);
     }
   }
 );
@@ -82,16 +69,10 @@ export const addOrUpdateCartItem = createAsyncThunk(
         token,
         body: payload,
       });
-      if (response?.data?.success === false)
-        return thunkAPI.rejectWithValue(response?.data?.errors);
       await thunkAPI.dispatch(fetchCart());
       return response?.data;
     } catch (err) {
-      let errorMessage = err?.message;
-      try {
-        errorMessage = JSON.parse(err.message)?.message || err.message;
-      } catch {}
-      return thunkAPI.rejectWithValue(errorMessage);
+      return thunkAPI.rejectWithValue(err.message);
     }
   }
 );
@@ -107,16 +88,10 @@ export const updateQuantity = createAsyncThunk(
         token,
         body: payload,
       });
-      if (response?.data?.success === false)
-        return thunkAPI.rejectWithValue(response?.data?.errors);
       await thunkAPI.dispatch(fetchCart());
       return response?.data;
     } catch (err) {
-      let errorMessage = err?.message;
-      try {
-        errorMessage = JSON.parse(err.message)?.message || err.message;
-      } catch {}
-      return thunkAPI.rejectWithValue(errorMessage);
+      return thunkAPI.rejectWithValue(err.message);
     }
   }
 );
@@ -130,17 +105,11 @@ export const updateGuestCartItem = createAsyncThunk(
         method: "PUT",
         body: payload,
       });
-      if (response?.data?.success === false)
-        return thunkAPI.rejectWithValue(response?.data?.errors);
       const { guestId } = payload;
       await thunkAPI.dispatch(fetchGuestCart({ guestId }));
       return response?.data;
     } catch (err) {
-      let errorMessage = err?.message;
-      try {
-        errorMessage = JSON.parse(err.message)?.message || err.message;
-      } catch {}
-      return thunkAPI.rejectWithValue(errorMessage);
+      return thunkAPI.rejectWithValue(err.message);
     }
   }
 );
@@ -156,16 +125,10 @@ export const removeCartItem = createAsyncThunk(
         token,
         body: payload,
       });
-      if (response?.data?.success === false)
-        return thunkAPI.rejectWithValue(response?.data?.errors);
       await thunkAPI.dispatch(fetchCart());
       return response?.data;
     } catch (err) {
-      let errorMessage = err?.message;
-      try {
-        errorMessage = JSON.parse(err.message)?.message || err.message;
-      } catch {}
-      return thunkAPI.rejectWithValue(errorMessage);
+      return thunkAPI.rejectWithValue(err.message);
     }
   }
 );
@@ -179,17 +142,11 @@ export const removeGuestCartItem = createAsyncThunk(
         method: "POST",
         body: payload,
       });
-      if (response?.data?.success === false)
-        return thunkAPI.rejectWithValue(response?.data?.errors);
       await thunkAPI.dispatch(fetchGuestCart({ guestId: payload?.guestId }));
 
       return response?.data;
     } catch (err) {
-      let errorMessage = err?.message;
-      try {
-        errorMessage = JSON.parse(err.message)?.message || err.message;
-      } catch {}
-      return thunkAPI.rejectWithValue(errorMessage);
+      return thunkAPI.rejectWithValue(err.message);
     }
   }
 );

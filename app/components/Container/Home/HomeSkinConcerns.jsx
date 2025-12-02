@@ -3,22 +3,27 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-
-import Image from "next/image";
-import facialImg from "@/app/assets/facial_img.svg";
-
-const concerns = [
-    { title: "Ubtan Facial", img: facialImg },
-    { title: "Brightening Facial", img: facialImg },
-    { title: "Night Beauty", img: facialImg },
-    { title: "Acne Mask", img: facialImg },
-    { title: "Hydrating Glow", img: facialImg },
-    { title: "Tan Removal", img: facialImg },
-    { title: "Acne Mask", img: facialImg },
-
-];
+import { useDispatch, useSelector } from "react-redux";
+import { getParentCategory } from "@/app/store/slice/parentCategorySlice";
+import { useEffect } from "react";
+import CustomImage from "@/app/common/Image";
+import { useRouter } from "next/navigation";
 
 const HomeSkinConcerns = () => {
+    const dispatch = useDispatch();
+    const router = useRouter()
+    const { getAllCategories, hasFetched } = useSelector((state) => state.parentcategory);
+
+    useEffect(() => {
+        if (!hasFetched) {
+            dispatch(getParentCategory());
+        }
+    }, [dispatch, hasFetched]);
+
+    const handleNavigate = (item) => {
+        router.push(`/category/${item?.slug}`)
+    }
+
     return (
         <div className="py-4 md:py-12 bg-[#FFF4E5] px-4 sm:px-6 lg:px-20">
             <h3 className="text-center text-red-500 font-semibold text-[26px] md:text-[32px] mb-8">
@@ -37,19 +42,19 @@ const HomeSkinConcerns = () => {
                     }}
                     className="px-6"
                 >
-                    {concerns?.map((item, index) => (
+                    {getAllCategories?.map((item, index) => (
                         <SwiperSlide key={index}>
-                            <div className="flex flex-col items-center text-center p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                            <div className="flex flex-col items-center text-center p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => handleNavigate(item)}>
                                 <div className="relative w-[170px] h-[140px] mb-4">
-                                    <Image
-                                        src={item?.img}
-                                        alt={item?.title}
+                                    <CustomImage
+                                        src={item?.image}
+                                        alt={item?.name}
                                         fill
                                         className="object-contain"
                                     />
                                 </div>
                                 <p className="text-gray-700 text-[15px] font-medium">
-                                    {item?.title}
+                                    {item?.name}
                                 </p>
                             </div>
                         </SwiperSlide>

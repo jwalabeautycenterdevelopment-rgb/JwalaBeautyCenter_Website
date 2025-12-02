@@ -29,6 +29,20 @@ export const getUserSubCategoryById = createAsyncThunk(
   }
 );
 
+export const categoriesBySlug = createAsyncThunk(
+  "user/getSubCategoryByCategory",
+  async (slug, thunkAPI) => {
+    try {
+      return await FetchApi({
+        endpoint: `/user/category/categoriesBySlug/${slug}`,
+        method: "GET",
+      });
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err?.message);
+    }
+  }
+);
+
 const subCategorySlice = createSlice({
   name: "userSubCategory",
   initialState: {
@@ -36,6 +50,7 @@ const subCategorySlice = createSlice({
     subCategories: [],
     loadingDetail: false,
     subCategoryDetail: null,
+    Category: null,
     error: null,
     hasFetched: false,
   },
@@ -70,6 +85,19 @@ const subCategorySlice = createSlice({
         state.subCategoryDetail = action?.payload?.data || null;
       })
       .addCase(getUserSubCategoryById.rejected, (state, action) => {
+        state.loadingDetail = false;
+        state.error = action?.payload || "Failed to fetch subcategory";
+      })
+
+      .addCase(categoriesBySlug.pending, (state) => {
+        state.loadingDetail = true;
+        state.error = null;
+      })
+      .addCase(categoriesBySlug.fulfilled, (state, action) => {
+        state.loadingDetail = false;
+        state.Category = action?.payload?.data || null;
+      })
+      .addCase(categoriesBySlug.rejected, (state, action) => {
         state.loadingDetail = false;
         state.error = action?.payload || "Failed to fetch subcategory";
       });

@@ -1,36 +1,8 @@
 'use client';
 import React, { useEffect } from 'react';
-import lipstick_img from "@/app/assets/lipstick_img.png";
-import mascara_img from "@/app/assets/mascara_img.png";
 import { DealCard } from '@/app/common/DealCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getActiveDailyDeals } from '@/app/store/slice/dealsSlice';
-
-const deals = [
-    {
-        id: 1,
-        title: 'Matte Lipstick',
-        category: 'Make Up',
-        price: 350,
-        originalPrice: 350,
-        rating: 4.5,
-        discount: '20% off',
-        image: lipstick_img,
-        description: 'Lorem ipsum dolor sit amet consectetur. Tellus platea ipsum suspendisse risus sed ac at enim.',
-    },
-    {
-        id: 2,
-        title: 'Mascara',
-        category: 'Make Up',
-        price: 350,
-        originalPrice: 350,
-        rating: 4.5,
-        discount: '20% off',
-        image: mascara_img,
-        description: 'Lorem ipsum dolor sit amet consectetur. Tellus platea ipsum suspendisse risus sed ac at enim.',
-    },
-];
-
 
 
 const HomeDealsDay = () => {
