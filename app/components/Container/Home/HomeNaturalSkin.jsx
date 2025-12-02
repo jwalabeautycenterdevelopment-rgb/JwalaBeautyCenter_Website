@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect } from "react";
-import naturalBanner from "@/app/assets/natural_banner_img.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserAdBanners } from "@/app/store/slice/adBanner";
 import CustomImage from "@/app/common/Image";
@@ -9,7 +8,6 @@ const HomeNaturalSkin = () => {
     const dispatch = useDispatch()
     const { allBanners, hasFetched } = useSelector((state) => state.adBanner);
     const firstBanner = allBanners[0]
-    
 
     useEffect(() => {
         if (!hasFetched) {

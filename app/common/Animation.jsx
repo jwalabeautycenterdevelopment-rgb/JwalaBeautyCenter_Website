@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBox, FaSearch, FaExclamationTriangle, FaSync } from "react-icons/fa";
 import { Sparkles, ShoppingCart } from "lucide-react";
+import { ShoppingBag, Heart } from "lucide-react";
 import Link from "next/link";
 
 
@@ -376,3 +377,149 @@ export const EmptyCart = () => {
     );
 };
 
+
+export const FavoritesLoading = () => {
+    return (
+        <div className="flex items-center justify-center py-12">
+            <div className="flex flex-col items-center space-y-4">
+                <div className="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
+                <p className="text-gray-600">Loading your favorites...</p>
+            </div>
+        </div>
+    );
+};
+
+
+export const EmptyFavorites = () => {
+    return (
+        <div className="flex flex-col items-center justify-center py-10 md:py-20 px-4 from-[#fff5e6] to-[#fff5e6]">
+            <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 15,
+                    delay: 0.1
+                }}
+                className="relative mb-8"
+            >
+                <motion.div
+                    className="absolute inset-0 rounded-full"
+                    animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.5, 0.8, 0.5]
+                    }}
+                    transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                />
+                <motion.div
+                    animate={{
+                        y: [0, -10, 0],
+                        rotate: [0, 5, -5, 0]
+                    }}
+                    transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                    className="relative z-10"
+                >
+                    <motion.div
+                        className="absolute -top-2 -right-2"
+                        animate={{
+                            y: [0, -15, 0],
+                            scale: [1, 1.2, 1]
+                        }}
+                        transition={{
+                            duration: 2.5,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: 0.5
+                        }}
+                    >
+                        <Heart className="w-10 h-10 text-pink-400 fill-pink-400" />
+                    </motion.div>
+
+                    <motion.div
+                        className="absolute -bottom-2 -left-2"
+                        animate={{
+                            y: [0, -10, 0],
+                            scale: [1, 1.1, 1]
+                        }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: 0.2
+                        }}
+                    >
+                        <Heart className="w-5 h-5 text-purple-300 fill-purple-300" />
+                    </motion.div>
+                </motion.div>
+            </motion.div>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-center space-y-1 max-w-md"
+            >
+                <h3 className="text-2xl font-bold text-gray-800">
+                    Your wishlist is empty
+                </h3>
+
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-gray-600 text-lg"
+                >
+                    Looks like you haven't added any favorites yet
+                </motion.p>
+            </motion.div>
+            <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-2"
+            >
+                <Link href={"/"} className=" cursor-pointer text-blue-600 hover:text-blue-700 font-medium">
+                    Start Shopping →
+                </Link>
+            </motion.div>
+        </div >
+    );
+};
+
+
+export const DotPulseLoader = () => {
+    const dotVariants = {
+        initial: { y: 0 },
+        animate: { y: -10 }
+    };
+
+    return (
+        <div className="flex justify-center items-center space-x-2">
+            {[0, 1, 2].map((index) => (
+                <motion.div
+                    key={index}
+                    className="w-3 h-3 bg-blue-500 rounded-full"
+                    variants={dotVariants}
+                    initial="initial"
+                    animate="animate"
+                    transition={{
+                        duration: 0.5,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        delay: index * 0.1
+                    }}
+                />
+            ))}
+        </div>
+    );
+};

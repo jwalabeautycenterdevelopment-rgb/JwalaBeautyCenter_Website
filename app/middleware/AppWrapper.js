@@ -14,7 +14,6 @@ export default function AppWrapper({ children }) {
   const segments = useSelectedLayoutSegments();
 
   const isNotFound = segments.includes("not-found");
-  const isNotFooter = segments.includes("/cart");
 
   useEffect(() => {
     if (accessToken) setupTokenRefresh();
@@ -25,19 +24,8 @@ export default function AppWrapper({ children }) {
       {!isNotFound && <Header />}
       <PopupManager />
       <main>{children}</main>
-      {!isNotFound || (isNotFooter && <Footer />)}
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+      {!isNotFound && <Footer />}
+      <ToastContainer position="top-right" autoClose={3000} theme="colored" />
     </>
   );
 }

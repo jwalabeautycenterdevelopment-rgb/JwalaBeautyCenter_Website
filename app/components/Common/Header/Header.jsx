@@ -25,6 +25,8 @@ const Header = () => {
     const { accessToken, userData } = useSelector((state) => state.auth);
     const { subCategories, hasFetched } = useSelector((state) => state.subCategory);
     const { totalQuantity } = useSelector((state) => state.cart);
+    const { favoritesCount } = useSelector((state) => state.myfavourite)
+
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
@@ -62,14 +64,13 @@ const Header = () => {
 
     const closeCategoryDropdown = () => setShowCategoryDropdown(false);
 
-    const favorite = 3;
     const navLinks = [
         { path: "/category", label: "Categories", hasDropdown: true },
         { path: "/brands", label: "Brands" },
         { path: "/offers", label: "Offers" },
     ];
 
-    const mobileLinks = ["/", "/brands", "/offers", "/cart", "/favorite"];
+    const mobileLinks = ["/", "/brands", "/offers", "/cart", "/myfavourites"];
 
 
     const menuVariants = {
@@ -204,19 +205,19 @@ const Header = () => {
                             </div>
                         </motion.div>
                         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="relative">
-                            <Link href="/favorite">
+                            <Link href="/myfavourites">
                                 <IoHeartOutline className="w-6 h-6 text-gray-700 hover:text-pink-500 transition-colors duration-200" />
                             </Link>
-                            {favorite > 0 && (
+                            {favoritesCount > 0 && (
                                 <motion.span
-                                    key={favorite}
+                                    key={favoritesCount}
                                     initial={{ scale: 0, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     exit={{ scale: 0, opacity: 0 }}
                                     transition={{ type: "spring", stiffness: 200, damping: 10 }}
                                     className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center shadow"
                                 >
-                                    {favorite}
+                                    {favoritesCount}
                                 </motion.span>
                             )}
                         </motion.div>

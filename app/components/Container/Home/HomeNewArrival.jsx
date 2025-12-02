@@ -1,25 +1,23 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { ProductCard } from "@/app/common/ProducrCart";
 import Arrival1 from "@/app/assets/arrival_img_1.jpg";
-import Arrival2 from "@/app/assets/arrival_img_2.png";
-import Arrival3 from "@/app/assets/arrival_img_3.png";
-import Arrival4 from "@/app/assets/arrival_img_4.png";
-import Arrival5 from "@/app/assets/arrival_img_5.png";
-import Arrival6 from "@/app/assets/arrival_img_6.png";
-import Arrival7 from "@/app/assets/arrival_img_7.png";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserProducts } from "@/app/store/slice/productsSlice";
 
-const products = [
-    { id: 2, title: "Body Lotion", category: "Skin Care", price: 350, discount: '20% off', rating: 4.5, image: Arrival2 },
-    { id: 3, title: "Gel Cleanser", category: "Skin Care", price: 350, discount: '20% off', rating: 4.5, image: Arrival3 },
-    { id: 4, title: "Straightener", category: "Hair Care", price: 350, discount: '20% off', rating: 4.5, image: Arrival4 },
-    { id: 5, title: "Moisturizer", category: "Skin Care", price: 350, discount: '20% off', rating: 4.5, image: Arrival5 },
-    { id: 6, title: "Bio Body Cream", category: "Skin Care", price: 350, discount: '20% off', rating: 4.5, image: Arrival6 },
-    { id: 7, title: "Serum A", category: "Skin Care", price: 350, discount: '20% off', rating: 4.5, image: Arrival7 },
-];
 
 const NewArrivals = () => {
+    const dispatch = useDispatch();
+    const { userProducts } = useSelector(
+        (state) => state.products
+    );
+    const newArrivals = userProducts.filter(product => product.isNewArrival);
+
+    useEffect(() => {
+        dispatch(getUserProducts());
+    }, [dispatch]);
+
     const handleAddToCart = (product) => {
     };
 
@@ -49,9 +47,9 @@ const NewArrivals = () => {
                     </div>
                     <div className="lg:col-span-8">
                         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-5">
-                            {products?.map((product) => (
+                            {newArrivals?.map((product) => (
                                 <ProductCard
-                                    key={product.id}
+                                    key={product._id}
                                     product={product}
                                     onAddToCart={() => handleAddToCart(product)}
                                 />
