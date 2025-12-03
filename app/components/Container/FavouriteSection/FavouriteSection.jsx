@@ -119,7 +119,7 @@ const FavouritesSection = () => {
                                     </h3>
                                     <div className="flex items-center gap-2 mt-2 text-[15px]">
                                         <span className="font-semibold text-green-600">
-                                            ₹{product?.price}
+                                            ₹{product?.price || product?.variants.price}
                                         </span>
                                         <span className="line-through text-gray-400">
                                             ₹{product?.offerPrice}

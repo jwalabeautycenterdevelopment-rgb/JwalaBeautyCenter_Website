@@ -17,6 +17,7 @@ import { getUserSubCategory } from "@/app/store/slice/subCategorySlice";
 import CategoryDropdown from "@/app/common/CategoryDropdown";
 import { fetchCart, fetchGuestCart } from "@/app/store/slice/cartSlice";
 import useGuestId from "@/app/utils/useGuestId";
+import { fetchFavorites, fetchGuestFavorites } from "@/app/store/slice/favoriteSlice";
 
 const Header = () => {
     const router = useRouter();
@@ -36,11 +37,15 @@ const Header = () => {
     const [showMobileCategory, setShowMobileCategory] = useState(false);
 
     useEffect(() => {
+        if (accessToken === undefined || guestId === undefined) return;
+
         if (accessToken) {
             dispatch(fetchMe());
             dispatch(fetchCart());
-        } else {
+            dispatch(fetchFavorites());
+        } else if (guestId) {
             dispatch(fetchGuestCart({ guestId }));
+            dispatch(fetchGuestFavorites(guestId));
         }
     }, [accessToken, guestId]);
 
