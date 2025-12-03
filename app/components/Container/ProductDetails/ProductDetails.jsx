@@ -19,12 +19,17 @@ const ProductDetails = ({ slug }) => {
     const guestId = useGuestId();
     const { singleProduct = {} } = useSelector((state) => state.products)
     const { accessToken } = useSelector((state) => state.auth);
-    const { addFavoriteError, addFavoriteMsg } = useSelector((state) => state.myfavourite)
+    const { addFavoriteError, addFavoriteMsg, favorites } = useSelector((state) => state.myfavourite)
     const { message, error } = useSelector((state) => state.cart)
     const [selectedVariant, setSelectedVariant] = useState(0)
     const [selectedImage, setSelectedImage] = useState(0)
     const [isPopupOpen, setIsPopupOpen] = useState(false)
     const [popupProduct, setPopupProduct] = useState(null)
+
+    const isFavourite = favorites?.find(
+        fav => fav.productId?._id === singleProduct?._id
+    )?._id;
+
 
     useEffect(() => {
         if (slug) dispatch(getSingleProduct(slug))
@@ -257,12 +262,15 @@ const ProductDetails = ({ slug }) => {
                             <button
                                 onClick={handleAddFavourtie}
                                 className="flex-1 flex items-center cursor-pointer justify-center gap-2 py-3 px-6
-               rounded-xl border border-gray-300 bg-white
-               text-gray-800 font-semibold transition-all
-               hover:bg-gray-50"
+        rounded-xl border border-gray-300 bg-white
+        text-gray-800 font-semibold transition-all hover:bg-gray-50"
                             >
-                                <Heart size={18} strokeWidth={2} className="text-gray-700" />
-                                Wishlist
+                                <Heart
+                                    size={18}
+                                    strokeWidth={2}
+                                    className={isFavourite ? "text-rose-600 fill-rose-600" : "text-gray-700"}
+                                />
+                                {isFavourite ? "Wishlisted" : "Wishlist"}
                             </button>
                         </div>
 

@@ -114,6 +114,26 @@ export const refreshToken = createAsyncThunk(
   }
 );
 
+export const updateShippingAddress = createAsyncThunk(
+  "user/updateShippingAddress",
+  async (payload, thunkAPI) => {
+    const token = thunkAPI.getState()?.auth?.accessToken;
+    try {
+      const response = await FetchApi({
+        endpoint: "/user/shipping-address",
+        method: "PUT",
+        token,
+        body: payload,
+      });
+      return response?.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err?.message || "Failed to update shipping address"
+      );
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -133,6 +153,10 @@ const authSlice = createSlice({
     refreshMessage: null,
     refreshError: null,
     forgotLoading: false,
+    shippingAddress: null,
+    updateLoading: false,
+    updateSuccess: null,
+    updateError: null,
     forgotPasswordSuccess: null,
     forgotPasswordError: null,
     resetPasswordLoading: false,
@@ -142,12 +166,14 @@ const authSlice = createSlice({
   reducers: {
     clearAuthError(state) {
       state.otpError = null;
+      state.updateError = null;
       state.loginError = null;
       state.forgotPasswordError = null;
       state.resetError = null;
       state.resetPasswordError = null;
     },
     clearAuthMessage(state) {
+      state.updateSuccess = null;
       state.otpSuccess = null;
       state.loginSuccess = null;
       state.forgotPasswordSuccess = null;
@@ -235,10 +261,26 @@ const authSlice = createSlice({
       .addCase(fetchMe.fulfilled, (state, action) => {
         state.fetchLoading = false;
         state.userData = action.payload;
+        state.shippingAddress = action.payload.shippingAddress || null;
       })
       .addCase(fetchMe.rejected, (state, action) => {
         state.fetchLoading = false;
         state.fetchMeError = action.payload || "Registration failed";
+      })
+
+      .addCase(updateShippingAddress.pending, (state) => {
+        state.updateLoading = true;
+        state.updateError = null;
+        state.updateSuccess = null;
+      })
+
+      .addCase(updateShippingAddress.fulfilled, (state, action) => {
+        state.updateLoading = false;
+        state.updateSuccess = action.payload?.message || "Address updated";
+      })
+      .addCase(updateShippingAddress.rejected, (state, action) => {
+        state.updateLoading = false;
+        state.updateError = action.payload;
       })
 
       .addCase(refreshToken.pending, (state) => {
