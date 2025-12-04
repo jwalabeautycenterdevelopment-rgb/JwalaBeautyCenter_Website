@@ -470,7 +470,7 @@ const CartSection = () => {
                         onClose={() => setIsAddressModalOpen(false)}
                         setIsAddressModalOpen={setIsAddressModalOpen}
                         loading={updateLoading}
-                        shippingAddress={userData?.shippingAddress[0]}
+                        shippingAddress={placeOrderData?.shippingAddress[0]}
                     />
                 )}
             </div>
