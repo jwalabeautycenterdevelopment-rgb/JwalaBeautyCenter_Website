@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addFavorite, addGuestFavorite, clearFavoriteMessage } from '../store/slice/favoriteSlice';
 import { addGuestCartItem, addOrUpdateCartItem } from '../store/slice/cartSlice';
 import { clearMessage } from '../store/slice/register';
+import { errorAlert } from '../utils/alertService';
 
 export const ProductCard = ({ product, isHover = true }) => {
     const router = useRouter()
@@ -36,7 +37,6 @@ export const ProductCard = ({ product, isHover = true }) => {
         originalPrice && price
             ? Math.round(((originalPrice - price) / originalPrice) * 100)
             : 0;
-
 
     useEffect(() => {
         if (addFavoriteMsg) {

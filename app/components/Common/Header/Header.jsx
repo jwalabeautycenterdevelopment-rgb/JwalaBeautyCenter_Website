@@ -249,7 +249,7 @@ const Header = () => {
                                 )}
                             </Link>
                         </motion.div>
-                        {userData ? (
+                        {accessToken ? (
                             <div
                                 className="relative"
                                 onMouseEnter={() => setShowDropdown(true)}
@@ -281,12 +281,12 @@ const Header = () => {
                                             >
                                                 My order
                                             </button>
-                                            <button
+                                            {/* <button
                                                 onClick={handleProfile}
                                                 className="block w-full cursor-pointer text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                             >
                                                 Profile
-                                            </button>
+                                            </button> */}
                                             <button
                                                 onClick={handleLogout}
                                                 className="block w-full cursor-pointer text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"

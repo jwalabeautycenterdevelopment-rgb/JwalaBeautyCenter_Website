@@ -8,8 +8,16 @@ import {
     FaWhatsapp,
 } from "react-icons/fa";
 import Logo from "@/app/assets/navbar_icon.svg";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 const Footer = () => {
+    const router = useRouter()
+    const { getAllCategories, } = useSelector((state) => state.parentcategory);
+
+    const handleNavigate = (item) => {
+        router.push(`/category/${item?.slug}`)
+    }
     return (
         <footer className="bg-[#ffff] px-4 md:px-6 text-gray-800 border-t border-gray-200">
             <div className="mx-auto py-3 md:pt-8 pb-4">
@@ -26,24 +34,26 @@ const Footer = () => {
                         <div>
                             <h3 className="font-semibold mb-3 text-lg">Links</h3>
                             <ul className="space-y-2 text-sm">
-                                <li><Link href="#" className="hover:underline">Brands</Link></li>
-                                <li><Link href="#" className="hover:underline">Offers</Link></li>
-                                <li><Link href="#" className="hover:underline">New</Link></li>
-                                <li><Link href="#" className="hover:underline">Cart</Link></li>
-                                <li><Link href="#" className="hover:underline">Wishlist</Link></li>
-                                <li><Link href="#" className="hover:underline">My Orders</Link></li>
-                                <li><Link href="#" className="hover:underline">Profile</Link></li>
+                                <li><Link href="/brands" className="hover:underline">Brands</Link></li>
+                                <li><Link href="/offers" className="hover:underline">Offers</Link></li>
+                                <li><Link href="/cart" className="hover:underline">Cart</Link></li>
+                                <li><Link href="/myfavourites" className="hover:underline">Wishlist</Link></li>
+                                <li><Link href="/myorders" className="hover:underline">My Orders</Link></li>
+                                <li><Link href="/myorders" className="hover:underline">Profile</Link></li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="font-semibold mb-3 text-lg">Categories</h3>
                             <ul className="space-y-2 text-sm">
-                                <li><Link href="#" className="hover:underline">Make Up</Link></li>
-                                <li><Link href="#" className="hover:underline">Skin</Link></li>
-                                <li><Link href="#" className="hover:underline">Hair</Link></li>
-                                <li><Link href="#" className="hover:underline">Fragrance</Link></li>
-                                <li><Link href="#" className="hover:underline">Bath & Body</Link></li>
-                                <li><Link href="#" className="hover:underline">Tools & Applications</Link></li>
+                                {getAllCategories?.map((item) => (
+                                    <li
+                                        key={item._id}
+                                        onClick={() => handleNavigate(item)}
+                                        className="hover:underline cursor-pointer"
+                                    >
+                                        {item.name}
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                         <div>
@@ -73,9 +83,9 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
-                <div className="border-t border-gray-300 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-600 px-4 md:px-6">
+                <div className="border-t border-gray-300 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-gray-600 px-4 md:px-6">
                     <p className="text-center md:text-left font-semibold text-black">
-                        © 2025. JWALA BEAUTY CENTER. All Right Reserved. Developed By{" "}
+                        © 2025. JWALA BEAUTY CENTER | All Right Reserved  Developed By{" "}
                         <span>WEBDADS2U PRIVATE LIMITED</span>
                     </p>
                     <div className="flex space-x-4 text-sm justify-center md:justify-start font-medium text-gray-600">

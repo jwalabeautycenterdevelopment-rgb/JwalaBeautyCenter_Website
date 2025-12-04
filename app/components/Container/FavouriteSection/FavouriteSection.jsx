@@ -104,7 +104,7 @@ const FavouritesSection = () => {
                             product?.variants?.[0]?.variantImages?.[0] ||
                             product?.productImages?.[0] ||
                             "/no-image.png";
-
+                        const variant = product?.variants?.[0];
                         return (
                             <div
                                 key={item?._id}
@@ -123,19 +123,19 @@ const FavouritesSection = () => {
                                     </h3>
                                     <div className="flex items-center gap-2 mt-2 text-[15px]">
                                         <span className="font-semibold text-green-600">
-                                            ₹{product?.price || product?.variants.price}
+                                            ₹{variant?.offerPrice || variant?.price}
                                         </span>
-                                        <span className="line-through text-gray-400">
-                                            ₹{product?.offerPrice}
-                                        </span>
-                                        <span className="text-green-600 text-sm font-medium">
-                                            {Math.floor(
-                                                ((product?.price - product?.offerPrice) /
-                                                    product?.price) *
-                                                100
-                                            )}
-                                            % off
-                                        </span>
+
+                                        {variant?.offerPrice && (
+                                            <>
+                                                <span className="line-through text-gray-400">
+                                                    ₹{variant?.price}
+                                                </span>
+                                                <span className="text-green-600 text-sm font-medium">
+                                                    {Math.floor(((variant.price - variant.offerPrice) / variant.price) * 100)}% off
+                                                </span>
+                                            </>
+                                        )}
                                     </div>
                                     <div className="flex items-center gap-2 mt-1">
                                         <div className="flex items-center gap-1 bg-green-600 text-white text-xs px-2 py-1 rounded-md">

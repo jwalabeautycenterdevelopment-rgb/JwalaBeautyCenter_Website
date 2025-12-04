@@ -109,6 +109,14 @@ const CartSection = () => {
         );
     };
 
+    useEffect(() => {
+        if (cartItems.length > 0 && selectedIds.length === 0) {
+            const allKeys = cartItems.map((item) => getItemKey(item));
+            setSelectedIds(allKeys);
+        }
+    }, [cartItems]);
+
+
     const handleSelectAll = () => {
         const allKeys = cartItems.map((item) => getItemKey(item));
         if (selectedIds.length === cartItems.length) {
@@ -229,7 +237,6 @@ const CartSection = () => {
         }
     };
 
-
     const selectedItems = cartItems.filter((item) =>
         selectedIds.includes(getItemKey(item))
     );
@@ -312,6 +319,8 @@ const CartSection = () => {
                                     const image =
                                         item.variant?.variantImages?.[0] ||
                                         item.productId.productImages?.[0];
+                                        console.log(image);
+                                        
                                     return (
                                         <div
                                             key={id}
@@ -335,7 +344,7 @@ const CartSection = () => {
                                                 <div className="w-28 h-28 rounded-xl bg-gray-100 overflow-hidden">
                                                     <CustomImage
                                                         src={image}
-                                                        alt={item.productId.name}
+                                                        alt={item?.productId?.name}
                                                         className="w-full h-full object-cover"
                                                     />
                                                 </div>

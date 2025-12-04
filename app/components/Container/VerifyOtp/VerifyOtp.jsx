@@ -3,8 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { errorAlert, successAlert } from "@/app/utils/alertService";
 import { useRouter } from "next/navigation";
-import { clearError, clearMessage, resendOtp } from "@/app/store/slice/register";
-import { verifyUser } from "@/app/store/slice/authSlice";
+import { resendOtp } from "@/app/store/slice/register";
+import { clearAuthError, clearAuthMessage, verifyUser } from "@/app/store/slice/authSlice";
 import { closePopup } from "@/app/store/slice/popupSlice";
 
 export default function Register() {
@@ -20,7 +20,7 @@ export default function Register() {
     useEffect(() => {
         if (resendSuccess) {
             successAlert(resendSuccess);
-            dispatch(clearMessage());
+            dispatch(clearAuthMessage());
             setOtp("");
         }
         if (otpSuccess) {
@@ -28,15 +28,15 @@ export default function Register() {
             setOtp("");
             router.push("/");
             dispatch(closePopup())
-            dispatch(clearMessage());
+            dispatch(clearAuthMessage());
         }
         if (otpError) {
             errorAlert(otpError);
-            dispatch(clearError());
+            dispatch(clearAuthError());
         }
         if (resendError) {
             errorAlert(resendError);
-            dispatch(clearError());
+            dispatch(clearAuthError());
         }
     }, [otpSuccess, otpError, resendSuccess, resendError, router, dispatch]);
 

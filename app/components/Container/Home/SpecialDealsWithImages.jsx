@@ -3,9 +3,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOffers } from "@/app/store/slice/offerSlice";
 import CustomImage from "@/app/common/Image";
+import { useRouter } from "next/navigation";
 
 const SpecialDealsWithImages = () => {
     const dispatch = useDispatch();
+    const router = useRouter()
     const { allOffers, hasFetched } = useSelector((state) => state.offers);
 
     useEffect(() => {
@@ -14,6 +16,9 @@ const SpecialDealsWithImages = () => {
         }
     }, [dispatch, hasFetched]);
 
+    const handleNavigate = () => {
+        router.push("/offers")
+    }
     return (
         <div className="py-4 md:py-12 px-4 sm:px-6 lg:px-20">
             <div className="max-w-7xl mx-auto">
@@ -45,6 +50,7 @@ const SpecialDealsWithImages = () => {
                                             {deal?.description}
                                         </p>
                                         <button
+                                            onClick={handleNavigate}
                                             className="inline-flex items-center gap-2 font-semibold py-2 px-5 md:px-6 rounded-full transition-colors duration-300 w-fit text-sm md:text-base"
                                             style={{
                                                 backgroundColor: buttonColor,

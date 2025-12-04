@@ -43,15 +43,27 @@ const HomeShopCategories = () => {
                             key={index}
                             className="rounded-lg text-center flex flex-col items-center p-4 min-w-[180px] md:min-w-[200px]"
                         >
-                            <Link href={`/products/${category?.slug}`} className="relative w-[150px] aspect-square mb-3" >
-                                <CustomImage
-                                    src={category?.image}
-                                    alt={category?.name}
-                                    fill
-                                    className="object-contain rounded-full"
-                                    priority={index === 0}
-                                />
-                            </Link>
+                            <div className="group w-[150px] aspect-square mb-3">
+                                <Link
+                                    href={`/products/${category?.slug}`}
+                                    className="relative w-full h-full block overflow-hidden rounded-full"
+                                >
+                                    <CustomImage
+                                        src={category?.image || "/placeholder.png"}
+                                        alt={category?.name || "Category"}
+                                        fill
+                                        priority={index === 0}
+                                        className="
+        object-contain
+        transform
+        transition-transform
+        duration-600
+        ease-out
+        group-hover:scale-110
+      "
+                                    />
+                                </Link>
+                            </div>
                             <h4 className="text-gray-700 text-[15px] font-medium mb-1">
                                 {category?.name.length > 10 ? category?.name.substring(0, 16) + "…" : category?.name}
                             </h4>

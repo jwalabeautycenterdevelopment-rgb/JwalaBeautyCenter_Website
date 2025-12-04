@@ -6,7 +6,7 @@ export const registerUser = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await FetchApi({
-        endpoint: `/user`,
+        endpoint: `/user/createuser`,
         method: "POST",
         body: payload,
       });

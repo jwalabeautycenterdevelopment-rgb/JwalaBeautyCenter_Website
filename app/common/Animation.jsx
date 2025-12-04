@@ -5,6 +5,7 @@ import { Sparkles, ShoppingCart } from "lucide-react";
 import { Heart } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Inbox } from "lucide-react";
 
 
 export const NoProductFound = () => {
@@ -329,6 +330,97 @@ export const EmptyCart = () => {
                             </motion.div>
                         </div>
                     </div>
+                </motion.div>
+            </div>
+        </motion.div>
+    );
+};
+
+export const EmptyOrders = () => {
+    return (
+        <motion.div
+            className="min-h-[60vh] flex items-center justify-center px-4 overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+        >
+            <div className="w-full max-w-md">
+                <motion.div className="relative">
+                    <motion.div
+                        className="absolute -top-10 -left-10 w-32 h-32 bg-pink-100 rounded-full blur-3xl opacity-60"
+                        animate={{ x: [0, 20, 0], y: [0, 15, 0] }}
+                        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                    />
+
+                    <motion.div
+                        className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-100 rounded-full blur-3xl opacity-60"
+                        animate={{ x: [0, -15, 0], y: [0, 20, 0] }}
+                        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <div className="relative bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-gray-200 shadow-xl">
+                        <motion.div
+                            className="absolute -top-3 -right-3"
+                            animate={{ opacity: [0, 1, 0], scale: [0, 1, 0] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                        >
+                            <Sparkles className="w-5 h-5 text-pink-400" />
+                        </motion.div>
+                        <motion.div
+                            className="absolute -bottom-3 -left-3"
+                            animate={{ opacity: [0, 1, 0], scale: [0, 1, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                        >
+                            <Sparkles className="w-5 h-5 text-blue-400" />
+                        </motion.div>
+                        <div className="min-h-[200px] flex flex-col items-center justify-center">
+                            <motion.div
+                                className="flex flex-col items-center gap-4"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ type: "spring", stiffness: 120 }}
+                            >
+                                <Inbox className="w-16 h-16 text-gray-300" />
+
+                                <h3 className="text-lg font-medium text-gray-700">
+                                    No Orders Found
+                                </h3>
+
+                                <p className="text-gray-500 text-sm text-center">
+                                    Looks like you haven’t placed any orders yet.
+                                </p>
+
+                                <Link
+                                    href="/"
+                                    className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                                >
+                                    Start Shopping →
+                                </Link>
+                            </motion.div>
+                        </div>
+                        <div className="absolute -top-4 left-4">
+                            <motion.div
+                                className="w-10 h-10 bg-white rounded-lg shadow flex items-center justify-center"
+                                animate={{ y: [0, -20, 0] }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                            >
+                                <span className="text-2xl">📦</span>
+                            </motion.div>
+                        </div>
+                        <div className="absolute -bottom-4 right-4">
+                            <motion.div
+                                className="w-10 h-10 bg-white rounded-lg shadow flex items-center justify-center"
+                                animate={{ y: [0, 20, 0] }}
+                                transition={{
+                                    duration: 3,
+                                    repeat: Infinity,
+                                    delay: 1.5,
+                                    ease: "easeInOut"
+                                }}
+                            >
+                                <span className="text-2xl">🛍️</span>
+                            </motion.div>
+                        </div>
+                    </div>
+
                 </motion.div>
             </div>
         </motion.div>
