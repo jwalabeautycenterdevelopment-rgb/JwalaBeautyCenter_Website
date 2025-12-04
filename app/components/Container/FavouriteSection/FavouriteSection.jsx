@@ -9,9 +9,11 @@ import { EmptyFavorites, FavoritesLoading } from "@/app/common/Animation";
 import { errorAlert, successAlert } from "@/app/utils/alertService";
 import CustomImage from "@/app/common/Image";
 import { addGuestCartItem, addOrUpdateCartItem } from "@/app/store/slice/cartSlice";
-
+import { useRouter } from "next/navigation";
 const FavouritesSection = () => {
+    const router = useRouter();
     const dispatch = useDispatch();
+
     const guestId = useGuestId();
     const { accessToken } = useSelector((state) => state.auth);
     const { message, error, getLoading, favorites } = useSelector((state) => state.myfavourite)
@@ -87,10 +89,12 @@ const FavouritesSection = () => {
             {!getLoading && !isEmpty && (
                 <div className="w-full bg-white border border-gray-200  shadow-sm">
                     <div className="p-4 border-b border-gray-300">
-                        <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-3">
-                            <Link href={"/"} className="text-gray-700">
+                        <h2 className="text-xl cursor-pointer font-semibold text-gray-900 flex items-center gap-3">
+                            <button
+                                onClick={() => router.back()}
+                                className="text-gray-700">
                                 ←
-                            </Link>
+                            </button>
                             My Favourites
                         </h2>
                     </div>

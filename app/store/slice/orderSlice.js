@@ -1,6 +1,23 @@
 import { FetchApi } from "@/app/api/FetchApi";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+export const fetchOrder = createAsyncThunk(
+  "order/fetchOrder",
+  async (_, thunkAPI) => {
+    const token = thunkAPI.getState()?.auth?.accessToken;
+    try {
+      const response = await FetchApi({
+        endpoint: "/user/order",
+        method: "GET",
+        token,
+      });
+      return response?.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err?.message || "Failed to fetch order");
+    }
+  }
+);
+
 export const placeOrder = createAsyncThunk(
   "order/placeOrder",
   async (payload, thunkAPI) => {
@@ -40,55 +57,69 @@ export const verifyOrder = createAsyncThunk(
 const orderSlice = createSlice({
   name: "order",
   initialState: {
-    checkoutData: null,
-    checkoutMsg: null,
-    checkoutError: null,
     orderData: null,
+    placeOrderData: null,
     verifyData: null,
-    loading: false,
-    placeOrderLoading: false,
-    verifyLoading: false,
-    error: null,
-    message: null,
+
+    loadingOrders: false,
+    loadingPlaceOrder: false,
+    loadingVerify: false,
+
+    successMsg: null,
+    errorMsg: null,
   },
+
   reducers: {
     clearOrderMessage(state) {
-      state.message = null;
-      state.checkoutMsg = null;
+      state.successMsg = null;
     },
     clearOrderError(state) {
-      state.error = null;
-      state.checkoutError = null;
+      state.errorMsg = null;
     },
   },
+
   extraReducers: (builder) => {
     builder
+      .addCase(fetchOrder.pending, (state) => {
+        state.loadingOrders = true;
+        state.errorMsg = null;
+      })
+      .addCase(fetchOrder.fulfilled, (state, action) => {
+        state.loadingOrders = false;
+        state.orderData = action.payload?.orders || action.payload;
+        state.successMsg = action.payload?.message || "Orders fetched";
+      })
+      .addCase(fetchOrder.rejected, (state, action) => {
+        state.loadingOrders = false;
+        state.errorMsg = action.payload;
+      })
+
       .addCase(placeOrder.pending, (state) => {
-        state.placeOrderLoading = true;
-        state.checkoutError = null;
+        state.loadingPlaceOrder = true;
+        state.errorMsg = null;
       })
       .addCase(placeOrder.fulfilled, (state, action) => {
-        state.placeOrderLoading = false;
-        state.orderData = action.payload;
-        state.checkoutMsg = action.payload?.message;
+        state.loadingPlaceOrder = false;
+        state.placeOrderData = action.payload;
+        state.successMsg = action.payload?.message || "Order placed";
       })
       .addCase(placeOrder.rejected, (state, action) => {
-        state.placeOrderLoading = false;
-        state.checkoutError = action.payload;
+        state.loadingPlaceOrder = false;
+        state.errorMsg = action.payload;
       })
 
       .addCase(verifyOrder.pending, (state) => {
-        state.verifyLoading = true;
-        state.error = null;
+        state.loadingVerify = true;
+        state.errorMsg = null;
       })
       .addCase(verifyOrder.fulfilled, (state, action) => {
-        state.verifyLoading = false;
+        state.loadingVerify = false;
         state.verifyData = action.payload;
-        state.message = action.payload?.message;
+        state.successMsg = action.payload?.message || "Order verified";
       })
       .addCase(verifyOrder.rejected, (state, action) => {
-        state.verifyLoading = false;
-        state.error = action.payload;
+        state.loadingVerify = false;
+        state.errorMsg = action.payload;
       });
   },
 });

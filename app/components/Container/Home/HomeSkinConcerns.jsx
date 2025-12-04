@@ -45,12 +45,12 @@ const HomeSkinConcerns = () => {
                     {getAllCategories?.map((item, index) => (
                         <SwiperSlide key={index}>
                             <div className="flex flex-col items-center text-center p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => handleNavigate(item)}>
-                                <div className="relative w-[170px] h-[140px] mb-4">
+                                <div className="group relative w-[170px] h-[140px] mb-4">
                                     <CustomImage
                                         src={item?.image}
                                         alt={item?.name}
                                         fill
-                                        className="object-contain"
+                                        className="object-contain group-hover:scale-110 transition duration-400"
                                     />
                                 </div>
                                 <p className="text-gray-700 text-[15px] font-medium">

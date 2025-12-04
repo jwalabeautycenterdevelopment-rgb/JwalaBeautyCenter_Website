@@ -73,7 +73,7 @@ const CartSection = () => {
 
     useEffect(() => {
         if (!cartItems || !favorites) return;
-        const favouriteMatches = cartItems.map((item) =>
+        const favouriteMatches = cartItems?.map((item) =>
             favorites?.some((fav) => fav.productId?._id === item.productId?._id)
         );
         setIsFavourite(prev => {
@@ -107,6 +107,15 @@ const CartSection = () => {
         setSelectedIds((prev) =>
             prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
         );
+    };
+
+    const handleSelectAll = () => {
+        const allKeys = cartItems.map((item) => getItemKey(item));
+        if (selectedIds.length === cartItems.length) {
+            setSelectedIds([]);
+        } else {
+            setSelectedIds(allKeys);
+        }
     };
 
     const removeItem = (item) => {
@@ -192,7 +201,7 @@ const CartSection = () => {
             warningAlert("Please select at least one item to place order.");
             return;
         }
-        const cartPayload = selectedItems.map(item => {
+        const cartPayload = selectedItems?.map(item => {
             const base = {
                 productId: item.productId._id,
                 quantity: item.quantity,
@@ -203,8 +212,10 @@ const CartSection = () => {
             return base;
         });
         const totalAmount = selectedItems.reduce((sum, item) => {
-            return sum + (item.price * item.quantity);
+            const finalPrice = item.variant?.offerPrice || item.price;
+            return sum + finalPrice * item.quantity;
         }, 0);
+
         try {
             const payload = {
                 shippingAddress: selectedShipping,
@@ -229,7 +240,7 @@ const CartSection = () => {
         0
     );
 
-    if (cartItems.length === 0) return <EmptyCart />;
+    if (cartItems?.length === 0) return <EmptyCart />;
 
     return (
         <MainLayout>
@@ -238,8 +249,7 @@ const CartSection = () => {
                 navigate={router.push}
                 userData={userData}
                 totalAmount={orderData?.amount || 0} />
-
-            <div className="min-h-screen bg-gray-50 p-4">
+            <div className="min-h-screen bg-gray-50 p-2 md:p-4">
                 <h1 className="text-3xl mb-5 font-bold text-gray-900 text-center">My Cart</h1>
 
                 <div className="max-w-6xl mx-auto">
@@ -259,14 +269,14 @@ const CartSection = () => {
                         <div className="space-y-3 mt-4">
                             {shippingAddress?.map((addr) => (
                                 <div
-                                    key={addr._id}
+                                    key={addr?._id}
                                     className="flex justify-between bg-gray-50 p-4 rounded-lg shadow-sm"
                                 >
                                     <div>
-                                        <p className="font-semibold text-gray-900">{addr.fullName}</p>
-                                        <p className="text-gray-600 text-sm">{addr.phone}</p>
+                                        <p className="font-semibold text-gray-900">{addr?.fullName}</p>
+                                        <p className="text-gray-600 text-sm">{addr?.phone}</p>
                                         <p className="text-gray-600 text-sm">
-                                            {addr.address}, {addr.city}, {addr.state} - {addr.zipCode}, {addr.country}
+                                            {addr?.address}, {addr?.city}, {addr?.state} - {addr?.zipCode}, {addr?.country}
                                         </p>
                                     </div>
                                     <button
@@ -277,15 +287,22 @@ const CartSection = () => {
                                     </button>
                                 </div>
                             ))}
-
                             {!shippingAddress?.length && (
                                 <p className="text-gray-500 text-center">No addresses found</p>
                             )}
                         </div>
                     </div>
+                    <div>
+                        <button
+                            onClick={handleSelectAll}
+                            className="px-4 py-2 my-3  text-sm bg-rose-600 text-white rounded-lg"
+                        >
+                            {selectedIds.length === cartItems.length ? "Deselect All" : "Select All"}
+                        </button>
+                    </div>
                     <div className="flex flex-col lg:flex-row gap-6">
-                        <div className="lg:flex-1 bg-white border border-gray-300 rounded-2xl shadow-sm overflow-hidden">
-                            <div className="divide-y max-h-[600px] overflow-y-auto">
+                        <div className="lg:flex-1 bg-white  border-gray-300 rounded-2xl shadow-sm overflow-hidden">
+                            <div className=" max-h-[600px] overflow-y-auto">
                                 {cartItems?.map((item, index) => {
                                     const fav = isFavourite?.[index];
                                     const id = getItemKey(item);
@@ -298,12 +315,12 @@ const CartSection = () => {
                                     return (
                                         <div
                                             key={id}
-                                            className={`p-6 ${selected
+                                            className={`p-6 border-b border-gray-300 ${selected
                                                 ? "bg-rose-50 border-l-4 border-rose-500"
                                                 : "bg-white"
                                                 }`}
                                         >
-                                            <div className="flex gap-4">
+                                            <div className="flex flex-col md:flex-row gap-4">
                                                 <button
                                                     onClick={() => toggleItemSelection(id)}
                                                     className={`w-5 h-5 rounded border-2 flex items-center justify-center ${selected
@@ -315,7 +332,6 @@ const CartSection = () => {
                                                         <Check className="w-3 h-3 text-white" />
                                                     )}
                                                 </button>
-
                                                 <div className="w-28 h-28 rounded-xl bg-gray-100 overflow-hidden">
                                                     <CustomImage
                                                         src={image}

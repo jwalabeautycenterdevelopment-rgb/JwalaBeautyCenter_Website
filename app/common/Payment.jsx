@@ -2,7 +2,6 @@ import { forwardRef, useImperativeHandle, useEffect } from "react";
 import { verifyOrder } from "../store/slice/orderSlice";
 
 const Payment = forwardRef(({ totalAmount, dispatch, navigate, userData }, ref) => {
-
     useEffect(() => {
         if (!window.Razorpay) {
             const script = document.createElement("script");
@@ -18,10 +17,10 @@ const Payment = forwardRef(({ totalAmount, dispatch, navigate, userData }, ref) 
         if (!razorpayOrderId) return errorAlert("Invalid order ID");
 
         const options = {
-            key: process.env.NEXT_PUBLIC_RZ_KEY,   
+            key: process.env.NEXT_PUBLIC_RZ_KEY,
             amount: totalAmount * 100,
             currency: "INR",
-            name: "Nanmai",
+            name: "JBC",
             description: "Payment for your order",
             order_id: razorpayOrderId,
             theme: { color: "#0C8040" },
@@ -33,14 +32,14 @@ const Payment = forwardRef(({ totalAmount, dispatch, navigate, userData }, ref) 
             },
             handler: async (response) => {
                 const verifyPayload = {
-                    razorpayOrderId: response.razorpay_order_id,
-                    razorpayPaymentId: response.razorpay_payment_id,
-                    razorpaySignature: response.razorpay_signature,
+                    razorpayOrderId: response?.razorpay_order_id,
+                    razorpayPaymentId: response?.razorpay_payment_id,
+                    razorpaySignature: response?.razorpay_signature,
                 };
-
                 try {
                     await dispatch(verifyOrder(verifyPayload));
                     setTimeout(() => navigate("/cart"), 300);
+                    window.location.reload()
                 } catch (err) {
                     console.error("Verification error:", err);
                 }

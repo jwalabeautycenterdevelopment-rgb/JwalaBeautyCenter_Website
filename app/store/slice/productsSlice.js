@@ -143,6 +143,7 @@ const productsSlice = createSlice({
     singleProduct: null,
     loadingSingle: false,
     errorSingle: null,
+    relatedProducts: [],
 
     bestSellers: [],
     loadingBestSellers: false,
@@ -223,6 +224,7 @@ const productsSlice = createSlice({
       .addCase(getSingleProduct.fulfilled, (state, action) => {
         state.loadingSingle = false;
         state.singleProduct = action.payload?.data?.product || null;
+        state.relatedProducts = action.payload.data?.relatedProducts || [];
       })
       .addCase(getSingleProduct.rejected, (state, action) => {
         state.loadingSingle = false;

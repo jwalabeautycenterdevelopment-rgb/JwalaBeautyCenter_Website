@@ -13,11 +13,13 @@ import { Heart } from "lucide-react"
 import { addFavorite, addGuestFavorite, clearFavoriteMessage } from "@/app/store/slice/favoriteSlice"
 import { errorAlert } from "@/app/utils/alertService"
 import { clearMessage } from "@/app/store/slice/register"
+import ProductTabs from "@/app/utils/ProductTabs"
+import RelatedProduct from "./RelatedProduct"
 
 const ProductDetails = ({ slug }) => {
     const dispatch = useDispatch()
     const guestId = useGuestId();
-    const { singleProduct = {} } = useSelector((state) => state.products)
+    const { singleProduct = {}, relatedProducts } = useSelector((state) => state.products)
     const { accessToken } = useSelector((state) => state.auth);
     const { addFavoriteError, addFavoriteMsg, favorites } = useSelector((state) => state.myfavourite)
     const { message, error } = useSelector((state) => state.cart)
@@ -129,6 +131,11 @@ const ProductDetails = ({ slug }) => {
 
     return (
         <MainLayout className="px-4 sm:px-6 lg:px-18 py-10">
+            {
+                isPopupOpen && popupProduct && (
+                    <ProductPopup isOpen={isPopupOpen} onClose={closePopup} product={popupProduct} />
+                )
+            }
             <div className="max-w-7xl mx-auto">
                 <div className="text-sm text-gray-500 mb-6  line-clamp-2">
                     {singleProduct?.category?.name} / {singleProduct?.brand?.name} /{" "}
@@ -276,20 +283,23 @@ const ProductDetails = ({ slug }) => {
 
                     </div>
                 </div>
-                <div className="mt-12">
-                    <h2 className="text-xl font-bold text-gray-900 mb-4">Product Description</h2>
-                    <div className="bg-gray-50 p-6 rounded-lg">
-                        <p className="text-gray-700 text-md font-normal whitespace-pre-line">
+                <ProductTabs />
+                <div id="details" className="mt-2">
+                    <h2 className="text-md font-medium text-gray-900 mb-2">Product Description</h2>
+                    <div className="rounded-lg">
+                        <p className="text-gray-700 text-sm capitalize md:text-md font-normal whitespace-pre-line">
                             {singleProduct?.description || "No description available."}
                         </p>
                     </div>
                 </div>
+                <div
+                    id="reviews" className="mt-10"
+                >
+                </div>
+                <div id="related" className="mt-10">
+                    <RelatedProduct product={relatedProducts} />
+                </div>
             </div>
-            {
-                isPopupOpen && popupProduct && (
-                    <ProductPopup isOpen={isPopupOpen} onClose={closePopup} product={popupProduct} />
-                )
-            }
         </MainLayout >
     )
 }

@@ -21,7 +21,7 @@ import Link from "next/link";
 const CategorySection = ({ slug }) => {
     const dispatch = useDispatch();
     const [active, setActive] = useState(null);
-
+    const router = useRouter()
     const { Category } = useSelector((state) => state.subCategory);
     const { categoryProducts, userCategoryLoading } = useSelector(
         (state) => state.products

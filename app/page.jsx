@@ -17,7 +17,7 @@ export default function Page() {
       <HomeShopCategories />
       <SpecialDealsWithImages />
       <OurProducts />
-      <HomeDealsDay />
+      {/* <HomeDealsDay /> */}
       <HomeNaturalSkin />
       <NewArrivals />
     </MainLayout>

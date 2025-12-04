@@ -4,17 +4,16 @@ import { motion, } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import CustomImage from "@/app/common/Image";
 import { getUserSubCategory } from "@/app/store/slice/subCategorySlice";
+import Link from "next/link";
 
 const HomeShopCategories = () => {
     const dispatch = useDispatch()
     const { subCategories, hasFetched } = useSelector((state) => state.subCategory);
-
     useEffect(() => {
         if (!hasFetched) {
             dispatch(getUserSubCategory());
         }
     }, [dispatch, hasFetched]);
-
     const repeatedCategories = [...subCategories, ...subCategories];
 
     return (
@@ -44,7 +43,7 @@ const HomeShopCategories = () => {
                             key={index}
                             className="rounded-lg text-center flex flex-col items-center p-4 min-w-[180px] md:min-w-[200px]"
                         >
-                            <div className="relative w-[150px] aspect-square mb-3">
+                            <Link href={`/products/${category?.slug}`} className="relative w-[150px] aspect-square mb-3" >
                                 <CustomImage
                                     src={category?.image}
                                     alt={category?.name}
@@ -52,7 +51,7 @@ const HomeShopCategories = () => {
                                     className="object-contain rounded-full"
                                     priority={index === 0}
                                 />
-                            </div>
+                            </Link>
                             <h4 className="text-gray-700 text-[15px] font-medium mb-1">
                                 {category?.name.length > 10 ? category?.name.substring(0, 16) + "…" : category?.name}
                             </h4>

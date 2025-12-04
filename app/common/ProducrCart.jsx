@@ -1,11 +1,22 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { BsCartPlus } from 'react-icons/bs';
 import CustomImage from './Image';
+import { useRouter } from 'next/navigation';
+import useGuestId from '../utils/useGuestId';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFavorite, addGuestFavorite, clearFavoriteMessage } from '../store/slice/favoriteSlice';
+import { addGuestCartItem, addOrUpdateCartItem } from '../store/slice/cartSlice';
+import { clearMessage } from '../store/slice/register';
 
 export const ProductCard = ({ product, isHover = true }) => {
-    const [wishlisted, setWishlisted] = useState(false);
+    const router = useRouter()
+    const dispatch = useDispatch()
+    const guestId = useGuestId();
+    const { accessToken } = useSelector((state) => state.auth);
+    const { addFavoriteError, addFavoriteMsg, favorites } = useSelector((state) => state.myfavourite)
+    const { message, error } = useSelector((state) => state.cart)
     const variant = product?.variants?.length > 0 ? product.variants[0] : null;
     const image =
         variant?.variantImages?.[0] ||
@@ -17,10 +28,76 @@ export const ProductCard = ({ product, isHover = true }) => {
     const categoryName = product?.category?.name || "Unknown";
     const title = product?.name;
 
+    const isFavourite = favorites?.find(
+        fav => fav.productId?._id === product?._id
+    )?._id;
+
     const discount =
         originalPrice && price
             ? Math.round(((originalPrice - price) / originalPrice) * 100)
             : 0;
+
+
+    useEffect(() => {
+        if (addFavoriteMsg) {
+            dispatch(clearFavoriteMessage());
+        }
+        if (addFavoriteError) {
+            errorAlert(addFavoriteError);
+            dispatch(clearFavoriteMessage());
+        }
+        if (message) {
+            dispatch(clearMessage())
+        }
+        if (error) {
+            dispatch(errorAlert(error))
+            dispatch(clearMessage())
+        }
+    }, [addFavoriteMsg, addFavoriteError, dispatch, error, message]);
+
+    const getProductPayload = (product) => {
+        const hasVariant = product?.isVariant && product?.variants?.length > 0;
+        const variant = hasVariant ? product.variants[0] : null;
+        return {
+            productId: product._id,
+            ...(variant && {
+                variant: {
+                    sku: variant.sku
+                }
+            })
+        };
+    };
+
+    const handleAddCart = () => {
+        const payload = {
+            ...getProductPayload(product),
+            quantity: 1
+        };
+        if (accessToken) {
+            dispatch(addOrUpdateCartItem(payload));
+        } else if (guestId) {
+            dispatch(addGuestCartItem({ guestId, item: payload }));
+        } else {
+            console.warn("Guest ID not available!");
+        }
+    };
+
+
+    const handleAddFavourite = () => {
+        const payload = getProductPayload(product);
+        if (accessToken) {
+            dispatch(addFavorite(payload));
+        } else if (guestId) {
+            dispatch(addGuestFavorite({ guestId, ...payload }));
+        } else {
+            console.warn("Guest ID not available!");
+        }
+    };
+
+    const handleNavigate = (item) => {
+        router.push(`/product/${item.slug}`);
+    }
+
 
     return (
         <div className="group relative rounded-2xl overflow-hidden transition-all duration-300">
@@ -33,28 +110,35 @@ export const ProductCard = ({ product, isHover = true }) => {
                 isHover &&
                 <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
-                        onClick={() => setWishlisted(!wishlisted)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddFavourite();
+                        }}
                         className="p-2 bg-white rounded-full shadow-md hover:scale-110 transition"
                     >
-                        {wishlisted ? (
+                        {isFavourite ? (
                             <AiFillHeart className="text-red-500 text-xl" />
                         ) : (
                             <AiOutlineHeart className="text-gray-600 text-xl" />
                         )}
                     </button>
-
                     <button className="p-2 bg-white text-black rounded-full shadow-md hover:scale-110 transition">
-                        <BsCartPlus className="text-xl" />
+                        <BsCartPlus
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleAddCart();
+                            }}
+                            className="text-xl" />
                     </button>
                 </div>
             }
-            <div className="aspect-square overflow-hidden">
+            <div className="aspect-square overflow-hidden" onClick={() => handleNavigate(product)}>
                 <CustomImage
                     src={image}
                     alt={title}
                     width={400}
                     height={400}
-                    className="w-full h-full object-cover group-hover:scale-110 transition duration-900"
+                    className="w-full h-full object-cover group-hover:scale-110 transition duration-900 cursor-pointer"
                 />
             </div>
             <div className="p-4">

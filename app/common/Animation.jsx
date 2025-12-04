@@ -2,11 +2,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBox, FaSearch, FaExclamationTriangle, FaSync } from "react-icons/fa";
 import { Sparkles, ShoppingCart } from "lucide-react";
-import { ShoppingBag, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 
 export const NoProductFound = () => {
+    const pathname = usePathname();
     const icons = [
         { icon: FaSearch, color: "text-blue-500" },
         { icon: FaBox, color: "text-gray-500" },
@@ -14,8 +16,10 @@ export const NoProductFound = () => {
         { icon: FaSync, color: "text-purple-500" }
     ];
 
+
     return (
-        <div className="col-span-full flex flex-col items-center justify-center py-20 text-center min-h-[60vh] relative overflow-hidden">
+        <div className={`col-span-full flex flex-col items-center justify-center text-center min-h-[60vh] relative overflow-hidden 
+    ${pathname !== "/brands" ? "py-20" : ""}`}>
             <div className="relative h-32 w-full max-w-md mb-8">
                 <motion.div
                     initial={{ x: -200, y: 0, scale: 0.5, opacity: 0 }}
@@ -228,10 +232,7 @@ export const EmptyCart = () => {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
-            transition: {
-                staggerChildren: 0.2,
-                delayChildren: 0.3
-            }
+            transition: { staggerChildren: 0.2, delayChildren: 0.3 }
         }
     };
 
@@ -240,11 +241,7 @@ export const EmptyCart = () => {
         visible: {
             opacity: 1,
             y: 0,
-            transition: {
-                type: "spring",
-                stiffness: 100,
-                damping: 15
-            }
+            transition: { type: "spring", stiffness: 100, damping: 15 }
         }
     };
 
@@ -253,56 +250,33 @@ export const EmptyCart = () => {
         animate: {
             opacity: [0, 1, 0],
             scale: [0, 1, 0],
-            transition: {
-                duration: 2,
-                repeat: Infinity,
-                repeatDelay: 1
-            }
+            transition: { duration: 2, repeat: Infinity, repeatDelay: 1 }
         }
     };
 
     return (
         <motion.div
-            className="min-h-screen  flex items-center justify-center bg-linear-to-r from-[#fff5e6] to-[#fff5e6] px-5 md:px-0"
+            className="min-h-[80vh] w-full flex items-center justify-center bg-linear-to-r from-[#fff5e6] to-[#fff5e6] px-4 overflow-hidden"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
-            <div className="max-w-md w-full">
+            <div className="w-full max-w-md">
                 <motion.div className="relative">
                     <motion.div
-                        className="absolute -top-20 -left-20 w-40 h-40 bg-linear-to-r from-rose-100 to-pink-100 rounded-full blur-3xl opacity-60"
-                        animate={{
-                            x: [0, 20, 0],
-                            y: [0, 15, 0],
-                        }}
-                        transition={{
-                            duration: 8,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
+                        className="absolute -top-10 -left-10 w-24 h-24 md:w-40 md:h-40 bg-linear-to-r from-rose-100 to-pink-100 rounded-full blur-3xl opacity-60"
+                        animate={{ x: [0, 20, 0], y: [0, 15, 0] }}
+                        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
                     />
 
                     <motion.div
-                        className="absolute -bottom-20 -right-20 w-40 h-40 bg-linear-to-r from-blue-100 to-cyan-100 rounded-full blur-3xl opacity-60"
-                        animate={{
-                            x: [0, -15, 0],
-                            y: [0, 20, 0],
-                        }}
-                        transition={{
-                            duration: 6,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
+                        className="absolute -bottom-10 -right-10 w-24 h-24 md:w-40 md:h-40 bg-linear-to-r from-blue-100 to-cyan-100 rounded-full blur-3xl opacity-60"
+                        animate={{ x: [0, -15, 0], y: [0, 20, 0] }}
+                        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                     />
-
-                    <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-200 shadow-2xl">
-                        <motion.div
-                            className="absolute -top-2 -right-2"
-                            variants={sparkleVariants}
-                            animate="animate"
-                        >
-                            <Sparkles className="w-6 h-6 text-rose-400" />
+                    <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-5 md:p-8 border border-gray-200 shadow-2xl">
+                        <motion.div className="absolute -top-2 -right-2" variants={sparkleVariants} animate="animate">
+                            <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-rose-400" />
                         </motion.div>
 
                         <motion.div
@@ -311,63 +285,47 @@ export const EmptyCart = () => {
                             animate="animate"
                             transition={{ delay: 1 }}
                         >
-                            <Sparkles className="w-6 h-6 text-blue-400" />
+                            <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-blue-400" />
                         </motion.div>
-                        <motion.div
-                            className="flex justify-center mb-6"
-                            variants={itemVariants}
-                        >
-                        </motion.div>
-                        <div className="min-h-[300px] flex flex-col items-center justify-center">
+                        <div className="min-h-[260px] flex flex-col items-center justify-center">
                             <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3 }}
+                                variants={itemVariants}
                                 className="flex flex-col items-center gap-4"
                             >
-                                <ShoppingCart className="w-20 h-20 text-gray-300" />
-                                <h3 className="text-lg font-medium text-gray-700">
+                                <ShoppingCart className="w-16 h-16 md:w-20 md:h-20 text-gray-300" />
+
+                                <h3 className="text-base md:text-lg font-medium text-gray-700">
                                     No items in cart
                                 </h3>
+
                                 <p className="text-gray-500 text-sm">
                                     Browse products to add items
                                 </p>
-                                <Link href={"/"} className=" cursor-pointer text-blue-600 hover:text-blue-700 font-medium">
+
+                                <Link
+                                    href="/"
+                                    className="text-blue-600 hover:text-blue-700 font-medium text-sm md:text-base"
+                                >
                                     View Products →
                                 </Link>
                             </motion.div>
                         </div>
-
-                        <div className="absolute -top-6 left-6">
+                        <div className="absolute -top-4 left-4 md:-top-6 md:left-6">
                             <motion.div
-                                className="w-12 h-12 bg-white rounded-lg shadow-lg flex items-center justify-center"
-                                animate={{
-                                    y: [0, -20, 0],
-                                }}
-                                transition={{
-                                    duration: 3,
-                                    repeat: Infinity,
-                                    ease: "easeInOut"
-                                }}
+                                className="w-9 h-9 md:w-12 md:h-12 bg-white rounded-lg shadow-lg flex items-center justify-center"
+                                animate={{ y: [0, -20, 0] }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
-                                <span className="text-2xl">👕</span>
+                                <span className="text-xl md:text-2xl">👕</span>
                             </motion.div>
                         </div>
-
-                        <div className="absolute -bottom-6 right-6">
+                        <div className="absolute -bottom-4 right-4 md:-bottom-6 md:right-6">
                             <motion.div
-                                className="w-12 h-12 bg-white rounded-lg shadow-lg flex items-center justify-center"
-                                animate={{
-                                    y: [0, 20, 0],
-                                }}
-                                transition={{
-                                    duration: 3,
-                                    repeat: Infinity,
-                                    ease: "easeInOut",
-                                    delay: 1.5
-                                }}
+                                className="w-9 h-9 md:w-12 md:h-12 bg-white rounded-lg shadow-lg flex items-center justify-center"
+                                animate={{ y: [0, 20, 0] }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
                             >
-                                <span className="text-2xl">👟</span>
+                                <span className="text-xl md:text-2xl">👟</span>
                             </motion.div>
                         </div>
                     </div>

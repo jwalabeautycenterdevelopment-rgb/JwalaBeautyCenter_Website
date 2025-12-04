@@ -20,13 +20,13 @@ const AddressForm = ({ onClose, loading, shippingAddress }) => {
     useEffect(() => {
         if (shippingAddress) {
             setNewAddressFields({
-                name: shippingAddress.fullName || "",
-                phone: shippingAddress.phone || "",
-                street: shippingAddress.address || "",
-                city: shippingAddress.city || "",
-                state: shippingAddress.state || "",
-                zipCode: shippingAddress.zipCode || "",
-                country: shippingAddress.country || "",
+                name: shippingAddress?.fullName || "",
+                phone: shippingAddress?.phone || "",
+                street: shippingAddress?.address || "",
+                city: shippingAddress?.city || "",
+                state: shippingAddress?.state || "",
+                zipCode: shippingAddress?.zipCode || "",
+                country: shippingAddress?.country || "",
             });
         }
     }, [shippingAddress]);

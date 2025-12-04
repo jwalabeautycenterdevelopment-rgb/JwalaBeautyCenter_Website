@@ -1,4 +1,5 @@
 "use client";
+import { NoProductFound } from "@/app/common/Animation";
 import CustomImage from "@/app/common/Image";
 import { ProductCard } from "@/app/common/ProducrCart";
 import { getAllBrands, getBrandBySlug } from "@/app/store/slice/brandsSlice";
@@ -137,7 +138,6 @@ export default function BrandPage() {
                         />
                         <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">🔍</span>
                     </div>
-
                     <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
                         <button className="px-4 py-2.5 rounded-full bg-gray-100 border-0 text-sm whitespace-nowrap active:bg-gray-200 active:scale-95 transition-all">
                             Filter
@@ -165,19 +165,7 @@ export default function BrandPage() {
                 </div>
                 <div className="flex-1 overflow-y-auto scrollbar-hide p-4 md:p-6">
                     {!loadingSlug && !brandDetail && (
-                        <div className="h-full flex flex-col items-center justify-center text-center p-4">
-                            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                <span className="text-3xl">🏷️</span>
-                            </div>
-                            <h3 className="text-xl font-semibold text-gray-700 mb-2">No Brand Selected</h3>
-                            <p className="text-gray-500 mb-6">Select a brand to view products</p>
-                            <button
-                                onClick={() => setMobileMenu(true)}
-                                className="px-6 py-3 bg_primary text-white rounded-lg font-medium active:opacity-90 active:scale-95 transition-all md:hidden"
-                            >
-                                Browse Brands
-                            </button>
-                        </div>
+                        <NoProductFound />
                     )}
                     {loadingSlug && (
                         <div className="flex flex-col items-center justify-center h-full p-4">
@@ -187,15 +175,15 @@ export default function BrandPage() {
                     )}
                     {brandDetail && (
                         <div className="space-y-6">
-                            <div className="bg-white/30 backdrop-blur-lg p-3 rounded-2xl border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300">
-                                <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+                            <div className="bg-white/20 backdrop-blur-lg p-2 rounded-2xl border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-center">
                                     <CustomImage
                                         src={brandDetail.brand?.logo}
                                         alt={brandDetail.brand?.name}
                                         className="w-24 h-24 sm:w-32 sm:h-32 object-contain border border-white/40 rounded-xl p-3 bg-white/20"
                                     />
                                     <div className="flex-1">
-                                        <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                                        <h3 className="text-2xl font-bold text-gray-900">
                                             {brandDetail.brand?.name}
                                         </h3>
                                         <p className="text-gray-600 leading-relaxed">
@@ -216,7 +204,6 @@ export default function BrandPage() {
                                         </span>
                                     )}
                                 </div>
-
                                 {filteredProducts?.length === 0 ? (
                                     <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
                                         <p className="text-gray-500">No products found matching your search.</p>
@@ -238,7 +225,6 @@ export default function BrandPage() {
                                         {filteredProducts?.map((product) => {
                                             const priceData = getProductPrice(product);
                                             const hasDiscount = priceData.offerPrice && priceData.offerPrice < priceData.price;
-
                                             return (
                                                 <div
                                                     key={product._id}

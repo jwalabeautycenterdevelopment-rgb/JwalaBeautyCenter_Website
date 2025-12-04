@@ -19,7 +19,7 @@ export default function ProductPopup({ isOpen, onClose, product }) {
             <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="relative bg-white rounded-xl p-6 w-full max-w-5xl z-50"
+                className="relative bg-white rounded-xl p-6 w-full max-w-xl md:max-w-5xl z-50"
             >
                 <button
                     onClick={onClose}
