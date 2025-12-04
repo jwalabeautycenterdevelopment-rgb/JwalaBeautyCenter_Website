@@ -35,17 +35,18 @@ const CartSection = () => {
     const [selectedIds, setSelectedIds] = useState([]);
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const cartItems = items?.items || [];
-    const { checkoutError, checkoutMsg, orderData } = useSelector((state) => state.order)
+    const { checkoutError, checkoutMsg, placeOrderData } = useSelector((state) => state.order)
     const paymentRef = useRef();
-    const { userData, shippingAddress, updateLoading, updateError, updateSuccess } = useSelector(
+    const { shippingAddress, updateLoading, updateError, updateSuccess } = useSelector(
         (state) => state.auth
     );
 
+
     useEffect(() => {
-        if (orderData?.razorpayOrderId && paymentRef.current) {
-            paymentRef.current.initiatePayment(orderData.razorpayOrderId);
+        if (placeOrderData?.razorpayOrderId && paymentRef.current) {
+            paymentRef.current.initiatePayment(placeOrderData.razorpayOrderId);
         }
-    }, [orderData]);
+    }, [placeOrderData]);
 
 
     useEffect(() => {
@@ -254,8 +255,8 @@ const CartSection = () => {
             <Payment ref={paymentRef}
                 dispatch={dispatch}
                 navigate={router.push}
-                userData={userData}
-                totalAmount={orderData?.amount || 0} />
+                userData={placeOrderData}
+                totalAmount={placeOrderData?.amount || 0} />
             <div className="min-h-screen bg-gray-50 p-2 md:p-4">
                 <h1 className="text-3xl mb-5 font-bold text-gray-900 text-center">My Cart</h1>
 
@@ -319,8 +320,8 @@ const CartSection = () => {
                                     const image =
                                         item.variant?.variantImages?.[0] ||
                                         item.productId.productImages?.[0];
-                                        console.log(image);
-                                        
+                                    console.log(image);
+
                                     return (
                                         <div
                                             key={id}
