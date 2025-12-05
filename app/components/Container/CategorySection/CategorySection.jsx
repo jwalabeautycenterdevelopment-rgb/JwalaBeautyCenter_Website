@@ -57,6 +57,8 @@ const CategorySection = ({ slug }) => {
         router.push(`/product/${item.slug}`);
     };
 
+    const activeSubcategory = subcategories.find(cat => cat._id === active);
+
     const renderRating = (rating) => (
         <div className="flex items-center gap-1 bg-green-700 rounded-full px-2 text-xs py-1 text-white font-semibold">
             <span>{rating}</span>
@@ -71,7 +73,6 @@ const CategorySection = ({ slug }) => {
                     <ProductSkeleton count={8} />
                 </div>
             )}
-
             {!userCategoryLoading && categoryProducts?.length === 0 && (
                 <NoProductFound />
             )}
@@ -93,8 +94,9 @@ const CategorySection = ({ slug }) => {
                             <li>
                                 <IoIosArrowForward className="border-gray-300 " />
                             </li>
+
                             <li className="text-blue-600">
-                                {slug}
+                                {activeSubcategory?.name ? activeSubcategory.name.substring(0, 10) : slug}
                             </li>
                         </ul>
                         <h2 className="text-red-500 font-semibold text-[26px] md:text-[32px]">
