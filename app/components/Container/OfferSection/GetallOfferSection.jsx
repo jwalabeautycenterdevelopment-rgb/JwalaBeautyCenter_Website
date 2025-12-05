@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import CustomImage from "@/app/common/Image";
-import OfferImg from "@/app/assets/offerbanner.png";
+import OfferImg from "@/app/assets/offersvg.svg";
 import { formatPrice, } from "@/app/utils/priceCalculate";
 import { FaBox, FaStar } from "react-icons/fa";
 import { getOffers } from "@/app/store/slice/offerSlice";
@@ -38,7 +38,7 @@ const GetallOfferSection = () => {
         .join("   ⚡   ");
     return (
         <div>
-            <div className="relative w-full h-[220px] sm:h-[300px] md:h-[380px] lg:h-[420px] overflow-hidden">
+            <div className="relative w-full h-[100px] lg:h-[300px] overflow-hidden">
                 <Image
                     src={OfferImg}
                     alt="Offer Banner"

@@ -1,13 +1,13 @@
 "use client";
 import MainLayout from "@/app/common/MainLayout";
 import React, { useEffect } from "react";
-import OfferImg from "@/app/assets/offerbanner.png";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOfferById } from "@/app/store/slice/offerSlice";
 import { calculateDiscount, formatPrice } from "@/app/utils/priceCalculate";
 import { FaBox, FaStar } from "react-icons/fa";
 import CustomImage from "@/app/common/Image";
+import OfferImg from "@/app/assets/offersvg.svg";
 import OfferMarquee from "@/app/common/OfferMarquee";
 import { useRouter } from "next/navigation";
 const OfferSection = ({ slug }) => {
@@ -31,7 +31,7 @@ const OfferSection = ({ slug }) => {
     );
     return (
         <MainLayout>
-            <div className="relative w-full h-[220px] sm:h-[300px] md:h-[380px] lg:h-[420px] overflow-hidden ">
+            <div className="relative w-full h-[100px] lg:h-[300px] overflow-hidden">
                 <Image
                     src={OfferImg}
                     alt="Offer Banner"
@@ -41,7 +41,7 @@ const OfferSection = ({ slug }) => {
             </div>
             <OfferMarquee text={`🔥 Save Big on Care Deals — Up to ${singleOffer?.percentage}% OFF! Limited Time Offer!`} />
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6   md:px-20">
-                {singleOffer?.products?.map((item) => {
+                {singleOffer?.products?.map((item, index) => {
                     const product = item?.product || {};
                     const img =
                         product?.productImages?.[0] ||
@@ -58,7 +58,7 @@ const OfferSection = ({ slug }) => {
                         0;
                     return (
                         <div
-                            key={product._id}
+                            key={index}
                             className="group relative overflow-hidden transition-all duration-300 cursor-pointer"
                             onClick={() => handleNavigate(product?.slug)}
                         >
