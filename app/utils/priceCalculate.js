@@ -9,13 +9,11 @@ export const getProductCardPrice = (product) => {
 
   if (hasValidVariant) {
     const v = product.variants[0];
-
     return {
       price: Number(v.price),
       offerPrice: v.offerPrice ? Number(v.offerPrice) : null,
     };
   }
-
   return {
     price: Number(product.price),
     offerPrice: product.offerPrice ? Number(product.offerPrice) : null,

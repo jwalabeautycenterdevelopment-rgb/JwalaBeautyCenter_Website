@@ -138,13 +138,7 @@ export default function BrandPage() {
                         />
                         <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">🔍</span>
                     </div>
-                    <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
-                        <button className="px-4 py-2.5 rounded-full bg-gray-100 border-0 text-sm whitespace-nowrap active:bg-gray-200 active:scale-95 transition-all">
-                            Filter
-                        </button>
-                        <button className="px-4 py-2.5 rounded-full bg-gray-100 border-0 text-sm whitespace-nowrap active:bg-gray-200 active:scale-95 transition-all">
-                            New to Old
-                        </button>
+                    <div className="flex items-center  overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
                         <div className="flex items-center bg-gray-100 rounded-full p-1">
                             <button
                                 onClick={() => setViewMode('grid')}

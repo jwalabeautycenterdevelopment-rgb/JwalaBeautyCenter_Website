@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { ProductCard } from "@/app/common/ProducrCart";
 import clsx from 'clsx';
 import { useEffect, useState } from "react";
@@ -6,14 +6,17 @@ import { getBestSellers } from "@/app/store/slice/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const OurProducts = () => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const [active, setActive] = useState('all');
-    const { bestSellers = [] } = useSelector((state) => state.products)
+    const { bestSellers = [] } = useSelector((state) => state.products);
 
-    const categoriesFromAPI = bestSellers?.map(item => ({
-        id: item?.category?._id,
-        label: item?.category?.name
-    }));
+    const categoriesFromAPI = Array.from(
+        new Map(
+            bestSellers
+                .filter(item => item?.category)
+                .map(item => [item.category._id, { id: item.category._id, label: item.category.name }])
+        ).values()
+    );
 
     const categories = [
         { id: 'all', label: 'All', color: 'bg-red-600 text-white' },
@@ -22,15 +25,14 @@ const OurProducts = () => {
 
     useEffect(() => {
         dispatch(getBestSellers());
-    }, [dispatch,]);
+    }, [dispatch]);
 
     const filterData = active === 'all'
         ? bestSellers
         : bestSellers?.filter((item) => item?.category?._id === active);
 
-
     return (
-        <section className="py-4 md:py-12  px-4 sm:px-6 lg:px-20">
+        <section className="py-4 md:py-12 px-4 sm:px-6 lg:px-20">
             <div className="max-w-7xl mx-auto">
                 <div className="mb-6">
                     <p className="text-sm font-medium text-black">Our Products</p>
@@ -41,13 +43,13 @@ const OurProducts = () => {
                 </div>
                 <div className="overflow-x-auto py-0 md:py-4 scrollbar-hide">
                     <div className="flex gap-3 min-w-max">
-                        {categories?.map((cat) => {
+                        {categories?.map((cat, index) => {
                             const isActive = active === cat?.id;
                             const baseClass =
                                 "px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer border line-clamp-1";
                             return (
                                 <button
-                                    key={cat?.id}
+                                    key={index}
                                     onClick={() => setActive(cat?.id)}
                                     className={clsx(
                                         baseClass,
@@ -62,6 +64,7 @@ const OurProducts = () => {
                         })}
                     </div>
                 </div>
+
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 my-8">
                     {filterData?.map((product) => (
                         <ProductCard key={product?._id} product={product} />
@@ -69,7 +72,6 @@ const OurProducts = () => {
                 </div>
             </div>
         </section>
-
     );
 };
 

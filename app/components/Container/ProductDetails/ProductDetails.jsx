@@ -27,7 +27,6 @@ const ProductDetails = ({ slug }) => {
     const [selectedImage, setSelectedImage] = useState(0)
     const [isPopupOpen, setIsPopupOpen] = useState(false)
     const [popupProduct, setPopupProduct] = useState(null)
-    console.log(accessToken);
 
     const isFavourite = favorites?.find(
         fav => fav.productId?._id === singleProduct?._id

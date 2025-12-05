@@ -2,53 +2,90 @@ import { FetchApi } from "@/app/api/FetchApi";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getOffers = createAsyncThunk(
-  "offer/getOffers",
+  "offers/fetchOffers",
   async (_, thunkAPI) => {
+    const token = thunkAPI.getState()?.auth?.accessToken;
     try {
       const response = await FetchApi({
         endpoint: "/user/offers",
         method: "GET",
+        token,
       });
-      return response;
+      return response?.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err?.message);
+      return thunkAPI.rejectWithValue(err?.message || "Failed to fetch offers");
     }
   }
 );
 
-const offersSlice = createSlice({
+export const fetchOfferById = createAsyncThunk(
+  "offers/fetchOfferById",
+  async (id, thunkAPI) => {
+    const token = thunkAPI.getState()?.auth?.accessToken;
+    try {
+      const response = await FetchApi({
+        endpoint: `/user/offers/${id}`,
+        method: "GET",
+        token,
+      });
+      return response?.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err?.message || "Failed to fetch offer");
+    }
+  }
+);
+
+const offerSlice = createSlice({
   name: "offers",
   initialState: {
-    allOffers: [],
-    loadingGet: false,
-    errorGet: null,
-    hasFetched: false,
+    offersList: [],
+    singleOffer: null,
+    loadingOffers: false,
+    loadingOfferById: false,
+    successMsg: null,
+    errorMsg: null,
   },
 
   reducers: {
-    clearGetOfferError(state) {
-      state.errorGet = null;
+    clearOfferMessage(state) {
+      state.successMsg = null;
+    },
+    clearOfferError(state) {
+      state.errorMsg = null;
     },
   },
 
   extraReducers: (builder) => {
     builder
+
       .addCase(getOffers.pending, (state) => {
-        state.loadingGet = true;
-        state.errorGet = null;
+        state.loadingOffers = true;
+        state.errorMsg = null;
       })
       .addCase(getOffers.fulfilled, (state, action) => {
-        state.loadingGet = false;
-        state.allOffers = action?.payload?.data?.offers || [];
-        state.hasFetched = true;
+        state.loadingOffers = false;
+        state.offersList = action.payload?.offers || action.payload;
+        state.successMsg = action.payload?.message || "Offers fetched";
       })
       .addCase(getOffers.rejected, (state, action) => {
-        state.loadingGet = false;
-        state.errorGet = action?.payload || "Failed to fetch offers";
+        state.loadingOffers = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(fetchOfferById.pending, (state) => {
+        state.loadingOfferById = true;
+        state.errorMsg = null;
+      })
+      .addCase(fetchOfferById.fulfilled, (state, action) => {
+        state.loadingOfferById = false;
+        state.singleOffer = action.payload?.offer || action.payload;
+        state.successMsg = action.payload?.message || "Offer fetched";
+      })
+      .addCase(fetchOfferById.rejected, (state, action) => {
+        state.loadingOfferById = false;
+        state.errorMsg = action.payload;
       });
   },
 });
 
-export const { clearGetOfferError } = offersSlice.actions;
-
-export default offersSlice.reducer;
+export const { clearOfferMessage, clearOfferError } = offerSlice.actions;
+export default offerSlice.reducer;
