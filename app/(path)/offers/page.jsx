@@ -1,9 +1,7 @@
-import OfferSection from '@/app/components/Container/OfferSection/OfferSection'
-import React from 'react'
-
-function page() {
+import GetallOfferSection from "@/app/components/Container/OfferSection/GetallOfferSection";
+const page = () => {
     return (
-        <OfferSection />
+        <GetallOfferSection />
     )
 }
 

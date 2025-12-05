@@ -7,28 +7,37 @@ import { useRouter } from "next/navigation";
 
 const SpecialDealsWithImages = () => {
     const dispatch = useDispatch();
-    const router = useRouter()
-    const { allOffers, hasFetched } = useSelector((state) => state.offers);
-
+    const router = useRouter();
+    const { offersList, hasFetched } = useSelector((state) => state.offers);
     useEffect(() => {
         if (!hasFetched) {
             dispatch(getOffers());
         }
     }, [dispatch, hasFetched]);
 
-    const handleNavigate = () => {
-        router.push("/offers")
+    const handleNavigate = (offerId) => {
+        router.push(`/offers/${offerId}`);
+    };
+
+    if (!offersList || offersList.length === 0) {
+        return (
+            <div className="py-12 text-center text-gray-500">
+                No offers available at the moment.
+            </div>
+        );
     }
+
     return (
         <div className="py-4 md:py-12 px-4 sm:px-6 lg:px-20">
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                    {allOffers?.slice(0, 2)?.map((deal, index) => {
+                    {offersList.slice(0, 2).map((deal, index) => {
                         const bgColor = index % 2 === 0 ? "#41263A" : "#F3BFE5";
                         const buttonColor = index % 2 === 0 ? "#F3BFE5" : "#41263A";
+                        const textColor = bgColor === "#41263A" ? "#FFFFFF" : "##FFFFFF";
                         return (
                             <div
-                                key={deal?._id}
+                                key={deal._id}
                                 className="rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300"
                                 style={{ backgroundColor: bgColor }}
                             >
@@ -38,23 +47,23 @@ const SpecialDealsWithImages = () => {
                                             className="text-sm font-semibold py-1 px-3 rounded-full w-fit mb-2 md:mb-3"
                                             style={{
                                                 backgroundColor: buttonColor,
-                                                color: bgColor === "#41263A" ? "#41263A" : "#FFFFFF",
+                                                color: textColor,
                                             }}
                                         >
-                                            Flat {deal?.percentage}% Discount
+                                            Flat {deal.percentage}% Discount
                                         </span>
                                         <h3 className="text-2xl md:text-[32px] font-semibold leading-tight mb-2 md:mb-3">
-                                            {deal?.title}
+                                            {deal.title}
                                         </h3>
                                         <p className="text-sm md:text-base leading-relaxed opacity-90 mb-4 md:mb-6">
-                                            {deal?.description}
+                                            {deal.description}
                                         </p>
                                         <button
-                                            onClick={handleNavigate}
-                                            className="inline-flex items-center gap-2 font-semibold py-2 px-5 md:px-6 rounded-full transition-colors duration-300 w-fit text-sm md:text-base"
+                                            onClick={() => handleNavigate(deal._id)}
+                                            className="inline-flex items-center cursor-pointer gap-2 font-semibold py-2 px-5 md:px-6 rounded-full transition-colors duration-300 w-fit text-sm md:text-base"
                                             style={{
                                                 backgroundColor: buttonColor,
-                                                color: bgColor === "#41263A" ? "#41263A" : "#FFFFFF",
+                                                color: textColor,
                                             }}
                                         >
                                             Shop Now
@@ -74,19 +83,22 @@ const SpecialDealsWithImages = () => {
                                         </button>
                                     </div>
                                     <div className="w-full md:w-1/2 relative h-48 sm:h-64 md:h-[400px]">
-                                        <CustomImage
-                                            src={deal?.offerPhoto[0]}
-                                            alt={deal?.title}
-                                            fill
-                                            className="object-cover"
-                                        />
+                                        {deal.offerPhoto?.[0] ? (
+                                            <CustomImage
+                                                src={deal.offerPhoto[0]}
+                                                alt={deal.title}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        ) : (
+                                            <div className="bg-gray-200 w-full h-full" />
+                                        )}
                                     </div>
                                 </div>
                             </div>
                         );
                     })}
                 </div>
-
             </div>
         </div>
     );

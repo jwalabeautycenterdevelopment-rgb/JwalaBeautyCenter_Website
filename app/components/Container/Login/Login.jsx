@@ -10,8 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearAuthError, clearAuthMessage, loginUser } from "@/app/store/slice/authSlice";
 import { errorAlert, successAlert } from "@/app/utils/alertService";
 import { closePopup, openPopup } from "@/app/store/slice/popupSlice";
+import { usePathname } from "next/navigation";
 
 const Login = () => {
+    const pathname = usePathname();
     const dispatch = useDispatch();
     const { loginLoading, loginError, loginSuccess } = useSelector((state) => state.auth);
 
@@ -27,7 +29,9 @@ const Login = () => {
             dispatch(clearAuthMessage());
             setFormData({ email: "", password: "" });
             dispatch(closePopup())
-            router.push("/");
+            if (pathname !== "/cart") {
+                router.push("/")
+            }
         }
         if (loginError) {
             errorAlert(loginError);
@@ -46,7 +50,7 @@ const Login = () => {
                 className="absolute bottom-0 left-0 rotate-100  -translate-x-10 opacity-50 hidden md:block"
             />
             <div className="flex justify-center mb-3 relative z-10">
-                <Image src={Logo} alt="logo" width={120} height={120}   loading="eager" />
+                <Image src={Logo} alt="logo" width={120} height={120} loading="eager" />
             </div>
             <h2 className="text-3xl font-bold text-center relative z-10">Welcome Back</h2>
             <p className="text-center text-black mb-3 relative z-10">
