@@ -50,7 +50,7 @@ const ProductSection = ({ slug }) => {
                         <IoIosArrowForward className="border-gray-300 " />
                     </li>
                     <li className="text-blue-600">
-                        {slug}
+                        {slug.substring(0, 10)}
                     </li>
                 </ul>
             </div>
