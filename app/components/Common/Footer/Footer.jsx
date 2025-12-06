@@ -89,8 +89,8 @@ const Footer = () => {
                         <span>WEBDADS2U PRIVATE LIMITED</span>
                     </p>
                     <div className="flex space-x-4 text-sm justify-center md:justify-start font-medium text-gray-600">
-                        <Link href="#" className="hover:underline">Privacy Policy</Link>
-                        <Link href="#" className="hover:underline">Terms & Conditions</Link>
+                        <Link href="/policy/terms" className="hover:underline">Privacy Policy</Link>
+                        <Link href="/policy/shipping" className="hover:underline">Terms & Conditions</Link>
                     </div>
                     <div className="flex flex-col md:flex-row items-center gap-4 mt-4 md:mt-0">
                         <div className="flex space-x-4 text-xl text-black">

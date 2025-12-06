@@ -13,6 +13,7 @@ import cartReducer from "./slice/cartSlice";
 import favouriteReducer from "./slice/favoriteSlice";
 import brandReducer from "./slice/brandsSlice";
 import orderReducer from "./slice/orderSlice";
+import reviewReducer from "./slice/review";
 
 const reducer = combineReducers({
   register: registerReducer,
@@ -29,5 +30,6 @@ const reducer = combineReducers({
   myfavourite: favouriteReducer,
   brands: brandReducer,
   order: orderReducer,
+  review: reviewReducer,
 });
 export default reducer;

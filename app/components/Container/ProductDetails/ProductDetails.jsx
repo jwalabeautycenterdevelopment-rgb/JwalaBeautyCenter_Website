@@ -137,10 +137,14 @@ const ProductDetails = ({ slug }) => {
                 )
             }
             <div className="max-w-7xl mx-auto">
-                <div className="text-sm text-gray-500 mb-6  line-clamp-2">
-                    {singleProduct?.category?.name} / {singleProduct?.brand?.name} /{" "}
-                    <span className="text-gray-900">{displayName}</span>
-                </div>
+                {
+                    singleProduct &&
+                    <div className="text-sm text-gray-500 mb-6  line-clamp-2">
+
+                        {singleProduct?.category?.name} / {singleProduct?.brand?.name} /{" "}
+                        <span className="text-gray-900">{displayName}</span>
+                    </div>
+                }
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div className="space-y-4">
                         <div className="bg-gray-100 rounded-lg h-96 flex items-center justify-center">
@@ -210,11 +214,11 @@ const ProductDetails = ({ slug }) => {
                         </div>
                         <div className="flex items-center gap-2">
                             <div className="flex items-center gap-1 bg-green-700 rounded-full px-3 py-1 text-white">
-                                <span className="text-sm font-semibold">{singleProduct?.rating || "0.0"}</span>
+                                <span className="text-sm font-semibold">{singleProduct?.rating || currentVariant?.rating}</span>
                                 <FaStar size={12} />
                             </div>
                             <span className="text-gray-600 text-sm">
-                                ({singleProduct?.reviewCount || 0} ratings)
+                                ({singleProduct?.reviewCount || currentVariant?.reviewCount} ratings)
                             </span>
                         </div>
                         <div className="space-y-2 flex items-center  gap-2">
@@ -280,7 +284,6 @@ const ProductDetails = ({ slug }) => {
                                 {isFavourite ? "Wishlisted" : "Wishlist"}
                             </button>
                         </div>
-
                     </div>
                 </div>
                 <ProductTabs />
@@ -288,13 +291,74 @@ const ProductDetails = ({ slug }) => {
                     <h2 className="text-md font-medium text-gray-900 mb-2">Product Description</h2>
                     <div className="rounded-lg">
                         <p className="text-gray-700 text-sm capitalize md:text-md font-normal whitespace-pre-line">
-                            {singleProduct?.description || "No description available."}
+                            {singleProduct?.description || currentVariant?.description || "No description available for this product."}
                         </p>
                     </div>
                 </div>
-                <div
-                    id="reviews" className="mt-10"
-                >
+                <div id="reviews" className="mt-10 space-y-10">
+                    <h2 className="text-xl font-semibold text-gray-900 mb-4">Customer Reviews</h2>
+
+                    {currentVariant?.reviews?.length > 0 ? (
+                        currentVariant?.reviews?.slice(0, 5)?.map((review) => (
+                            <div key={review._id} className="">
+                                <div className="flex items-start gap-4">
+                                    {review.user?.profileImage ? (
+                                        <CustomImage
+                                            src={review.user.profileImage}
+                                            className="w-14 h-14 rounded-full object-cover"
+                                            alt="User"
+                                        />
+                                    ) : (
+                                        <>
+                                            <img
+                                                src="/profile1.png"
+                                                alt="User"
+                                                className="w-14 h-14 rounded-full object-cover"
+                                                onError={(e) => {
+                                                    e.target.style.display = "none";
+                                                    e.target.nextSibling.style.display = "flex";
+                                                }}
+                                            />
+                                            <div
+                                                className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xl font-bold text-gray-600"
+                                            >
+                                                {review.user?.name?.charAt(0).toUpperCase() || "U"}
+                                            </div>
+                                        </>
+                                    )}
+                                    <div className="flex-1">
+                                        <div className="flex justify-between items-start">
+                                            <h3 className="text-lg font-semibold">
+                                                {review.user?.name || "User"}
+                                            </h3>
+                                            <div className="flex text-yellow-400 text-xl">
+                                                {"★".repeat(review.rating)}
+                                                <span className="text-gray-400 ml-1">
+                                                    {"★".repeat(5 - review.rating)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <p className="text-gray-600 mt-1">{review.comment}</p>
+                                        {review.images?.length > 0 && (
+                                            <div className="flex gap-4 mt-4">
+                                                {review.images.map((img, index) => (
+                                                    <CustomImage
+                                                        key={index}
+                                                        src={img}
+                                                        className="w-32 h-24 rounded-xl object-cover"
+                                                        alt={`review-img-${index}`}
+                                                    />
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="mt-6 border-b border-gray-300" />
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-gray-500">No reviews available for this product.</p>
+                    )}
                 </div>
                 <div id="related" className="mt-10">
                     <RelatedProduct product={relatedProducts} />

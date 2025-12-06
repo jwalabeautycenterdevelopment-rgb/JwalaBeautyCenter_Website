@@ -19,7 +19,7 @@ import useGuestId from "@/app/utils/useGuestId";
 import MainLayout from "@/app/common/MainLayout";
 import { addFavorite, addGuestFavorite } from "@/app/store/slice/favoriteSlice";
 import { clearAuthError, clearAuthMessage, fetchMe } from "@/app/store/slice/authSlice";
-import { clearOrderError, clearOrderMessage, fetchCheckout, placeOrder } from "@/app/store/slice/orderSlice";
+import { clearOrderError, clearOrderMessage, placeOrder } from "@/app/store/slice/orderSlice";
 import { useRouter } from "next/navigation";
 import { openPopup } from "@/app/store/slice/popupSlice";
 import Payment from "@/app/common/Payment";
@@ -35,7 +35,7 @@ const CartSection = () => {
     const [selectedIds, setSelectedIds] = useState([]);
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const cartItems = items?.items || [];
-    const { checkoutError, checkoutMsg, placeOrderData } = useSelector((state) => state.order)
+    const { checkoutError, checkoutMsg, placeOrderData, errorMsg, loadingPlaceOrder } = useSelector((state) => state.order)
     const paymentRef = useRef();
     const { shippingAddress, updateLoading, updateError, updateSuccess } = useSelector(
         (state) => state.auth
@@ -60,7 +60,11 @@ const CartSection = () => {
             errorAlert(updateError);
             dispatch(clearAuthError());
         }
-    }, [updateSuccess, updateError]);
+        if (errorMsg) {
+            errorAlert(errorMsg);
+            dispatch(clearOrderError());
+        }
+    }, [updateSuccess, updateError, errorMsg]);
 
     useEffect(() => {
         if (checkoutMsg) {
@@ -71,6 +75,7 @@ const CartSection = () => {
             dispatch(clearOrderError());
         }
     }, [updateSuccess, checkoutError]);
+
 
     useEffect(() => {
         if (!cartItems || !favorites) return;
@@ -206,7 +211,7 @@ const CartSection = () => {
         }
         const selectedShipping = shippingAddress[0];
         const paymentMethod = "RAZORPAY";
-        if (selectedItems.length === 0) {
+        if (selectedItems?.length === 0) {
             warningAlert("Please select at least one item to place order.");
             return;
         }
@@ -220,17 +225,17 @@ const CartSection = () => {
             }
             return base;
         });
-        const totalAmount = selectedItems.reduce((sum, item) => {
-            const finalPrice = item.variant?.offerPrice || item.price;
-            return sum + finalPrice * item.quantity;
-        }, 0);
-
+        const subtotal = selectedItems.reduce(
+            (sum, item) =>
+                sum + (item.variant?.offerPrice || item.offerPrice) * item.quantity,
+            0
+        );
         try {
             const payload = {
                 shippingAddress: selectedShipping,
                 paymentMethod,
                 items: cartPayload,
-                amount: totalAmount
+                amount: subtotal
             };
             dispatch(placeOrder(payload));
         } catch (err) {
@@ -244,10 +249,9 @@ const CartSection = () => {
 
     const subtotal = selectedItems.reduce(
         (sum, item) =>
-            sum + (item.variant?.offerPrice || item.price) * item.quantity,
+            sum + (item.variant?.offerPrice || item.offerPrice) * item.quantity,
         0
     );
-
     if (cartItems?.length === 0) return <EmptyCart />;
 
     return (
@@ -261,45 +265,48 @@ const CartSection = () => {
                 <h1 className="text-3xl mb-5 font-bold text-gray-900 text-center">My Cart</h1>
 
                 <div className="max-w-6xl mx-auto">
-                    <div className="bg-white border border-gray-300 p-6 rounded-2xl mb-6">
-                        <div className="flex justify-between">
-                            <h2 className="text-lg font-bold">Delivery Address</h2>
-                            {
-                                !shippingAddress &&
-                                < button
-                                    onClick={() => setIsAddressModalOpen(true)}
-                                    className="px-4 py-2 bg-rose-600 text-white rounded-lg text-sm"
-                                >
-                                    Add New Address
-                                </button>
-                            }
-                        </div>
-                        <div className="space-y-3 mt-4">
-                            {shippingAddress?.map((addr) => (
-                                <div
-                                    key={addr?._id}
-                                    className="flex justify-between bg-gray-50 p-4 rounded-lg shadow-sm"
-                                >
-                                    <div>
-                                        <p className="font-semibold text-gray-900">{addr?.fullName}</p>
-                                        <p className="text-gray-600 text-sm">{addr?.phone}</p>
-                                        <p className="text-gray-600 text-sm">
-                                            {addr?.address}, {addr?.city}, {addr?.state} - {addr?.zipCode}, {addr?.country}
-                                        </p>
-                                    </div>
-                                    <button
+                    {
+                        accessToken &&
+                        <div className="bg-white border border-gray-300 p-6 rounded-2xl mb-6">
+                            <div className="flex justify-between">
+                                <h2 className="text-lg font-bold">Delivery Address</h2>
+                                {
+                                    !shippingAddress &&
+                                    < button
                                         onClick={() => setIsAddressModalOpen(true)}
-                                        className="text-red-600 text-sm hover:underline cursor-pointer"
+                                        className="px-4 py-2 bg-rose-600 text-white rounded-lg text-sm"
                                     >
-                                        Change
+                                        Add New Address
                                     </button>
-                                </div>
-                            ))}
-                            {!shippingAddress?.length && (
-                                <p className="text-gray-500 text-center">No addresses found</p>
-                            )}
+                                }
+                            </div>
+                            <div className="space-y-3 mt-4">
+                                {shippingAddress?.map((addr) => (
+                                    <div
+                                        key={addr?._id}
+                                        className="flex justify-between bg-gray-50 p-4 rounded-lg shadow-sm"
+                                    >
+                                        <div>
+                                            <p className="font-semibold text-gray-900">{addr?.fullName}</p>
+                                            <p className="text-gray-600 text-sm">{addr?.phone}</p>
+                                            <p className="text-gray-600 text-sm">
+                                                {addr?.address}, {addr?.city}, {addr?.state} - {addr?.zipCode}, {addr?.country}
+                                            </p>
+                                        </div>
+                                        <button
+                                            onClick={() => setIsAddressModalOpen(true)}
+                                            className="text-red-600 text-sm hover:underline cursor-pointer"
+                                        >
+                                            Change
+                                        </button>
+                                    </div>
+                                ))}
+                                {!shippingAddress?.length && (
+                                    <p className="text-gray-500 text-center">No addresses found</p>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    }
                     <div>
                         <button
                             onClick={handleSelectAll}
@@ -315,13 +322,11 @@ const CartSection = () => {
                                     const fav = isFavourite?.[index];
                                     const id = getItemKey(item);
                                     const selected = selectedIds.includes(id);
-                                    const price = item.variant?.offerPrice || item.price;
+                                    const price = item.variant?.offerPrice || item.offerPrice
                                     const originalPrice = item.variant?.price || item.price;
                                     const image =
                                         item.variant?.variantImages?.[0] ||
                                         item.productId.productImages?.[0];
-                                    console.log(image);
-
                                     return (
                                         <div
                                             key={id}
@@ -409,7 +414,6 @@ const CartSection = () => {
                                                         >
                                                             <Trash2 className="w-4 h-4" /> Remove
                                                         </button>
-
                                                         <button
                                                             onClick={() => toggleItemSelection(id)}
                                                             className={`px-5 py-2 text-sm rounded-lg font-medium ${selected
@@ -443,10 +447,9 @@ const CartSection = () => {
                                             </span>
                                             <span className="font-bold">
                                                 ₹
-                                                {(
-                                                    (item.variant?.offerPrice || item.price) *
-                                                    item.quantity
-                                                ).toFixed(2)}
+                                                {
+                                                    (item.variant?.offerPrice || item?.offerPrice)
+                                                }
                                             </span>
                                         </div>
                                     ))}
@@ -457,8 +460,18 @@ const CartSection = () => {
                                     <p className="text-gray-500 mt-3 text-sm text-end">
                                         Free delivery •
                                     </p>
-                                    <button className="w-full cursor-pointer bg-rose-600 text-white mt-2 py-3 rounded-xl font-bold flex justify-center gap-2" onClick={handlePlaceOrder}>
-                                        Place Order <ChevronRight />
+                                    <button
+                                        disabled={loadingPlaceOrder}
+                                        onClick={handlePlaceOrder}
+                                        className={`w-full mt-2 py-3 rounded-xl font-bold flex justify-center items-center gap-2
+    ${loadingPlaceOrder
+                                                ? "bg-rose-400 cursor-not-allowed opacity-70"
+                                                : "bg-rose-600 hover:bg-rose-700 cursor-pointer text-white"
+                                            }
+  `}
+                                    >
+                                        {loadingPlaceOrder ? "Placing Order..." : "Place Order"}
+                                        <ChevronRight />
                                     </button>
                                 </div>
                             </div>
