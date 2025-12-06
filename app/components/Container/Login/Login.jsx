@@ -11,10 +11,13 @@ import { clearAuthError, clearAuthMessage, loginUser } from "@/app/store/slice/a
 import { errorAlert, successAlert } from "@/app/utils/alertService";
 import { closePopup, openPopup } from "@/app/store/slice/popupSlice";
 import { usePathname } from "next/navigation";
+import useGuestId from "@/app/utils/useGuestId";
 
 const Login = () => {
     const pathname = usePathname();
     const dispatch = useDispatch();
+    const guestId = useGuestId();
+
     const { loginLoading, loginError, loginSuccess } = useSelector((state) => state.auth);
 
     const router = useRouter();
@@ -58,7 +61,7 @@ const Login = () => {
             </p>
             <form className="space-y-5 relative z-10" onSubmit={(e) => {
                 e.preventDefault();
-                dispatch(loginUser(formData));
+                dispatch(loginUser({ ...formData, guestId }));
             }}>
                 <InputField name="email" placeholder="Email" value={formData?.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })} />

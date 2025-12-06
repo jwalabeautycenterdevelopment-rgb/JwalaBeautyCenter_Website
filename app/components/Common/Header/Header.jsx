@@ -27,7 +27,6 @@ const Header = () => {
     const { subCategories, hasFetched } = useSelector((state) => state.subCategory);
     const { totalQuantity } = useSelector((state) => state.cart);
     const { favoritesCount } = useSelector((state) => state.myfavourite)
-
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);

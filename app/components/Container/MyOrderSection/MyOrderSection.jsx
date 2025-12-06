@@ -2,7 +2,12 @@
 
 import { EmptyOrders } from "@/app/common/Animation";
 import CustomImage from "@/app/common/Image";
+import ReviewModal from "@/app/common/ReviewModal";
+import { fetchMe } from "@/app/store/slice/authSlice";
 import { fetchOrder } from "@/app/store/slice/orderSlice";
+import { addReview, clearReviewError, clearReviewMessage } from "@/app/store/slice/review";
+import { errorAlert, successAlert } from "@/app/utils/alertService";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -18,11 +23,29 @@ const MyOrderSection = () => {
     const dispatch = useDispatch();
     const { userData } = useSelector((state) => state.auth);
     const { orderData, loadingOrders } = useSelector((state) => state.order);
+    const { successMsg, errorMsg } = useSelector((state) => state.review);
     const [activeTab, setActiveTab] = useState("All");
+    const [isReviewOpen, setIsReviewOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
 
     useEffect(() => {
         dispatch(fetchOrder());
+        dispatch(fetchMe());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (successMsg) {
+            successAlert(successMsg);
+            dispatch(clearReviewMessage());
+            dispatch(fetchOrder());
+            setIsReviewOpen(false);
+        }
+
+        if (errorMsg) {
+            errorAlert(errorMsg);
+            dispatch(clearReviewError());
+        }
+    }, [successMsg, errorMsg]);
 
     const formatDate = (isoDate) => {
         const date = new Date(isoDate);
@@ -42,6 +65,10 @@ const MyOrderSection = () => {
             if (activeTab === "Cancelled") return order.status === "Cancelled";
         }) || [];
 
+    const handleSubmitReview = (reviewData) => {
+        dispatch(addReview(reviewData));
+    };
+
     return (
         <div className="bg-linear-to-r from-[#fff5e6] to-[#fff5e6]">
             <div className="min-h-screen max-w-4xl mx-auto py-6 ">
@@ -60,7 +87,7 @@ const MyOrderSection = () => {
                         </div>
                     </div>
                 </div>
-                {orderData && orderData.length > 0 && (
+                {orderData?.length > 0 && (
                     <div className="flex items-center gap-3 mb-6">
                         {["All", "In Progress", "Delivered", "Cancelled"].map((tab) => (
                             <button
@@ -76,18 +103,17 @@ const MyOrderSection = () => {
                         ))}
                     </div>
                 )}
-                {!loadingOrders && filteredOrders?.length === 0 && (
-                    <EmptyOrders />
-                )}
+
+                {!loadingOrders && filteredOrders.length === 0 && <EmptyOrders />}
                 {loadingOrders && (
                     <p className="text-center text-gray-500 py-10">Loading orders...</p>
                 )}
+
                 {filteredOrders?.map((order) => {
                     const firstItem = order.items[0];
                     const image = firstItem?.variant?.variantImages?.[0];
                     const itemsCount = order.items.length;
-                    const badgeColor =
-                        STATUS_STYLES[order.status] || "bg-gray-200 text-gray-600";
+
                     return (
                         <div
                             key={order._id}
@@ -95,7 +121,9 @@ const MyOrderSection = () => {
                         >
                             <div className="flex items-center gap-3 mb-3">
                                 <span
-                                    className={`px-3 py-1 rounded-full text-xs font-semibold ${badgeColor}`}
+                                    className={`px-3 py-1 rounded-full text-xs font-semibold ${STATUS_STYLES[order.status] ||
+                                        "bg-gray-200 text-gray-600"
+                                        }`}
                                 >
                                     ● {order.status}
                                 </span>
@@ -103,8 +131,9 @@ const MyOrderSection = () => {
                                     {formatDate(order.placedAt)}
                                 </span>
                             </div>
+
                             <div className="flex items-start gap-4">
-                                <div className="relative">
+                                <Link href={`/product/${firstItem?.productId?.slug}`} className="relative">
                                     <CustomImage
                                         src={image}
                                         className="w-16 h-16 rounded-md object-cover"
@@ -116,31 +145,54 @@ const MyOrderSection = () => {
                                             +{itemsCount - 1}
                                         </span>
                                     )}
-                                </div>
+                                </Link>
+
                                 <div className="flex-1">
                                     <h3 className="text-red-600 text-sm font-semibold mb-1">
                                         Order ID: {order.orderId}
                                     </h3>
+
                                     <p className="text-gray-700 text-sm">
                                         {firstItem.productId?.name?.slice(0, 45)}...
                                         {itemsCount > 1 && (
                                             <span className="text-red-500">
                                                 {" "}
-                                                & {itemsCount - 1} more items
+                                                & {itemsCount - 1} more
                                             </span>
                                         )}
                                     </p>
+
                                     <p className="mt-2 text-black font-semibold">
                                         ₹ {order.totalAmount}
                                     </p>
+
+                                    <div className="flex justify-end">
+                                        <button
+                                            className="px-4 py-2 font-semibold bg-green-600 text-sm text-white rounded-lg hover:bg-green-700 transition"
+                                            onClick={() => {
+                                                setSelectedItem({
+                                                    productId: firstItem?.productId?._id || null,
+                                                    sku: firstItem?.variant?.sku || null,
+                                                });
+                                                setIsReviewOpen(true);
+                                            }}
+                                        >
+                                            Write a Review
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     );
                 })}
             </div>
+            <ReviewModal
+                isOpen={isReviewOpen}
+                onClose={() => setIsReviewOpen(false)}
+                OrderData={selectedItem}
+                onSubmit={handleSubmitReview}
+            />
         </div>
-
     );
 };
 

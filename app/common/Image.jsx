@@ -27,6 +27,7 @@ export default function CustomImage({
 
     if (!imgSrc) return null;
 
+    
     return (
         <Image
             src={imgSrc}

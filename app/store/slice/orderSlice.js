@@ -29,7 +29,7 @@ export const placeOrder = createAsyncThunk(
         token,
         body: payload,
       });
-      return response?.data;
+      return response;
     } catch (err) {
       return thunkAPI.rejectWithValue(err?.message || "Failed to place order");
     }
@@ -59,7 +59,7 @@ const orderSlice = createSlice({
   initialState: {
     orderData: null,
     placeOrderData: null,
-    
+
     verifyData: null,
 
     loadingOrders: false,
@@ -101,7 +101,7 @@ const orderSlice = createSlice({
       })
       .addCase(placeOrder.fulfilled, (state, action) => {
         state.loadingPlaceOrder = false;
-        state.placeOrderData = action.payload;
+        state.placeOrderData = action.payload?.data || action.payload;
         state.successMsg = action.payload?.message || "Order placed";
       })
       .addCase(placeOrder.rejected, (state, action) => {

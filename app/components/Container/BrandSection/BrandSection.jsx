@@ -5,6 +5,7 @@ import { ProductCard } from "@/app/common/ProducrCart";
 import { getAllBrands, getBrandBySlug } from "@/app/store/slice/brandsSlice";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FiSearch } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function BrandPage() {
@@ -127,16 +128,17 @@ export default function BrandPage() {
                 />
             )}
             <div className="flex-1 flex flex-col overflow-hidden w-full">
-                <div className="bg-white px-4 py-3 md:px-6 md:py-4 border-b border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-3 sticky top-0 z-10">
+                <div className=" px-4 py-3 md:px-6 md:py-4 border-b border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-3 sticky top-0 z-10">
                     <div className="w-full relative">
                         <input
                             type="text"
                             placeholder="Search products..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-gray-100 border-0 outline-none text-base focus:ring-2 focus:ring-blue-500 focus:bg-white"
+                            className="w-full pl-12 pr-4 py-3.5 rounded-2xl  border-0 outline-none text-base focus:ring-2 focus:ring-blue-500 focus:bg-white"
                         />
-                        <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">🔍</span>
+                        <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <FiSearch className="text-xl" /></span>
                     </div>
                     <div className="flex items-center  overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
                         <div className="flex items-center bg-gray-100 rounded-full p-1">

@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation";
 import { resendOtp } from "@/app/store/slice/register";
 import { clearAuthError, clearAuthMessage, verifyUser } from "@/app/store/slice/authSlice";
 import { closePopup } from "@/app/store/slice/popupSlice";
+import useGuestId from "@/app/utils/useGuestId";
 
 export default function Register() {
     const length = 6;
     const dispatch = useDispatch();
     const router = useRouter();
+    const guestId = useGuestId();
     const inputsRef = useRef([]);
     const [otp, setOtp] = useState("");
     const [timer, setTimer] = useState(30);
@@ -80,7 +82,7 @@ export default function Register() {
     };
 
     const handleSubmit = () => {
-        dispatch(verifyUser({ email, otp }));
+        dispatch(verifyUser({ email, otp, guestId }));
     };
 
     const inputClass =

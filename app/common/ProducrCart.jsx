@@ -7,8 +7,7 @@ import { useRouter } from 'next/navigation';
 import useGuestId from '../utils/useGuestId';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFavorite, addGuestFavorite, clearFavoriteMessage } from '../store/slice/favoriteSlice';
-import { addGuestCartItem, addOrUpdateCartItem } from '../store/slice/cartSlice';
-import { clearMessage } from '../store/slice/register';
+import { addGuestCartItem, addOrUpdateCartItem, clearMessage } from '../store/slice/cartSlice';
 import { errorAlert } from '../utils/alertService';
 
 export const ProductCard = ({ product, isHover = true }) => {

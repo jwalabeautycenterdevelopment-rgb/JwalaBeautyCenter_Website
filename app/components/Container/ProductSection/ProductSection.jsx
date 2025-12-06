@@ -5,9 +5,11 @@ import MainLayout from "@/app/common/MainLayout";
 import { ProductSkeleton } from "@/app/common/Skeleton";
 import { getCategoryProducts } from "@/app/store/slice/productsSlice";
 import { calculateDiscount, formatPrice, getProductCardPrice, } from "@/app/utils/priceCalculate";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { FaBox, FaStar } from "react-icons/fa";
+import { IoIosArrowForward } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -37,6 +39,21 @@ const ProductSection = ({ slug }) => {
 
     return (
         <MainLayout className="px-4 sm:px-6 lg:px-18 py-10 capitalize">
+            <div className="mb-6">
+                <ul className="flex gap-1 items-center text-sm font-medium capitalize">
+                    <li>
+                        <Link href={"/"}>
+                            Home
+                        </Link>
+                    </li>
+                    <li>
+                        <IoIosArrowForward className="border-gray-300 " />
+                    </li>
+                    <li className="text-blue-600">
+                        {slug.substring(0, 10)}
+                    </li>
+                </ul>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 {userCategoryProducts ? (
                     <ProductSkeleton count={8} />

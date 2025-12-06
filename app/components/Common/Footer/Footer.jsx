@@ -89,19 +89,32 @@ const Footer = () => {
                         <span>WEBDADS2U PRIVATE LIMITED</span>
                     </p>
                     <div className="flex space-x-4 text-sm justify-center md:justify-start font-medium text-gray-600">
-                        <Link href="#" className="hover:underline">Privacy Policy</Link>
-                        <Link href="#" className="hover:underline">Terms & Conditions</Link>
+                        <Link href="/policy/terms" className="hover:underline">Privacy Policy</Link>
+                        <Link href="/policy/shipping" className="hover:underline">Terms & Conditions</Link>
                     </div>
-                    <div className="flex flex-col md:flex-row items-center gap-4 mt-4 md:mt-0">
+                    <div className="flex flex-col md:flex-row items-center gap-4 mt-4 md:mt-0 md:px-10">
                         <div className="flex space-x-4 text-xl text-black">
-                            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="hover:underline">
+                            <a
+                                href="https://www.instagram.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="
+            bg-[#E1306C] p-2 rounded-full text-white 
+            transition-transform duration-300 hover:scale-110
+        "
+                            >
                                 <FaInstagram />
                             </a>
-                            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:underline">
+                            <a
+                                href="https://www.facebook.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="
+            bg-[#1877F2] p-2 rounded-full text-white
+            transition-transform duration-300 hover:scale-110
+        "
+                            >
                                 <FaFacebookF />
-                            </a>
-                            <a href="https://wa.me/919551222201" target="_blank" rel="noopener noreferrer" className="hover:underline">
-                                <FaWhatsapp />
                             </a>
                         </div>
                     </div>
