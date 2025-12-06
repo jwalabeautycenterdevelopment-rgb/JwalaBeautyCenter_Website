@@ -8,7 +8,6 @@ export const FetchApi = async ({
 }) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
-
   try {
     const headers = {};
     if (!(body instanceof FormData))
