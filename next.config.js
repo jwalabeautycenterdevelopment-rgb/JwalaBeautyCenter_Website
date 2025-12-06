@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {},
+
+  logging: {
+    // hide noisy warnings from Turbopack & baseline-browser-mapping
+    warnings: false,
+  },
 
   images: {
     remotePatterns: [
