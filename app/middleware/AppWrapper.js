@@ -6,9 +6,9 @@ import Header from "../components/Common/Header/Header";
 import Footer from "../components/Common/Footer/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { setupTokenRefresh } from "../utils/setupTokenRefresh";
 import PopupManager from "../common/PopupManager";
 import WhatsAppButton from "../common/WhatsAppButton";
+import { setupTokenRefresh } from "../utils/setupTokenRefresh";
 
 export default function AppWrapper({ children }) {
   const accessToken = useSelector((state) => state.auth.accessToken);
