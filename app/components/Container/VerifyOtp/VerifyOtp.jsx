@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { errorAlert, successAlert } from "@/app/utils/alertService";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { resendOtp } from "@/app/store/slice/register";
 import { clearAuthError, clearAuthMessage, verifyUser } from "@/app/store/slice/authSlice";
 import { closePopup } from "@/app/store/slice/popupSlice";
@@ -20,6 +20,7 @@ export default function Register() {
     const { otpLoading, otpError, otpSuccess, resendLoading, resendSuccess, resendError } = useSelector((state) => state.auth);
 
     useEffect(() => {
+        const pathname = usePathname();
         if (resendSuccess) {
             successAlert(resendSuccess);
             dispatch(clearAuthMessage());
@@ -28,7 +29,9 @@ export default function Register() {
         if (otpSuccess) {
             successAlert(otpSuccess);
             setOtp("");
-            router.push("/");
+            if (pathname !== "/cart") {
+                router.push("/")
+            }
             dispatch(closePopup())
             dispatch(clearAuthMessage());
         }
