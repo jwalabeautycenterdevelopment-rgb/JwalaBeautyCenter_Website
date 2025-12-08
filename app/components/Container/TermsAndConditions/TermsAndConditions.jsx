@@ -14,7 +14,7 @@ export default function PolicyTabs({ slug }) {
     }, [slug]);
 
     return (
-        <div className="w-full max-w-4xl mx-auto p-4 py-10">
+        <div className="w-full max-w-5xl mx-auto p-4 py-10">
             <div className="flex border-b border-gray-300">
                 <button
                     onClick={() => setActiveTab("terms")}
@@ -34,7 +34,7 @@ export default function PolicyTabs({ slug }) {
                     Shipping Policy
                 </button>
             </div>
-            <div className="mt-6 text-gray-700 space-y-4 leading-relaxed">
+            <div className="mt-6 text-gray-700 space-y-4 leading-relaxed font-medium">
                 {activeTab === "terms" && (
                     <>
                         <p>

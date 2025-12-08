@@ -233,22 +233,33 @@ const ProductDetails = ({ slug }) => {
                             )}
                         </div>
                         {singleProduct?.variants?.length > 0 && (
-                            <div className="space-y-4 border-t border-gray-300">
+                            <div className="space-y-2  border-t border-gray-300 pt-4">
                                 <h3 className="font-semibold text-gray-900">Select Variant:</h3>
                                 <div className="flex flex-wrap gap-3">
                                     {singleProduct?.variants?.map((variant, index) => (
                                         <button
                                             key={variant._id}
                                             onClick={() => handleVariantSelect(index)}
-                                            className={`px-4 py-2 border-2 rounded-lg transition-all ${selectedVariant === index
-                                                ? "border-blue-500 bg-blue-50 text-blue-700"
+                                            className={`flex flex-col items-center px-4 py-2 border-2 rounded-lg transition-all ${selectedVariant === index
+                                                ? "border-red-500"
                                                 : "border-gray-300 hover:border-gray-400"
                                                 }`}
                                         >
-                                            {variant?.name.length > 20 ? variant?.name.substring(0, 13) + ".." : variant?.name}
-                                            <div className="text-xs text-gray-600">
-                                                {variant.stock > 0 ? `${variant.stock} in stock` : "Out of stock"}
-                                            </div>
+                                            <CustomImage
+                                                src={variant?.variantImages[0]}
+                                                alt={variant.name}
+                                                className="w-10 h-10 object-cover rounded"
+                                            />
+                                            {variant.type && (
+                                                <div className="mt-2 inline-block px-2 py-1 h-4 w-4 rounded-full bg-pink-100 text-pink-600 text-xs font-medium">
+                                                 
+                                                </div>
+                                            )}
+                                            {variant.weight > 0 && (
+                                                <div className="mt-1 text-gray-700 text-sm">
+                                                    {variant.weight}
+                                                </div>
+                                            )}
                                         </button>
                                     ))}
                                 </div>

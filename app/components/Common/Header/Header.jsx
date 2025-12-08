@@ -315,28 +315,67 @@ const Header = () => {
                         )}
                     </div>
                 </div>
-                <motion.button
-                    className="lg:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1.5 relative z-50"
-                    onClick={toggleMenu}
-                    aria-label="Toggle menu"
-                    whileTap={{ scale: 0.95 }}
-                >
-                    <motion.span
-                        className="block h-0.5 w-6 bg-gray-700"
-                        animate={isMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-                        transition={{ duration: 0.3 }}
-                    />
-                    <motion.span
-                        className="block h-0.5 w-6 bg-gray-700"
-                        animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                    />
-                    <motion.span
-                        className="block h-0.5 w-6 bg-gray-700"
-                        animate={isMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-                        transition={{ duration: 0.3 }}
-                    />
-                </motion.button>
+
+                <div className="flex  lg:hidden  items-center gap-4">
+                    <div className="flex gap-2 items-center">
+                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="relative">
+                            <Link href="/myfavourites">
+                                <IoHeartOutline className="w-6 h-6 text-gray-700 hover:text-pink-500 transition-colors duration-200" />
+                            </Link>
+                            {favoritesCount > 0 && (
+                                <motion.span
+                                    key={favoritesCount}
+                                    initial={{ scale: 0, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    exit={{ scale: 0, opacity: 0 }}
+                                    transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                                    className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center shadow"
+                                >
+                                    {favoritesCount}
+                                </motion.span>
+                            )}
+                        </motion.div>
+                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="relative">
+                            <Link href="/cart" className="relative">
+                                <IoCartOutline className="w-6 h-6 text-gray-700 hover:text-green-600 transition-colors duration-200" />
+                                {totalQuantity > 0 && (
+                                    <motion.span
+                                        key={totalQuantity}
+                                        initial={{ scale: 0, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0, opacity: 0 }}
+                                        transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                                        className="absolute -top-1 -right-1 bg-green-600 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center shadow"
+                                    >
+                                        {totalQuantity}
+                                    </motion.span>
+                                )}
+                            </Link>
+                        </motion.div>
+                    </div>
+                    <motion.button
+                        className="lg:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1.5 relative z-50"
+                        onClick={toggleMenu}
+                        aria-label="Toggle menu"
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <motion.span
+                            className="block h-0.5 w-6 bg-gray-700"
+                            animate={isMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                        />
+                        <motion.span
+                            className="block h-0.5 w-6 bg-gray-700"
+                            animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                        />
+                        <motion.span
+                            className="block h-0.5 w-6 bg-gray-700"
+                            animate={isMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                        />
+                    </motion.button>
+                </div>
             </nav>
             <AnimatePresence>
                 {isMenuOpen && (

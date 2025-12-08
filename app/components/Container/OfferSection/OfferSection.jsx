@@ -43,19 +43,18 @@ const OfferSection = ({ slug }) => {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6   md:px-20">
                 {singleOffer?.products?.map((item, index) => {
                     const product = item?.product || {};
+                    const variant = product?.variants?.[0];
                     const img =
                         product?.productImages?.[0] ||
-                        product?.variants?.[0]?.variantImages?.[0] ||
+                        variant?.variantImages?.[0] ||
                         null;
                     const showImage = img && img !== "string";
-                    const price = product?.price ?? product?.variants?.[0]?.price ?? 0;
-                    const offerPrice = product?.offerPrice ?? product?.variants?.[0]?.offerPrice ?? price;
+                    const price = variant?.price ?? 0;
+                    const offerPrice = variant?.offerPrice ?? price;
                     const discountPercent = calculateDiscount(price, offerPrice);
                     const hasDiscount = discountPercent > 0;
-                    const stock =
-                        product?.stock ??
-                        product?.variants?.[0]?.stock ??
-                        0;
+                    const stock = variant?.stock ?? 0;
+
                     return (
                         <div
                             key={index}

@@ -271,10 +271,10 @@ const CartSection = () => {
                             <div className="flex justify-between">
                                 <h2 className="text-lg font-bold">Delivery Address</h2>
                                 {
-                                    !shippingAddress &&
+                                    !shippingAddress || shippingAddress?.length == 0 &&
                                     < button
                                         onClick={() => setIsAddressModalOpen(true)}
-                                        className="px-4 py-2 bg-rose-600 text-white rounded-lg text-sm"
+                                        className="px-4 py-2 bg-rose-600 text-white rounded-lg text-sm cursor-pointer"
                                     >
                                         Add New Address
                                     </button>
