@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBanner } from '@/app/store/slice/bannerSlice';
 import CustomImage from '@/app/common/Image';
+import Link from 'next/link';
 
 export default function HomeBanner() {
     const dispatch = useDispatch();
@@ -51,19 +52,34 @@ export default function HomeBanner() {
                         </div>
                         {
                             banner?.header &&
-                            <div className="absolute left-5 md:left-30 top-1/2 -translate-y-1/2 flex flex-col gap-1 md:gap-4">
-                                <p className="text_primary text-lg sm:text-4xl">
-                                    {banner?.description}
-                                </p>
-                                <h1 className="text-bl text-2xl lg:text-5xl 2xl:text-7xl font-semibold max-w-xl text-white">
+                            <div className="
+        absolute left-1/2 top-1/2 
+        -translate-x-1/2 -translate-y-1/2 
+        flex flex-col items-center text-center 
+        gap-2 sm:gap-3 md:gap-4 px-4 w-full
+    ">
+                                <h1
+                                    className="
+        font-bold leading-tight
+        text-2xl sm:text-3xl md:text-5xl lg:text-6xl 2xl:text-7xl
+        drop-shadow-xl max-w-[90%] sm:max-w-[80%] md:max-w-4xl lg:max-w-5xl
+    "
+                                    style={{ color: banner?.colourCode || "#ffffff" }}
+                                >
                                     {banner?.header}
                                 </h1>
-                                <button className="px-8 md:px-15 py-2 bg-red-600/20 backdrop-blur-md text-white rounded-full hover:bg-[#FBBBBC]/30 transition-all duration-300 w-max text-sm md:text-lg">
+                                <Link href={"/brands"}
+                                    className="
+                px-6 sm:px-10 md:px-14 py-2 sm:py-3
+                bg-red-600/40 backdrop-blur-md text-white rounded-full
+                hover:bg-[#FBBBBC]/40 transition-all duration-300
+                text-sm sm:text-base md:text-xl
+            "
+                                >
                                     View
-                                </button>
+                                </Link>
                             </div>
                         }
-
                     </SwiperSlide>
                 ))}
             </Swiper>

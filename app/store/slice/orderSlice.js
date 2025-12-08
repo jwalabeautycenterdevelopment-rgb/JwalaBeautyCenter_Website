@@ -47,7 +47,7 @@ export const verifyOrder = createAsyncThunk(
         token,
         body: payload,
       });
-      return response?.data;
+      return response;
     } catch (err) {
       return thunkAPI.rejectWithValue(err?.message || "Failed to verify order");
     }
@@ -59,13 +59,12 @@ const orderSlice = createSlice({
   initialState: {
     orderData: null,
     placeOrderData: null,
-
     verifyData: null,
-
     loadingOrders: false,
     loadingPlaceOrder: false,
     loadingVerify: false,
-
+    checkoutMsg: null,
+    checkoutError: null,
     successMsg: null,
     errorMsg: null,
   },
@@ -88,7 +87,6 @@ const orderSlice = createSlice({
       .addCase(fetchOrder.fulfilled, (state, action) => {
         state.loadingOrders = false;
         state.orderData = action.payload?.orders || action.payload;
-        state.successMsg = action.payload?.message || "Orders fetched";
       })
       .addCase(fetchOrder.rejected, (state, action) => {
         state.loadingOrders = false;
@@ -111,16 +109,16 @@ const orderSlice = createSlice({
 
       .addCase(verifyOrder.pending, (state) => {
         state.loadingVerify = true;
-        state.errorMsg = null;
+        state.checkoutError = null;
       })
       .addCase(verifyOrder.fulfilled, (state, action) => {
         state.loadingVerify = false;
-        state.verifyData = action.payload;
-        state.successMsg = action.payload?.message || "Order verified";
+        state.verifyData = action.payload?.data?.order || action.payload;
+        state.checkoutMsg = action.payload?.data?.message || "Order verified";
       })
       .addCase(verifyOrder.rejected, (state, action) => {
         state.loadingVerify = false;
-        state.errorMsg = action.payload;
+        state.checkoutError = action.payload;
       });
   },
 });

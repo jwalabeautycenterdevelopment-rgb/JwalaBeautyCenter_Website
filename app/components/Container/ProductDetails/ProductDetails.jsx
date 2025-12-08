@@ -172,7 +172,6 @@ const ProductDetails = ({ slug }) => {
                                 </button>
                             ) : (
                                 <div className="text-gray-400 text-center">
-                                    <div className="text-4xl mb-2">📱</div>
                                     <p>No Image Available</p>
                                 </div>
                             )}
@@ -200,6 +199,7 @@ const ProductDetails = ({ slug }) => {
                     </div>
                     <div className="space-y-2">
                         <h1 className="text-2xl font-bold text-gray-900  line-clamp-4">{displayName}</h1>
+                        <p className="text-gray-700 text-sm capitalize md:text-md font-normal whitespace-pre-line line-clamp-3">{singleProduct?.description}</p>
                         <div className="flex gap-2">
                             {singleProduct?.isNewArrival && (
                                 <span className="inline-block px-3 py-1 text-white text-xs font-semibold bg-linear-to-r from-orange-400 to-red-500 skew-x-[-7deg] shadow-md rounded-sm">
@@ -214,11 +214,11 @@ const ProductDetails = ({ slug }) => {
                         </div>
                         <div className="flex items-center gap-2">
                             <div className="flex items-center gap-1 bg-green-700 rounded-full px-3 py-1 text-white">
-                                <span className="text-sm font-semibold">{singleProduct?.rating || currentVariant?.rating}</span>
+                                <span className="text-sm font-semibold">{singleProduct?.rating || currentVariant?.rating || 5}</span>
                                 <FaStar size={12} />
                             </div>
                             <span className="text-gray-600 text-sm">
-                                ({singleProduct?.reviewCount || currentVariant?.reviewCount} ratings)
+                                ({singleProduct?.reviewCount || currentVariant?.reviewCount || 10} ratings)
                             </span>
                         </div>
                         <div className="space-y-2 flex items-center  gap-2">
@@ -252,7 +252,7 @@ const ProductDetails = ({ slug }) => {
                                             />
                                             {variant.type && (
                                                 <div className="mt-2 inline-block px-2 py-1 h-4 w-4 rounded-full bg-pink-100 text-pink-600 text-xs font-medium">
-                                                 
+
                                                 </div>
                                             )}
                                             {variant.weight > 0 && (
