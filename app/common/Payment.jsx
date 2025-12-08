@@ -15,7 +15,6 @@ const Payment = forwardRef(({ totalAmount, dispatch, userData }, ref) => {
 
     const initiatePayment = async (razorpayOrderId) => {
         if (!razorpayOrderId) return errorAlert("Invalid order ID");
-
         const options = {
             key: process.env.NEXT_PUBLIC_RZ_KEY,
             amount: totalAmount * 100,
@@ -38,8 +37,6 @@ const Payment = forwardRef(({ totalAmount, dispatch, userData }, ref) => {
                 };
                 try {
                     await dispatch(verifyOrder(verifyPayload));
-                    window.location.reload()
-                    
                 } catch (err) {
                     console.error("Verification error:", err);
                 }
@@ -52,7 +49,6 @@ const Payment = forwardRef(({ totalAmount, dispatch, userData }, ref) => {
         };
 
         const razor = new window.Razorpay(options);
-
         razor.on("payment.failed", (response) =>
             errorAlert(response.error.description || "Payment failed")
         );

@@ -35,12 +35,14 @@ const CartSection = () => {
     const [selectedIds, setSelectedIds] = useState([]);
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const cartItems = items?.items || [];
-    const { checkoutError, checkoutMsg, placeOrderData, errorMsg, loadingPlaceOrder } = useSelector((state) => state.order)
+    const { checkoutError, checkoutMsg, placeOrderData, errorMsg, loadingPlaceOrder, successMsg } = useSelector((state) => state.order)
     const paymentRef = useRef();
+    const [agree, setAgree] = useState(false);
+    console.log(checkoutMsg);
+
     const { shippingAddress, updateLoading, updateError, updateSuccess } = useSelector(
         (state) => state.auth
     );
-
 
     useEffect(() => {
         if (placeOrderData?.razorpayOrderId && paymentRef.current) {
@@ -60,6 +62,10 @@ const CartSection = () => {
             errorAlert(updateError);
             dispatch(clearAuthError());
         }
+        if (successMsg) {
+            successAlert(successMsg);
+            dispatch(clearOrderMessage());
+        }
         if (errorMsg) {
             errorAlert(errorMsg);
             dispatch(clearOrderError());
@@ -68,13 +74,16 @@ const CartSection = () => {
 
     useEffect(() => {
         if (checkoutMsg) {
+            successAlert(checkoutMsg);
+            router.push('/myorders');
             dispatch(clearOrderMessage());
+
         }
         if (checkoutError) {
             errorAlert(checkoutError);
             dispatch(clearOrderError());
         }
-    }, [updateSuccess, checkoutError]);
+    }, [checkoutMsg, checkoutError]);
 
 
     useEffect(() => {
@@ -258,7 +267,6 @@ const CartSection = () => {
         <MainLayout>
             <Payment ref={paymentRef}
                 dispatch={dispatch}
-                navigate={router.push}
                 userData={placeOrderData}
                 totalAmount={placeOrderData?.amount || 0} />
             <div className="min-h-screen bg-gray-50 p-2 md:p-4">
@@ -457,22 +465,53 @@ const CartSection = () => {
                                         <span>Total Amount</span>
                                         <span>₹{subtotal.toFixed(2)}</span>
                                     </div>
-                                    <p className="text-gray-500 mt-3 text-sm text-end">
-                                        Free delivery •
+                                    <p className="text-red-600 mt-3 text-sm text-left font-semibold">
+                                        Free Delivery •
                                     </p>
-                                    <button
-                                        disabled={loadingPlaceOrder}
-                                        onClick={handlePlaceOrder}
-                                        className={`w-full mt-2 py-3 rounded-xl font-bold flex justify-center items-center gap-2
-    ${loadingPlaceOrder
-                                                ? "bg-rose-400 cursor-not-allowed opacity-70"
-                                                : "bg-rose-600 hover:bg-rose-700 cursor-pointer text-white"
-                                            }
-  `}
-                                    >
-                                        {loadingPlaceOrder ? "Placing Order..." : "Place Order"}
-                                        <ChevronRight />
-                                    </button>
+                                    <div className="mt-3 space-y-1">
+                                        <div className="mt-4 flex items-start gap-2">
+                                            <input
+                                                type="checkbox"
+                                                checked={agree}
+                                                onChange={(e) => setAgree(e.target.checked)}
+                                                className="mt-1 cursor-pointer w-4 h-4 accent-rose-600"
+                                            />
+
+                                            <p className="text-sm text-gray-700">
+                                                I agree to the{" "}
+                                                <a
+                                                    href="/policy/terms"
+                                                    target="_blank"
+                                                    className="text-rose-600 hover:underline"
+                                                >
+                                                    Terms & Conditions
+                                                </a>{" "}
+                                                and{" "}
+                                                <a
+                                                    href="/policy/shipping"
+                                                    target="_blank"
+                                                    className="text-rose-600 hover:underline"
+                                                >
+                                                    Shipping Policy
+                                                </a>.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {agree && (
+                                        <button
+                                            disabled={loadingPlaceOrder}
+                                            onClick={handlePlaceOrder}
+                                            className={`w-full mt-2 py-3 rounded-xl font-bold flex justify-center items-center gap-2
+            ${loadingPlaceOrder
+                                                    ? "bg-rose-400 cursor-not-allowed opacity-70"
+                                                    : "bg-rose-600 hover:bg-rose-700 cursor-pointer text-white"
+                                                }
+        `}
+                                        >
+                                            {loadingPlaceOrder ? "Placing Order..." : "Place Order"}
+                                            <ChevronRight />
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </div>
