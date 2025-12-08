@@ -8,10 +8,10 @@ export const isLoginExpired = () => {
   return now - Number(loginTimestamp) > sevenDays;
 };
 
-export const setupTokenRefresh = (dispatch, getState) => {
+export const setupTokenRefresh = (dispatch, logout, refreshToken) => {
   if (isLoginExpired()) {
     localStorage.clear();
-    dispatch({ type: "auth/logout" }); 
+    dispatch(logout());
     return;
   }
 
@@ -21,13 +21,14 @@ export const setupTokenRefresh = (dispatch, getState) => {
   const currentTime = Date.now();
   const expiresIn = Number(tokenExpiry) - currentTime;
   const refreshIn = expiresIn - 2 * 60 * 1000;
+
   clearTimeout(refreshTimeout);
 
   if (refreshIn <= 0) {
-    dispatch({ type: "auth/refreshToken/pending" }); 
+    dispatch(refreshToken());
   } else {
     refreshTimeout = setTimeout(() => {
-      dispatch({ type: "auth/refreshToken/pending" });
+      dispatch(refreshToken());
     }, refreshIn);
   }
 };
