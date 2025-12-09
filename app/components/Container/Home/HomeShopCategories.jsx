@@ -30,8 +30,6 @@ const HomeShopCategories = () => {
                     Shop by Categories
                 </motion.h3>
             </div>
-
-            {/* MOBILE → scrollable | DESKTOP → infinite animation */}
             <div className="overflow-x-auto md:overflow-hidden scrollbar-hide">
                 <motion.div
                     className="flex gap-4"
@@ -43,43 +41,39 @@ const HomeShopCategories = () => {
                     }}
                 >
                     {repeatedCategories?.map((category, index) => (
-                        <div
+                        <Link
                             key={index}
-                            className="rounded-lg text-center flex flex-col items-center p-4 min-w-[180px] md:min-w-[200px]"
-                        >
-                            <div className="group w-[150px] aspect-square mb-3">
-                                <Link
-                                    href={`/products/${category?.slug}`}
-                                    className="relative w-full h-full block overflow-hidden rounded-full"
-                                >
-                                    <CustomImage
-                                        src={category?.image || "/placeholder.png"}
-                                        alt={category?.name || "Category"}
-                                        fill
-                                        priority={index === 0}
-                                        className="object-contain transform transition-transform duration-600 ease-out group-hover:scale-110"
-                                    />
-                                </Link>
+                            href={`/products/${category?.slug}`}>
+                            <div
+                                className="rounded-lg text-center flex flex-col items-center p-4 min-w-[180px] md:min-w-[200px]"
+                            >
+                                <div className="group w-[150px] aspect-square mb-3">
+                                    <div
+                                        className="relative w-full h-full block overflow-hidden rounded-full"
+                                    >
+                                        <CustomImage
+                                            src={category?.image || "/placeholder.png"}
+                                            alt={category?.name || "Category"}
+                                            fill
+                                            priority={index === 0}
+                                            className="object-contain transform transition-transform duration-600 ease-out group-hover:scale-110"
+                                        />
+                                    </div>
+                                </div>
+
+                                <h4 className="text-gray-700 text-[15px] font-medium mb-1">
+                                    {category?.name?.length > 10
+                                        ? category?.name.substring(0, 16) + "…"
+                                        : category?.name}
+                                </h4>
+
+                                <p className="text-gray-500 font-medium text-xs md:text-sm">
+                                    ({category?.productCount} Products)
+                                </p>
                             </div>
-
-                            <h4 className="text-gray-700 text-[15px] font-medium mb-1">
-                                {category?.name?.length > 10
-                                    ? category?.name.substring(0, 16) + "…"
-                                    : category?.name}
-                            </h4>
-
-                            <p className="text-gray-500 font-medium text-xs md:text-sm">
-                                ({category?.productCount} Products)
-                            </p>
-                        </div>
+                        </Link>
                     ))}
                 </motion.div>
-            </div>
-
-            <div className="flex justify-end">
-                <button className="text-[#BF6159] px-5 py-4 text-sm font-medium duration-300 cursor-pointer">
-                    View All
-                </button>
             </div>
         </div>
     );
