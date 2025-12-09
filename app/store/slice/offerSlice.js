@@ -18,13 +18,29 @@ export const getOffers = createAsyncThunk(
   }
 );
 
+export const discountOffers = createAsyncThunk(
+  "offers/discountOffers",
+  async (_, thunkAPI) => {
+    const token = thunkAPI.getState()?.auth?.accessToken;
+    try {
+      const response = await FetchApi({
+        endpoint: "/user/offers/discountOffer",
+        method: "GET",
+        token,
+      });
+      return response?.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err?.message || "Failed to fetch offers");
+    }
+  }
+);
 export const fetchOfferById = createAsyncThunk(
   "offers/fetchOfferById",
   async (id, thunkAPI) => {
     const token = thunkAPI.getState()?.auth?.accessToken;
     try {
       const response = await FetchApi({
-        endpoint: `/user/offers/${id}`,
+        endpoint: `/user/offers/single/${id}`,
         method: "GET",
         token,
       });
@@ -39,6 +55,7 @@ const offerSlice = createSlice({
   name: "offers",
   initialState: {
     offersList: [],
+    discountoffersList: [],
     singleOffer: null,
     loadingOffers: false,
     loadingOfferById: false,
@@ -68,6 +85,20 @@ const offerSlice = createSlice({
         state.successMsg = action.payload?.message || "Offers fetched";
       })
       .addCase(getOffers.rejected, (state, action) => {
+        state.loadingOffers = false;
+        state.errorMsg = action.payload;
+      })
+
+      .addCase(discountOffers.pending, (state) => {
+        state.loadingOffers = true;
+        state.errorMsg = null;
+      })
+      .addCase(discountOffers.fulfilled, (state, action) => {
+        state.loadingOffers = false;
+        state.discountoffersList = action.payload || action.payload;
+        state.successMsg = action.payload?.message || "Offers fetched";
+      })
+      .addCase(discountOffers.rejected, (state, action) => {
         state.loadingOffers = false;
         state.errorMsg = action.payload;
       })

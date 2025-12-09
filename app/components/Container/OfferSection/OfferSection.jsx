@@ -14,7 +14,7 @@ const OfferSection = ({ slug }) => {
     const { singleOffer } = useSelector((state) => state.offers)
     const dispatch = useDispatch()
     const router = useRouter();
-
+    
     useEffect(() => {
         if (slug) dispatch(fetchOfferById(slug))
     }, [slug, dispatch])
