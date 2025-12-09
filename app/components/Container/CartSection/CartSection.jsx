@@ -453,11 +453,9 @@ const CartSection = () => {
                                             <span className="line-clamp-2">
                                                 {item.quantity} × {item.productId.name}
                                             </span>
+
                                             <span className="font-bold">
-                                                ₹
-                                                {
-                                                    (item.variant?.offerPrice || item?.offerPrice)
-                                                }
+                                                ₹{((item.variant?.offerPrice || item?.offerPrice) * item.quantity).toFixed(2)}
                                             </span>
                                         </div>
                                     ))}
@@ -466,7 +464,7 @@ const CartSection = () => {
                                         <span>₹{subtotal.toFixed(2)}</span>
                                     </div>
                                     <p className="text-red-600 mt-3 text-sm text-left font-semibold">
-                                        Free Delivery •
+                                        Free Delivery
                                     </p>
                                     <div className="mt-3 space-y-1">
                                         <div className="mt-4 flex items-start gap-2">

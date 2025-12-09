@@ -250,9 +250,11 @@ const ProductDetails = ({ slug }) => {
                                                 alt={variant.name}
                                                 className="w-10 h-10 object-cover rounded"
                                             />
-                                            {variant.type && (
-                                                <div className="mt-2 inline-block px-2 py-1 h-4 w-4 rounded-full bg-pink-100 text-pink-600 text-xs font-medium">
-
+                                            {variant?.type && (
+                                                <div
+                                                    className="mt-2 inline-block px-2 py-1 h-4 w-4 rounded-full text-xs font-medium"
+                                                    style={{ backgroundColor: variant?.type }}
+                                                >
                                                 </div>
                                             )}
                                             {variant.weight > 0 && (

@@ -39,7 +39,7 @@ const OfferSection = ({ slug }) => {
                     className="object-cover"
                 />
             </div>
-            <OfferMarquee text={`🔥 Save Big on Care Deals — Up to ${singleOffer?.percentage}% OFF! Limited Time Offer!`} />
+            <OfferMarquee text={`Save Big on Care Deals — Up to ${singleOffer?.percentage}% OFF! Limited Time Offer!`} />
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6   md:px-20">
                 {singleOffer?.products?.map((item, index) => {
                     const product = item?.product || {};
