@@ -84,6 +84,7 @@ const CategoryDropdown = ({ subCategories = [], closeDropdown }) => {
                             </p>
                             <Link
                                 href="/offers"
+                                onClick={closeDropdown}
                                 className="text-xs text-green-600 hover:text-green-700 font-medium"
                             >
                                 View All Offers →

@@ -34,7 +34,7 @@ const GetallOfferSection = () => {
     );
 
     const marqueeText = offersList
-        ?.map((offer) => `🔥 ${offer.title} — ${offer.percentage}% OFF!`)
+        ?.map((offer) => `${offer.title} — ${offer.percentage}% OFF!`)
         .join("   ⚡   ");
     return (
         <div>

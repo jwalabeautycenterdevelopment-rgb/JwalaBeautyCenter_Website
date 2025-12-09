@@ -453,11 +453,9 @@ const CartSection = () => {
                                             <span className="line-clamp-2">
                                                 {item.quantity} × {item.productId.name}
                                             </span>
+
                                             <span className="font-bold">
-                                                ₹
-                                                {
-                                                    (item.variant?.offerPrice || item?.offerPrice)
-                                                }
+                                                ₹{((item.variant?.offerPrice || item?.offerPrice) * item.quantity).toFixed(2)}
                                             </span>
                                         </div>
                                     ))}
