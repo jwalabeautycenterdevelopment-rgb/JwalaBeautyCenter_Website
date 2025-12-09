@@ -37,7 +37,6 @@ const Header = () => {
     const [showMobileCategory, setShowMobileCategory] = useState(false);
     const [query, setQuery] = useState("");
     const { searchResults, suggestions } = useSelector((state) => state.products);
-    console.log(searchResults);
 
     useEffect(() => {
         if (accessToken === undefined || guestId === undefined) return;
