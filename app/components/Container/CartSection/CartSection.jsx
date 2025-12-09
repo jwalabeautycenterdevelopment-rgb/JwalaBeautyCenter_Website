@@ -38,7 +38,6 @@ const CartSection = () => {
     const { checkoutError, checkoutMsg, placeOrderData, errorMsg, loadingPlaceOrder, successMsg } = useSelector((state) => state.order)
     const paymentRef = useRef();
     const [agree, setAgree] = useState(false);
-    console.log(checkoutMsg);
 
     const { shippingAddress, updateLoading, updateError, updateSuccess } = useSelector(
         (state) => state.auth

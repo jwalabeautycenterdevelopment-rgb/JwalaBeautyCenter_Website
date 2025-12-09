@@ -18,6 +18,7 @@ import CategoryDropdown from "@/app/common/CategoryDropdown";
 import { fetchCart, fetchGuestCart } from "@/app/store/slice/cartSlice";
 import useGuestId from "@/app/utils/useGuestId";
 import { fetchFavorites, fetchGuestFavorites } from "@/app/store/slice/favoriteSlice";
+import { searchProducts } from "@/app/store/slice/productsSlice";
 
 const Header = () => {
     const router = useRouter();
@@ -34,6 +35,8 @@ const Header = () => {
     const closeMenu = () => setIsMenuOpen(false);
     const [showSearch, setShowSearch] = useState(false);
     const [showMobileCategory, setShowMobileCategory] = useState(false);
+    const [query, setQuery] = useState("");
+    const { searchResults, suggestions } = useSelector((state) => state.products);
 
     useEffect(() => {
         if (accessToken === undefined || guestId === undefined) return;
@@ -47,6 +50,18 @@ const Header = () => {
             dispatch(fetchGuestFavorites(guestId));
         }
     }, [accessToken, guestId]);
+
+
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (query.trim().length > 0) {
+                dispatch(searchProducts(query));
+            }
+        }, 300);
+
+        return () => clearTimeout(timeout);
+    }, [query, dispatch]);
 
 
     useEffect(() => {
@@ -172,9 +187,8 @@ const Header = () => {
                             </div>
                         );
                     })}
-
                     <div className="flex items-center gap-5">
-                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="relative">
+                        <motion.div whileHover={{ scale: 1.1 }} className="relative">
                             <div className="relative search-container">
                                 <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                                     <IoIosSearch
@@ -193,12 +207,12 @@ const Header = () => {
                                             exit={{ opacity: 0, y: -10 }}
                                             transition={{ duration: 0.15 }}
                                             className="
-                                            absolute right-0 mt-3 
-                                            w-[320px] md:w-[450px]
-                                            backdrop-blur-xl bg-white/20
-                                            border border-white/10 shadow-2xl
-                                            rounded-3xl p-4 z-50
-                                        "
+        absolute right-0 mt-3 
+        w-[320px] md:w-[450px]
+        backdrop-blur-xl bg-white/20
+        border border-white/10 shadow-2xl
+        rounded-3xl p-4 z-50
+    "
                                         >
                                             <div className="flex items-center gap-3">
                                                 <IoIosSearch className="w-6 h-6 text-gray-700" />
@@ -207,9 +221,70 @@ const Header = () => {
                                                     placeholder="Search for products..."
                                                     className="bg-transparent w-full outline-none text-gray-800 placeholder-gray-500"
                                                     autoFocus
+                                                    onChange={(e) => setQuery(e.target.value)}
                                                 />
                                             </div>
+                                            {query.length > 0 && (
+                                                <div className="mt-3 max-h-72 overflow-y-auto space-y-2 scrollbar-hide">
+                                                    {suggestions?.length > 0 && (
+                                                        <div>
+                                                            <p className="text-xs text-gray-600 mb-1">Suggestions</p>
+                                                            {suggestions.map((text, i) => (
+                                                                <div
+                                                                    key={i}
+                                                                    onClick={() => {
+                                                                        setQuery(text);
+                                                                        router.push(`/search?q=${text}`);
+                                                                        setShowSearch(false);
+                                                                    }}
+                                                                    className="cursor-pointer p-2 rounded-lg hover:bg-white/40"
+                                                                >
+                                                                    {text}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                    {searchResults?.length > 0 && (
+                                                        <div>
+                                                            <p className="text-xs text-gray-600 mb-1">Products</p>
+                                                            {searchResults.map((p) => (
+                                                                <div
+                                                                    key={p._id}
+                                                                    onClick={() => {
+                                                                        router.push(`/product/${p.slug}`);
+                                                                        setShowSearch(false);
+                                                                    }}
+                                                                    className="flex items-center gap-3 p-2 rounded-xl cursor-pointer bg-white/30 hover:bg-white/50"
+                                                                >
+                                                                    <CustomImage
+                                                                        src={
+                                                                            p?.productImages?.length
+                                                                                ? `${p.productImages[0]}`
+                                                                                : "/placeholder.png"
+                                                                        }
+                                                                        className="w-12 h-12 rounded-lg object-cover"
+                                                                    />
+
+                                                                    <div className="flex flex-col">
+                                                                        <span className="font-medium text-gray-800">{p.name}</span>
+                                                                        <span className="text-sm text-gray-600">
+                                                                            ₹{p.offerPrice || p.price}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                    {searchResults?.length === 0 && query.length > 0 && (
+                                                        <p className="text-center text-gray-500 text-sm py-3">
+                                                            No products found
+                                                        </p>
+                                                    )}
+
+                                                </div>
+                                            )}
                                         </motion.div>
+
                                     )}
                                 </AnimatePresence>
                             </div>

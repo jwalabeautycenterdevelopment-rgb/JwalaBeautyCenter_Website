@@ -7,12 +7,11 @@ import { FaStar } from "react-icons/fa"
 import CustomImage from "@/app/common/Image"
 import ProductPopup from "@/app/common/ProductPopup"
 import { formatPrice } from "@/app/utils/priceCalculate"
-import { addGuestCartItem, addOrUpdateCartItem } from "@/app/store/slice/cartSlice"
+import { addGuestCartItem, addOrUpdateCartItem, clearMessage } from "@/app/store/slice/cartSlice"
 import useGuestId from "@/app/utils/useGuestId"
 import { Heart } from "lucide-react"
 import { addFavorite, addGuestFavorite, clearFavoriteMessage } from "@/app/store/slice/favoriteSlice"
-import { errorAlert } from "@/app/utils/alertService"
-import { clearMessage } from "@/app/store/slice/register"
+import { errorAlert, successAlert } from "@/app/utils/alertService"
 import ProductTabs from "@/app/utils/ProductTabs"
 import RelatedProduct from "./RelatedProduct"
 
@@ -23,6 +22,8 @@ const ProductDetails = ({ slug }) => {
     const { accessToken } = useSelector((state) => state.auth);
     const { addFavoriteError, addFavoriteMsg, favorites } = useSelector((state) => state.myfavourite)
     const { message, error } = useSelector((state) => state.cart)
+    console.log(message);
+
     const [selectedVariant, setSelectedVariant] = useState(0)
     const [selectedImage, setSelectedImage] = useState(0)
     const [isPopupOpen, setIsPopupOpen] = useState(false)
@@ -51,13 +52,14 @@ const ProductDetails = ({ slug }) => {
             dispatch(clearFavoriteMessage());
         }
         if (message) {
+            successAlert(message, "bottom-right");
             dispatch(clearMessage())
         }
         if (error) {
             dispatch(errorAlert(error))
             dispatch(clearMessage())
         }
-    }, [addFavoriteMsg, addFavoriteError, dispatch]);
+    }, [addFavoriteMsg, addFavoriteError, dispatch, message, error]);
 
     const currentVariant = singleProduct?.variants?.[selectedVariant]
 

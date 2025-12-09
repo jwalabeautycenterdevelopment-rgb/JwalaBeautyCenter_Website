@@ -40,7 +40,7 @@ const OfferSection = ({ slug }) => {
                 />
             </div>
             <OfferMarquee text={`Save Big on Care Deals — Up to ${singleOffer?.percentage}% OFF! Limited Time Offer!`} />
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6   md:px-20">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6  px-5 md:px-20">
                 {singleOffer?.products?.map((item, index) => {
                     const product = item?.product || {};
                     const variant = product?.variants?.[0];
@@ -49,8 +49,8 @@ const OfferSection = ({ slug }) => {
                         variant?.variantImages?.[0] ||
                         null;
                     const showImage = img && img !== "string";
-                    const price = variant?.price ?? 0;
-                    const offerPrice = variant?.offerPrice ?? price;
+                    const price = variant?.price ?? product?.price ?? 0;
+                    const offerPrice = variant?.offerPrice ?? product?.offerPrice ?? 0;
                     const discountPercent = calculateDiscount(price, offerPrice);
                     const hasDiscount = discountPercent > 0;
                     const stock = variant?.stock ?? 0;
