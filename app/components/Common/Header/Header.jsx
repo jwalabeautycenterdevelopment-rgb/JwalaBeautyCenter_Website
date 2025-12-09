@@ -232,12 +232,12 @@ const Header = () => {
                                                             {suggestions.map((text, i) => (
                                                                 <div
                                                                     key={i}
-                                                                    onClick={() => {
-                                                                        setQuery(text);
-                                                                        router.push(`/search?q=${text}`);
-                                                                        setShowSearch(false);
-                                                                    }}
-                                                                    className="cursor-pointer p-2 rounded-lg hover:bg-white/40"
+                                                                    // onClick={() => {
+                                                                    //     setQuery(text);
+                                                                    //     router.push(`/search?q=${text}`);
+                                                                    //     setShowSearch(false);
+                                                                    // }}
+                                                                    className=" p-2 rounded-lg hover:bg-white/40"
                                                                 >
                                                                     {text}
                                                                 </div>

@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
@@ -8,17 +7,18 @@ import CustomImage from "@/app/common/Image";
 import OfferImg from "@/app/assets/offersvg.svg";
 import { formatPrice, } from "@/app/utils/priceCalculate";
 import { FaBox, FaStar } from "react-icons/fa";
-import { getOffers } from "@/app/store/slice/offerSlice";
+import { discountOffers } from "@/app/store/slice/offerSlice";
 import OfferMarquee from "@/app/common/OfferMarquee";
 
 const GetallOfferSection = () => {
     const dispatch = useDispatch();
     const router = useRouter();
-    const { offersList, hasFetched } = useSelector((state) => state.offers);
+    const { discountoffersList, hasFetched } = useSelector((state) => state.offers);
+    console.log(discountoffersList);
 
     useEffect(() => {
         if (!hasFetched) {
-            dispatch(getOffers());
+            dispatch(discountOffers());
         }
     }, [dispatch, hasFetched]);
 
@@ -33,8 +33,8 @@ const GetallOfferSection = () => {
         </div>
     );
 
-    const marqueeText = offersList
-        ?.map((offer) => `${offer.title} — ${offer.percentage}% OFF!`)
+    const marqueeText = discountoffersList
+        ?.map((offer) => `Save Big on Care Deals — Up to ${offer?.discount}% OFF! Limited Time Offer!`)
         .join("   ⚡   ");
     return (
         <div>
@@ -46,10 +46,10 @@ const GetallOfferSection = () => {
                     className="object-cover"
                 />
             </div>
-            <OfferMarquee text={marqueeText}  />
+            <OfferMarquee text={marqueeText} />
             <div className="px-4 md:px-20  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 pb-10">
-                {offersList?.map((offer) => {
-                    const product = offer?.products?.[0]?.product;
+                {discountoffersList?.map((offer) => {
+                    const product = offer || {};
                     const variant = product?.variants?.length > 0 ? product.variants[0] : null;
                     const price = variant?.price ?? product?.price ?? 0;
                     const img =
@@ -57,7 +57,7 @@ const GetallOfferSection = () => {
                         variant?.variantImages?.[0] ||
                         null;
                     const showImage = img && img !== "string";
-                    const discountPercent = offer?.percentage || 0;
+                    const discountPercent = offer?.discount || 0;
                     const offerPriceFinal = price - (price * discountPercent) / 100;
                     return (
                         <div
@@ -80,8 +80,8 @@ const GetallOfferSection = () => {
                                 )}
                             </div>
                             <div className="px-2 mt-3">
-                                <h3 className="font-bold text-gray-900 text-sm line-clamp-2">
-                                    {offer?.title}
+                                <h3 className=" text-gray-900 text-sm line-clamp-2">
+                                    {offer?.name}
                                 </h3>
                                 <div className="flex items-center gap-2 mt-1">
                                     <span className="text-lg font-bold text-gray-900">
