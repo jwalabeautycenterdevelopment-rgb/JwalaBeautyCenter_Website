@@ -128,6 +128,7 @@ const productsSlice = createSlice({
   name: "products",
   initialState: {
     searchResults: [],
+    suggestions: [],
     loadingSearch: false,
     errorSearch: null,
 
@@ -179,7 +180,8 @@ const productsSlice = createSlice({
       })
       .addCase(searchProducts.fulfilled, (state, action) => {
         state.loadingSearch = false;
-        state.searchResults = action.payload?.data || [];
+        state.searchResults = action.payload?.data?.products || [];
+        state.suggestions = action.payload?.data?.suggestions || [];
       })
       .addCase(searchProducts.rejected, (state, action) => {
         state.loadingSearch = false;
