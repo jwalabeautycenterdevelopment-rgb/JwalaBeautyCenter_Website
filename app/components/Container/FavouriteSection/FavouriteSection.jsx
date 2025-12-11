@@ -10,6 +10,7 @@ import { errorAlert, successAlert } from "@/app/utils/alertService";
 import CustomImage from "@/app/common/Image";
 import { addGuestCartItem, addOrUpdateCartItem } from "@/app/store/slice/cartSlice";
 import { useRouter } from "next/navigation";
+import { getProductCardPrice } from "@/app/utils/priceCalculate";
 const FavouritesSection = () => {
     const router = useRouter();
     const dispatch = useDispatch();
@@ -105,37 +106,36 @@ const FavouritesSection = () => {
                             product?.productImages?.[0] ||
                             "/no-image.png";
                         const variant = product?.variants?.[0];
+                        const { price, offerPrice } = getProductCardPrice(product);
                         return (
                             <div
                                 key={item?._id}
                                 className="flex gap-4 p-4 border-b border-gray-300 last:border-none"
                             >
-                                <div className="w-28 h-28 rounded-xl overflow-hidden border border-gray-300 bg-white">
+                                <Link href={`product/${product?.slug}`} className="w-28 h-28 rounded-xl overflow-hidden border border-gray-300 bg-white">
                                     <CustomImage
                                         src={image}
                                         alt={product?.name}
                                         className="w-full h-full object-cover"
                                     />
-                                </div>
+                                </Link>
                                 <div className="flex-1">
                                     <h3 className="text-[15px] font-semibold leading-5 line-clamp-2">
                                         {product?.name}
                                     </h3>
                                     <div className="flex items-center gap-2 mt-2 text-[15px]">
                                         <span className="font-semibold text-green-600">
-                                            ₹{variant?.offerPrice || variant?.price}
+                                            ₹{offerPrice}
                                         </span>
-
-                                        {variant?.offerPrice && (
-                                            <>
-                                                <span className="line-through text-gray-400">
-                                                    ₹{variant?.price}
-                                                </span>
-                                                <span className="text-green-600 text-sm font-medium">
-                                                    {Math.floor(((variant.price - variant.offerPrice) / variant.price) * 100)}% off
-                                                </span>
-                                            </>
-                                        )}
+                                        <>
+                                            <span>
+                                                {offerPrice && (
+                                                    <span className="text-gray-500 line-through text-sm ml-2">
+                                                        ₹{price}
+                                                    </span>
+                                                )}
+                                            </span>
+                                        </>
                                     </div>
                                     <div className="flex items-center gap-2 mt-1">
                                         <div className="flex items-center gap-1 bg-green-600 text-white text-xs px-2 py-1 rounded-md">

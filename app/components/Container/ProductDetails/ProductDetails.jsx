@@ -22,7 +22,6 @@ const ProductDetails = ({ slug }) => {
     const { accessToken } = useSelector((state) => state.auth);
     const { addFavoriteError, addFavoriteMsg, favorites } = useSelector((state) => state.myfavourite)
     const { message, error } = useSelector((state) => state.cart)
-    console.log(message);
 
     const [selectedVariant, setSelectedVariant] = useState(0)
     const [selectedImage, setSelectedImage] = useState(0)

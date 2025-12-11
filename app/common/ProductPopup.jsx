@@ -31,7 +31,7 @@ export default function ProductPopup({ isOpen, onClose, product }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <CustomImage
                         src={currentImage}
-                        className="w-full rounded-lg object-cover"
+                        className="w-full h-64 md:h-80 lg:h-120 max-h-120 rounded-lg object-cover"
                     />
                     <div className="flex flex-col gap-3">
                         <h2 className="text-2xl font-semibold">

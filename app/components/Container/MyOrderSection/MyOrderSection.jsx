@@ -104,13 +104,17 @@ const MyOrderSection = () => {
                     </div>
                 )}
 
-                {!loadingOrders && filteredOrders.length === 0 && <EmptyOrders />}
+                {!loadingOrders && filteredOrders?.length === 0 && <EmptyOrders />}
                 {loadingOrders && (
                     <p className="text-center text-gray-500 py-10">Loading orders...</p>
                 )}
                 {filteredOrders?.map((order) => {
                     const firstItem = order.items[0];
-                    const image = firstItem?.variant?.variantImages?.[0] || firstItem?.productImages?.[0] || "/placeholder-image.png";
+                    const image =
+                        firstItem?.variant?.variantImages?.[0] ||
+                        firstItem?.productId?.productImages?.[0] ||
+                        "/placeholder-image.png";
+
                     const itemsCount = order.items.length;
 
                     return (

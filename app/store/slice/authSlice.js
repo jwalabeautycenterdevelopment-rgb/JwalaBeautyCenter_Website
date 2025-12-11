@@ -57,7 +57,7 @@ export const forgotPassword = createAsyncThunk(
       if (response?.data?.success === false) {
         return thunkAPI.rejectWithValue(response?.data?.errors);
       }
-      return response?.data;
+      return response;
     } catch (err) {
       return thunkAPI.rejectWithValue(err?.message || "Something went wrong");
     }
