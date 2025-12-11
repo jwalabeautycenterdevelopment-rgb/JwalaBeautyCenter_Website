@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 const IMG_URL = process.env.NEXT_PUBLIC_BASE_IMAGE_URL || "";
+
 export default function CustomImage({
     src = null,
     alt = "image",
@@ -13,21 +14,15 @@ export default function CustomImage({
     fill = false,
     priority = false,
 }) {
-    const [imgSrc, setImgSrc] = useState(null);
-
-    useEffect(() => {
+    const imgSrc = useMemo(() => {
         if (typeof src === "string" && src.trim() !== "") {
-            setImgSrc(src.startsWith("http") ? src : `${IMG_URL}${src}`);
-        } else {
-            setImgSrc(
-                ""
-            );
+            return src.startsWith("http") ? src : `${IMG_URL}${src}`;
         }
+        return null;
     }, [src]);
 
     if (!imgSrc) return null;
 
-    
     return (
         <Image
             src={imgSrc}

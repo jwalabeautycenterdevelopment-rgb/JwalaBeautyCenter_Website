@@ -30,7 +30,7 @@ const HomeShopCategories = () => {
                     Shop by Categories
                 </motion.h3>
             </div>
-            <div className="overflow-x-auto md:overflow-hidden scrollbar-hide">
+            <div className="overflow-x-auto scrollbar-hide">
                 <motion.div
                     className="flex gap-4"
                     animate={{ x: ["0%", "-50%"] }}
