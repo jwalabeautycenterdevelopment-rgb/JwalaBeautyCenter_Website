@@ -311,9 +311,8 @@ const ProductDetails = ({ slug }) => {
                 </div>
                 <div id="reviews" className="mt-10 space-y-10">
                     <h2 className="text-xl font-semibold text-gray-900 mb-4">Customer Reviews</h2>
-
-                    {currentVariant?.reviews?.length > 0 ? (
-                        currentVariant?.reviews?.slice(0, 5)?.map((review) => (
+                    {(currentVariant?.reviews?.length > 0 || singleProduct?.reviews?.length > 0) ? (
+                        (currentVariant?.reviews?.length > 0 ? currentVariant.reviews : singleProduct.reviews).slice(0, 5).map((review) => (
                             <div key={review._id} className="">
                                 <div className="flex items-start gap-4">
                                     {review.user?.profileImage ? (
@@ -323,18 +322,14 @@ const ProductDetails = ({ slug }) => {
                                             alt="User"
                                         />
                                     ) : (
-                                        <>
-                                            <div
-                                                className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xl font-bold text-gray-600"
-                                            >
-                                                {review.user?.name?.charAt(0).toUpperCase() || "U"}
-                                            </div>
-                                        </>
+                                        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xl font-bold text-gray-600">
+                                            {review.user?.firstName?.charAt(0).toUpperCase() || "U"}
+                                        </div>
                                     )}
                                     <div className="flex-1">
                                         <div className="flex justify-between items-start">
                                             <h3 className="text-md font-semibold">
-                                                {review.user?.name || "User"}
+                                                {review.user?.firstName || "User"}
                                             </h3>
                                             <div className="flex text-yellow-400 text-xl">
                                                 {"★".repeat(review.rating)}
@@ -343,9 +338,9 @@ const ProductDetails = ({ slug }) => {
                                                 </span>
                                             </div>
                                         </div>
-                                        <p className="text-gray-600 text-sm ">{review.comment}</p>
+                                        <p className="text-gray-600 text-sm">{review.comment}</p>
                                         {review.images?.length > 0 && (
-                                            <div className="flex gap-4 ">
+                                            <div className="flex gap-4 my-2">
                                                 {review.images.map((img, index) => (
                                                     <CustomImage
                                                         key={index}
