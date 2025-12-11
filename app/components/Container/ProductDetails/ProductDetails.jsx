@@ -183,7 +183,7 @@ const ProductDetails = ({ slug }) => {
                                     <button
                                         key={index}
                                         onClick={() => setSelectedImage(index)}
-                                        className={`w-20 h-20 border-2  rounded-lg overflow-hidden ${selectedImage === index ? "border-blue-500" : "border-gray-200"
+                                        className={`w-20 h-20 border-2 cursor-pointer  rounded-lg overflow-hidden ${selectedImage === index ? "border-blue-500" : "border-gray-200"
                                             }`}
                                     >
                                         <CustomImage

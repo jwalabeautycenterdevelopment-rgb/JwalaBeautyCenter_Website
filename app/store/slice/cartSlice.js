@@ -52,7 +52,6 @@ export const addGuestCartItem = createAsyncThunk(
       await thunkAPI.dispatch(fetchGuestCart({ guestId }));
       return response?.data;
     } catch (err) {
-      console.log(err);
       return thunkAPI.rejectWithValue(err.message);
     }
   }
