@@ -324,15 +324,6 @@ const ProductDetails = ({ slug }) => {
                                         />
                                     ) : (
                                         <>
-                                            <img
-                                                src="/profile1.png"
-                                                alt="User"
-                                                className="w-14 h-14 rounded-full object-cover"
-                                                onError={(e) => {
-                                                    e.target.style.display = "none";
-                                                    e.target.nextSibling.style.display = "flex";
-                                                }}
-                                            />
                                             <div
                                                 className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xl font-bold text-gray-600"
                                             >
@@ -342,7 +333,7 @@ const ProductDetails = ({ slug }) => {
                                     )}
                                     <div className="flex-1">
                                         <div className="flex justify-between items-start">
-                                            <h3 className="text-lg font-semibold">
+                                            <h3 className="text-md font-semibold">
                                                 {review.user?.name || "User"}
                                             </h3>
                                             <div className="flex text-yellow-400 text-xl">
@@ -352,9 +343,9 @@ const ProductDetails = ({ slug }) => {
                                                 </span>
                                             </div>
                                         </div>
-                                        <p className="text-gray-600 mt-1">{review.comment}</p>
+                                        <p className="text-gray-600 text-sm ">{review.comment}</p>
                                         {review.images?.length > 0 && (
-                                            <div className="flex gap-4 mt-4">
+                                            <div className="flex gap-4 ">
                                                 {review.images.map((img, index) => (
                                                     <CustomImage
                                                         key={index}

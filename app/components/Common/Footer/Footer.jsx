@@ -5,15 +5,23 @@ import Link from "next/link";
 import {
     FaFacebookF,
     FaInstagram,
-    FaWhatsapp,
 } from "react-icons/fa";
 import Logo from "@/app/assets/navbar_icon.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { getParentCategory } from "@/app/store/slice/parentCategorySlice";
 
 const Footer = () => {
+    const dispatch = useDispatch();
     const router = useRouter()
-    const { getAllCategories, } = useSelector((state) => state.parentcategory);
+    const { getAllCategories, hasFetched } = useSelector((state) => state.parentcategory);
+
+    useEffect(() => {
+        if (!hasFetched) {
+            dispatch(getParentCategory());
+        }
+    }, [dispatch, hasFetched]);
 
     const handleNavigate = (item) => {
         router.push(`/category/${item?.slug}`)
