@@ -47,7 +47,7 @@ const NewArrivals = () => {
                     </div>
                     <div className="lg:col-span-8">
                         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-5">
-                            {newArrivals?.map((product) => (
+                            {newArrivals?.slice(0, 8).map((product) => (
                                 <ProductCard
                                     key={product._id}
                                     product={product}

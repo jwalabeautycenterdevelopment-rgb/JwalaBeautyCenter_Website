@@ -124,6 +124,9 @@ const favoritesSlice = createSlice({
     clearFavoriteMessage: (state) => {
       state.message = null;
       state.error = null;
+      state.addFavoriteMsg = null;
+      state.addFavoriteError = null;
+
     },
     clearFavoritesState: (state) => {
       state.favorites = [];

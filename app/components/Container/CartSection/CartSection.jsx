@@ -393,7 +393,22 @@ const CartSection = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="flex w-30 justify-center bg-gray-200 mt-4 rounded-lg items-center gap-4">
+
+                                                    </div>
+                                                    <div className="flex justify-between items-center gap-1 mt-3 text-sm">
+                                                        <button
+                                                            onClick={() => handleAddFavourite(item)}
+                                                            className="flex items-center gap-2 text-gray-600 hover:text-rose-600">
+                                                            <Heart className={`w-4 h-4 ${fav ? "text-rose-600 fill-rose-600" : ""}`} />
+                                                            Wishlist
+                                                        </button>
+                                                        <button
+                                                            onClick={() => removeItem(item)}
+                                                            className="flex items-center gap-2 text-gray-600 hover:text-red-600"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" /> Remove
+                                                        </button>
+                                                        <div className="flex w-30 justify-center bg-gray-200 mt-4 py-4 rounded-lg items-center gap-4">
                                                             <button
                                                                 onClick={() => updateQty(item, "decrease")}
                                                                 disabled={item.quantity <= 1}
@@ -407,29 +422,6 @@ const CartSection = () => {
                                                                 +
                                                             </button>
                                                         </div>
-                                                    </div>
-                                                    <div className="flex justify-between mt-3 text-sm">
-                                                        <button
-                                                            onClick={() => handleAddFavourite(item)}
-                                                            className="flex items-center gap-2 text-gray-600 hover:text-rose-600">
-                                                            <Heart className={`w-4 h-4 ${fav ? "text-rose-600 fill-rose-600" : ""}`} />
-                                                            Wishlist
-                                                        </button>
-                                                        <button
-                                                            onClick={() => removeItem(item)}
-                                                            className="flex items-center gap-2 text-gray-600 hover:text-red-600"
-                                                        >
-                                                            <Trash2 className="w-4 h-4" /> Remove
-                                                        </button>
-                                                        <button
-                                                            onClick={() => toggleItemSelection(id)}
-                                                            className={`px-5 py-2 text-sm rounded-lg font-medium ${selected
-                                                                ? "bg-rose-600 text-white"
-                                                                : "bg-gray-100"
-                                                                }`}
-                                                        >
-                                                            {selected ? "Selected" : "Select"}
-                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>

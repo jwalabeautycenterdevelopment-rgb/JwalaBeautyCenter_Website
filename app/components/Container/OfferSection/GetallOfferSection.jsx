@@ -14,8 +14,6 @@ const GetallOfferSection = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { discountoffersList, hasFetched } = useSelector((state) => state.offers);
-    console.log(discountoffersList);
-
     useEffect(() => {
         if (!hasFetched) {
             dispatch(discountOffers());
@@ -33,7 +31,7 @@ const GetallOfferSection = () => {
         </div>
     );
 
-    const marqueeText = discountoffersList
+    const marqueeText = discountoffersList.slice(0, 2)
         ?.map((offer) => `Save Big on Care Deals — Up to ${offer?.discount}% OFF! Limited Time Offer!`)
         .join("   ⚡   ");
     return (
