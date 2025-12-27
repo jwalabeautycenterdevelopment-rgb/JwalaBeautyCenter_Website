@@ -18,9 +18,9 @@ export default function Register() {
     const [timer, setTimer] = useState(30);
     const { email } = useSelector((state) => state.register);
     const { otpLoading, otpError, otpSuccess, resendLoading, resendSuccess, resendError } = useSelector((state) => state.auth);
+    const pathname = usePathname();
 
     useEffect(() => {
-        const pathname = usePathname();
         if (resendSuccess) {
             successAlert(resendSuccess);
             dispatch(clearAuthMessage());

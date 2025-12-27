@@ -88,16 +88,23 @@ export default function HomeBanner() {
                 <div className="hidden md:flex justify-end">
                     <div className="absolute bottom-10 2xl:bottom-30 right-0 md:right-1 -translate-x-1/2 flex flex-col items-center gap-4 z-10">
                         <div className="flex gap-3 z-20">
-                            {banners?.map((_, i) => (
-                                <div key={i} className="w-20 h-1 bg-white/40 overflow-hidden rounded-full">
+                            {Array.from({ length: 3 }).map((_, i) => {
+                                const visibleIndex = (activeIndex + i) % banners.length;
+
+                                return (
                                     <div
-                                        className={clsx(
-                                            "h-full bg-white transition-all duration-[4s]",
-                                            i === activeIndex ? "w-full" : "w-0"
-                                        )}
-                                    />
-                                </div>
-                            ))}
+                                        key={i}
+                                        className="w-20 h-1 bg-white/40 overflow-hidden rounded-full"
+                                    >
+                                        <div
+                                            className={clsx(
+                                                "h-full bg-white transition-all duration-[4s]",
+                                                i === 0 ? "w-full" : "w-0"
+                                            )}
+                                        />
+                                    </div>
+                                );
+                            })}
                         </div>
                         <div className="w-20 h-auto overflow-hidden rounded-lg border-2 border-white">
                             <CustomImage
