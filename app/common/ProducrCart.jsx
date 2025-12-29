@@ -49,7 +49,7 @@ export const ProductCard = ({ product, isHover = true }) => {
             dispatch(clearMessage())
         }
         if (error) {
-            dispatch(errorAlert(error))
+            errorAlert(error)
             dispatch(clearMessage())
         }
     }, [addFavoriteMsg, addFavoriteError, dispatch, error, message]);
