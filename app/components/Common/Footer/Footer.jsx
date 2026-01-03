@@ -93,7 +93,7 @@ const Footer = () => {
                 </div>
                 <div className="border-t border-gray-300 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-gray-600 px-4 md:px-6">
                     <p className="text-center md:text-left font-semibold text-black">
-                        © 2025. JWALA BEAUTY CENTER  All Right Reserved  {" "}
+                        © {new Date().getFullYear()}. JWALA BEAUTY CENTER  All Right Reserved  {" "}
                         {/* <Link target="_blank" href={"https://www.webdads2u.com/"}>WEBDADS2U PRIVATE LIMITED</Link> */}
                     </p>
                     <div className="flex space-x-4 text-sm justify-center md:justify-start font-medium text-gray-600">
