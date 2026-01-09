@@ -70,7 +70,7 @@ const MyOrderSection = () => {
     };
 
     return (
-        <div className="bg-linear-to-r from-[#fff5e6] to-[#fff5e6]">
+        <div className="bg-linear-to-r from-[#fff5e6] to-[#fff5e6] px-5 lg:px-0">
             <div className="min-h-screen max-w-4xl mx-auto py-6 ">
                 <div className="relative mb-8">
                     <div className="backdrop-blur-xl bg-white/30 shadow-lg border border-white/40 rounded-2xl p-6 flex items-center gap-4">
