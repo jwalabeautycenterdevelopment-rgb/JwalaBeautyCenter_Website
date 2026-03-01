@@ -60,7 +60,7 @@ export default function HomeBanner() {
     ">
                                 <h1
                                     className="
-        font-bold leading-tight
+        font-bold lg:leading-18
         text-2xl sm:text-3xl md:text-5xl lg:text-6xl 2xl:text-7xl
         drop-shadow-xl max-w-[90%] sm:max-w-[80%] md:max-w-4xl lg:max-w-5xl
     "

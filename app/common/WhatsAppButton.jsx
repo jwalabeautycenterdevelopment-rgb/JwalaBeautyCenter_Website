@@ -8,7 +8,7 @@ const WhatsAppButton = () => {
             href="https://wa.me/9551222201?text=Hi,%20Welcome%20to%20JwalaOnlinestore%20store"
             target="_blank"
             rel="noopener noreferrer"
-            className="fixed bottom-6 right-4 z-50"
+            className="fixed bottom-20 right-2 z-50"
         >
             <div
                 className="

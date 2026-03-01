@@ -75,8 +75,8 @@ export default function BrandPage() {
     return (
         <div className="flex flex-col md:flex-row h-screen bg-linear-to-r from-[#fff5e6] to-[#fff5e6] overflow-hidden">
             <div className="hidden md:flex flex-col w-72 border-r border-gray-300 shadow">
-                <div className="p-4 border-b border-gray-300">
-                    <h2 className="text-lg font-bold">Brands</h2>
+                <div className="py-7 border-b border-gray-300">
+                    <h2 className="text-lg font-bold text-center">Brands</h2>
                 </div>
                 <div className="flex-1 overflow-y-auto p-4">
                     {loadingAll && <p className="text-gray-500">Loading...</p>}
@@ -155,7 +155,7 @@ export default function BrandPage() {
                 </div>
             </div>
             <div className="flex-1 flex flex-col overflow-hidden">
-                <div className="hidden md:flex px-6 py-4 border-b border-gray-200 items-center justify-between gap-4 sticky top-0 z-10 bg-white">
+                <div className="hidden md:flex px-6 py-4 border-b border-gray-200 items-center justify-between gap-4 sticky top-0 z-10">
                     <div className="flex-1 relative max-w-xl">
                         <input
                             type="text"
