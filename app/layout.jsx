@@ -9,9 +9,53 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
-  title: "Jwala Beauty - Your One-Stop Shop for All Things Beauty",
-  description: "Project setup with Redux, Framer Motion, and Tailwind v4",
-  metadataBase: new URL("https://jwalabeautycenter.com"),
+  metadataBase: new URL("https://www.jwalabeauty.com"),
+
+  title: {
+    default: "Jwala Beauty Center | Professional Makeup, Hair & Beauty Products",
+    template: "%s | Jwala Beauty Center",
+  },
+
+  description:
+    "Shop premium makeup, skincare, haircare, beauty tools, cosmetics, and professional beauty products at Jwala Beauty Center. Discover top beauty brands at the best prices.",
+
+  keywords: [
+    "Jwala Beauty",
+    "Beauty Products",
+    "Makeup Products",
+    "Hair Care",
+    "Skin Care",
+    "Cosmetics",
+    "Beauty Store",
+    "Professional Makeup",
+    "Beauty Center",
+  ],
+
+  alternates: {
+    canonical: "/",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
+  openGraph: {
+    title: "Jwala Beauty Center",
+    description:
+      "Shop premium makeup, skincare, haircare, beauty tools, cosmetics, and professional beauty products.",
+    url: "https://www.jwalabeauty.com",
+    siteName: "Jwala Beauty Center",
+    locale: "en_US",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Jwala Beauty Center",
+    description:
+      "Shop premium makeup, skincare, haircare, beauty tools, cosmetics, and professional beauty products.",
+  },
 };
 
 export default function RootLayout({ children }) {
