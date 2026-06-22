@@ -1,11 +1,13 @@
-import { Montserrat } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "./provider/ReduxProvider";
 import AppWrapper from "./middleware/AppWrapper";
 
-const montserrat = Montserrat({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-plus-jakarta",
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
 export const metadata = {
@@ -17,51 +19,23 @@ export const metadata = {
   },
 
   description:
-    "Shop premium makeup, skincare, haircare, beauty tools, cosmetics, and professional beauty products at Jwala Beauty Center. Discover top beauty brands at the best prices.",
-
-  keywords: [
-    "Jwala Beauty",
-    "Beauty Products",
-    "Makeup Products",
-    "Hair Care",
-    "Skin Care",
-    "Cosmetics",
-    "Beauty Store",
-    "Professional Makeup",
-    "Beauty Center",
-  ],
-
+    "Shop premium makeup, skincare, haircare, beauty tools, cosmetics, and professional beauty products at Jwala Beauty Center.",
   alternates: {
     canonical: "/",
   },
-
   robots: {
     index: true,
     follow: true,
-  },
-
-  openGraph: {
-    title: "Jwala Beauty Center",
-    description:
-      "Shop premium makeup, skincare, haircare, beauty tools, cosmetics, and professional beauty products.",
-    url: "https://www.jwalabeauty.com",
-    siteName: "Jwala Beauty Center",
-    locale: "en_US",
-    type: "website",
-  },
-
-  twitter: {
-    card: "summary_large_image",
-    title: "Jwala Beauty Center",
-    description:
-      "Shop premium makeup, skincare, haircare, beauty tools, cosmetics, and professional beauty products.",
   },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={montserrat.className} suppressHydrationWarning>
+      <body
+        className={plusJakartaSans.className}
+        suppressHydrationWarning
+      >
         <ReduxProvider>
           <AppWrapper>{children}</AppWrapper>
         </ReduxProvider>
