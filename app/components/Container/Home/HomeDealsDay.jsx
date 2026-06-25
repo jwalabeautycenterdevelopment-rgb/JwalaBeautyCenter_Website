@@ -15,6 +15,9 @@ const HomeDealsDay = () => {
         }
     }, [dispatch, hasFetched]);
 
+    if (!deals?.length) {
+        return null;
+    }
     return (
         <section className="py-4 md:py-12 px-4 sm:px-6 lg:px-20 ">
             <div className="text-center mb-4 md:mb-12">

@@ -14,7 +14,7 @@ export const metadata = {
     openGraph: {
         title: "Top Brands | Best Brand Collections",
         description: "Explore top brand collections with premium quality products.",
-        url: "https://jwalabeautycenter.com/brands",
+        url: "https://www.jwalabeauty.com/brands",
         siteName: "Your Website Name",
         images: [
             {
@@ -26,7 +26,7 @@ export const metadata = {
         type: "website",
     },
     alternates: {
-        canonical: "https://jwalabeautycenter.com/brands",
+        canonical: "https://www.jwalabeauty.com/brands",
     },
 };
 

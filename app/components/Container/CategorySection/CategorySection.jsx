@@ -68,11 +68,7 @@ const CategorySection = ({ slug }) => {
 
     return (
         <MainLayout className="py-4 md:py-12 bg-[#FFF4E5] px-4 sm:px-6 lg:px-20 min-h-screen">
-            {userCategoryLoading && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                    <ProductSkeleton count={8} />
-                </div>
-            )}
+
             {!userCategoryLoading && categoryProducts?.length === 0 && (
                 <NoProductFound />
             )}
@@ -104,6 +100,11 @@ const CategorySection = ({ slug }) => {
                             <span className="text-rose-600">Sub Categories</span>
                         </h2>
                     </div>
+                    {userCategoryLoading && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                            <ProductSkeleton count={8} />
+                        </div>
+                    )}
                     <div className="overflow-x-auto scrollbar-hide">
                         <div className="flex gap-3 min-w-max">
                             {subcategories?.map((cat) => {

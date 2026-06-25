@@ -15,7 +15,7 @@ export const metadata = {
     openGraph: {
         title: "Latest Offers | Best Deals & Discounts",
         description: "Discover amazing deals and special discounts.",
-        url: "https://jwalabeautycenter.com/offers",
+        url: "https://www.jwalabeauty.com/offers",
         images: [
             {
                 url: "/offer-banner.jpg",

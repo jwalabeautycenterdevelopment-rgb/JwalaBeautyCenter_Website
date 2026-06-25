@@ -19,12 +19,9 @@ const SpecialDealsWithImages = () => {
         router.push(`/offers/${offerId}`);
     };
 
-    if (!offersList || offersList.length === 0) {
-        return (
-            <div className="py-12 text-center text-gray-500">
-                No offers available at the moment.
-            </div>
-        );
+
+    if (!offersList?.length) {
+        return null
     }
 
     return (
