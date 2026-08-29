@@ -53,7 +53,7 @@ const Footer = () => {
                         <div>
                             <h3 className="font-semibold mb-3 text-lg">Categories</h3>
                             <ul className="space-y-2 text-sm">
-                                {getAllCategories?.map((item) => (
+                                {getAllCategories.slice(0, 5)?.map((item) => (
                                     <li
                                         key={item._id}
                                         onClick={() => handleNavigate(item)}
